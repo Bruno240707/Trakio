@@ -8,28 +8,30 @@ app.use(cors());
 
 app.get("/api/lineData", (req, res) => {
   res.json([
-    { label: "Enero", Ads: 1, Subscriptions: 30, Sponsorships: 15 },
-    { label: "Febrero", Ads: 25, Subscriptions: 35, Sponsorships: 18 },
-    { label: "Marzo", Ads: 30, Subscriptions: 40, Sponsorships: 20 },
-    { label: "Abril", Ads: 28, Subscriptions: 42, Sponsorships: 22 },
-    { label: "Mayo", Ads: 32, Subscriptions: 45, Sponsorships: 23 }
+    { label: "Lunes", Regularidad: 100},
+    { label: "Martes", Regularidad: 30 },
+    { label: "Miercoles", Regularidad: 40 },
+    { label: "Jueves", Regularidad: 50 },
+    { label: "Viernes", Regularidad: 20 }
   ]);
 });
 
 app.get("/api/doughnutData", (req, res) => {
   res.json([
-    { label: "llegadas Temprano", value: 33 },
-    { label: "llegadas Tarde", value: 20 }
+    { label: "A Tiempo", value: 70 },
+    { label: "Tardanzas", value: 30 }
   ]);
 });
 
 app.get("/api/barData", (req, res) => {
   res.json([
-    { label: "Enero", Ads: 1, Subscriptions: 30, Sponsorships: 15 },
-    { label: "Febrero", Ads: 25, Subscriptions: 35, Sponsorships: 18 },
-    { label: "Marzo", Ads: 30, Subscriptions: 40, Sponsorships: 20 },
-    { label: "Abril", Ads: 28, Subscriptions: 42, Sponsorships: 22 },
-    { label: "Mayo", Ads: 32, Subscriptions: 45, Sponsorships: 23 }
+    { label: "8AM", Entradas: 1, Salidas: 30 },
+    { label: "9AM", Entradas: 25, Salidas: 35 },
+    { label: "10AM", Entradas: 30, Salidas: 40 },
+    { label: "11AM", Entradas: 28, Salidas: 42 },
+    { label: "12PM", Entradas: 32, Salidas: 45 },
+    { label: "13PM", Entradas: 32, Salidas: 45 },
+    { label: "14PM", Entradas: 32, Salidas: 45 },
   ]);
 });
 

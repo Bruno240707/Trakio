@@ -1,0 +1,7 @@
+.doughnut-chart-container {
+    width: 100%;
+    height: 100%;
+    background-color: #0d1b2a;
+    padding: 20px;
+    border-radius: 10px;
+}
