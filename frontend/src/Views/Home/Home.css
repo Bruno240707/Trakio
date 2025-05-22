@@ -1,0 +1,150 @@
+:root {
+  --main-bg: #f2f2f2;
+  --dark-bg: #0a0f14;
+  --primary: #ffffff;
+  --secondary: #132744;
+  --accent: #000000;
+  --font-main: 'Segoe UI', sans-serif;
+  --hero-bg-gradient: linear-gradient(90deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  --glow-blue: #3ca9f9;
+}
+
+.home-container {
+  width: 100%;
+  min-height: 100vh;
+  font-family: var(--font-main);
+  background: var(--dark-bg);
+  color: var(--primary);
+  overflow: hidden;
+}
+
+/* Hero Section */
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5rem 8rem;
+  background: var(--hero-bg-gradient);
+  height: 100vh;
+  color: var(--primary);
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--primary);
+}
+
+.hero-input {
+  display: flex;
+  gap: 1rem;
+}
+
+.hero-input input {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  flex: 1;
+  background-color: #fff;
+  color: #000;
+}
+
+.hero-input input::placeholder {
+  color: #666;
+}
+
+.hero-input button {
+  padding: 0.75rem 1.5rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.hero-input button:hover {
+  background-color: #333;
+}
+
+.hero-image img {
+  height: 400px;
+  object-fit: contain;
+}
+
+/* Features Section */
+.features-section {
+  background-color: var(--dark-bg);
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: space-around;
+  color: var(--primary);
+  text-align: center;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.feature img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 0;
+  filter: invert(100%) brightness(150%);
+}
+
+.feature p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Control Section */
+.control-section {
+  background: var(--secondary);
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.control-section h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.control-section p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.gif-placeholder {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  margin: 0 auto;
+  background-color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--primary);
+  border: 2px solid var(--glow-blue);
+  box-shadow: 0 0 15px 5px var(--glow-blue);
+  border-radius: 8px;
+}

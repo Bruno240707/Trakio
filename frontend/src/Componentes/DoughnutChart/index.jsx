@@ -14,7 +14,7 @@ import './doughnutchart.css';
 
       ctx.save();
       ctx.fillStyle = color;
-      ctx.font = "bold 20px " + font;
+      ctx.font = "bold 40px " + font;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(text, x, y);

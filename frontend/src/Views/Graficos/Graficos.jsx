@@ -1,11 +1,11 @@
 import { Chart as ChartJS, defaults } from "chart.js/auto"
 import { Bar, Doughnut, Line } from "react-chartjs-2"
-import '../App.css'
+import '../Graficos/Graficos.css'
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"   
-import DoughnutChart from "../Componentes/DoughnutChart/index";
-import LineChart from "../Componentes/LineChart";
-import BarChart from "../Componentes/BarChart";
+import DoughnutChart from "../../Componentes/DoughnutChart/index";
+import LineChart from "../../Componentes/LineChart/index";
+import BarChart from "../../Componentes/BarChart/index"
 
 const Graficos = () => {
 
@@ -34,7 +34,7 @@ const Graficos = () => {
   return (
     <>
     <div style={{backgroundColor: "black", width: "10%", borderRadius: "50%"}}>
-        <Link to={"/"} style={{fontSize: 20, color: "white"}}>←</Link>
+        <Link to={"/"} style={{fontSize: 20, color: "White"}}>←</Link>
     </div>
       <div className="grafico-container">
         <LineChart lineData={lineData}/>

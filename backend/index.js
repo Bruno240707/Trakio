@@ -9,10 +9,12 @@ app.use(cors());
 app.get("/api/lineData", (req, res) => {
   res.json([
     { label: "Lunes", Regularidad: 100},
-    { label: "Martes", Regularidad: 30 },
-    { label: "Miercoles", Regularidad: 40 },
-    { label: "Jueves", Regularidad: 50 },
-    { label: "Viernes", Regularidad: 20 }
+    { label: "Martes", Regularidad: 70 },
+    { label: "Miercoles", Regularidad: 80 },
+    { label: "Jueves", Regularidad: 75 },
+    { label: "Viernes", Regularidad:85 },
+    { label: "Sabado", Regularidad:5 },
+    { label: "Domingo", Regularidad:4 }
   ]);
 });
 
@@ -27,11 +29,16 @@ app.get("/api/barData", (req, res) => {
   res.json([
     { label: "8AM", Entradas: 1, Salidas: 30 },
     { label: "9AM", Entradas: 25, Salidas: 35 },
-    { label: "10AM", Entradas: 30, Salidas: 40 },
-    { label: "11AM", Entradas: 28, Salidas: 42 },
-    { label: "12PM", Entradas: 32, Salidas: 45 },
-    { label: "13PM", Entradas: 32, Salidas: 45 },
-    { label: "14PM", Entradas: 32, Salidas: 45 },
+    { label: "10AM", Entradas: 30, Salidas: 10 },
+    { label: "11AM", Entradas: 28, Salidas: 32 },
+    { label: "12PM", Entradas: 12, Salidas: 20 },
+    { label: "13PM", Entradas: 22, Salidas: 15 },
+    { label: "14PM", Entradas: 42, Salidas: 25 },
+    { label: "15PM", Entradas: 12, Salidas: 35 },
+    { label: "16PM", Entradas: 22, Salidas: 25 },
+    { label: "17PM", Entradas: 42, Salidas: 15 },
+    { label: "18PM", Entradas: 22, Salidas: 15 },
+
   ]);
 });
 
