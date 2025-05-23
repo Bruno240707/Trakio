@@ -1,13 +1,11 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
 .grafico-container {
-  width: 100%;
-  max-width: 800px;
+  width: 50%;
   height: 400px;
   margin: 0 auto;
   padding: 1rem;
@@ -15,6 +13,7 @@
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 100px;
+
 }
 
 

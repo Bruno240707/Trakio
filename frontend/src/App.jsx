@@ -10,11 +10,13 @@ const App = () => {
   return (
     <>
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Graficos" element={<Graficos />} />
-        <Route path="/IniciarSesion" element={<IniciarSesion />} />
-      </Routes>
+      <div style={{ paddingTop: "45px", minHeight: "100vh" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Graficos" element={<Graficos />} />
+          <Route path="/IniciarSesion" element={<IniciarSesion />} />
+        </Routes>
+      </div>
     </>
   );
 };

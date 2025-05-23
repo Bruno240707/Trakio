@@ -33,7 +33,7 @@ const Graficos = () => {
 
   return (
     <>
-    <div style={{backgroundColor: "black", width: "10%", borderRadius: "50%"}}>
+    <div style={{backgroundColor: "black", width: "50px", borderRadius: "50%"}}>
         <Link to={"/"} style={{fontSize: 20, color: "White"}}>←</Link>
     </div>
       <div className="grafico-container">

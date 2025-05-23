@@ -4,7 +4,6 @@ const Home = () => {
   return (
     <>
       <div className="home-container">
-        {/* Hero Section */}
         <section className="hero-section">
           <div className="hero-text">
             <h1>Trakio</h1>
@@ -25,7 +24,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Features Section */}
         <section className="features-section">
           <div className="feature">
             <img src="/icons/chatbot.svg" alt="Chatbot" />
