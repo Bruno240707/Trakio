@@ -1,5 +1,5 @@
 import "./Home.css";
-import camara from "C:/Users/48113202/Trakio/frontend/src/Imagenes/camara.png";
+//import camara from "C:/Users/48113202/Trakio/frontend/src/Imagenes/camara.png";
 
 
 const Home = () => {
@@ -22,7 +22,7 @@ const Home = () => {
             </div>
           </div>
           <div className="hero-image">
-            <img src={camara}/>
+            <img/>
           </div>
         </section>
 
@@ -52,6 +52,15 @@ const Home = () => {
             <span>GIFs DE CÓMO FUNCIONA</span>
           </div>
         </section>
+
+        <section className="control-section">
+          <h2> Ya se corre la voz </h2>
+          <div className="opiniones">
+
+          </div>
+        </section>
+
+
       </div>
     </>
   );
