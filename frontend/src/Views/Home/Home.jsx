@@ -1,6 +1,4 @@
 import "./Home.css";
-//import camara from "C:/Users/48113202/Trakio/frontend/src/Imagenes/camara.png";
-
 
 const Home = () => {
   return (
@@ -22,7 +20,7 @@ const Home = () => {
             </div>
           </div>
           <div className="hero-image">
-            <img/>
+            <img src="../src/Imagenes/camara.png"/>
           </div>
         </section>
 
@@ -53,13 +51,24 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="control-section">
+        <section className="opinion-section">
           <h2> Ya se corre la voz </h2>
-          <div className="opiniones">
-
+          <div className="opiniones-container">
+            <div className="opinion-card">
+              <p className="opinion-text">Es fácil ver los datos en tiempo real, lo que hace todo más eficiente.</p>
+              <p className="opinion-author">JOSE N</p>
+            </div>
+            <div className="opinion-card">
+              <p className="opinion-text">Los reportes automáticos sobre la puntualidad y asistencia de los empleados nos ahorran tiempo y nos ayudan a tomar decisiones más informadas.</p>
+              <p className="opinion-author">FRAN M</p>
+            </div>
+            <div className="opinion-card">
+              <p className="opinion-text">La integración fue simple y la interfaz es muy intuitiva.</p>
+              <p className="opinion-author">NICO K</p>
           </div>
-        </section>
+</div>
 
+        </section>
 
       </div>
     </>
