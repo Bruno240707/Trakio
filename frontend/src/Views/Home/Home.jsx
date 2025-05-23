@@ -1,4 +1,6 @@
-  import "./Home.css";
+import "./Home.css";
+import camara from "C:/Users/48113202/Trakio/frontend/src/Imagenes/camara.png";
+
 
 const Home = () => {
   return (
@@ -20,7 +22,7 @@ const Home = () => {
             </div>
           </div>
           <div className="hero-image">
-            <img src="../Imagenes/camara.png" alt="Device" />
+            <img src={camara}/>
           </div>
         </section>
 
@@ -43,9 +45,8 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Control Section */}
         <section className="control-section">
-          <h2>Control Inteligente</h2>
+          <h2 >Control Inteligente</h2>
           <p>Visualiza y gestiona el flujo de personas en tiempo real</p>
           <div className="gif-placeholder">
             <span>GIFs DE CÓMO FUNCIONA</span>

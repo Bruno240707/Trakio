@@ -18,7 +18,6 @@
   overflow: hidden;
 }
 
-/* Hero Section */
 .hero-section {
   display: flex;
   justify-content: space-between;
@@ -81,11 +80,12 @@
 }
 
 .hero-image img {
-  height: 400px;
   object-fit: contain;
+  height: 800px;
 }
 
-/* Features Section */
+
+
 .features-section {
   background-color: var(--dark-bg);
   padding: 4rem 2rem;
@@ -114,7 +114,6 @@
   margin: 0;
 }
 
-/* Control Section */
 .control-section {
   background: var(--secondary);
   color: white;
@@ -123,20 +122,20 @@
 }
 
 .control-section h2 {
-  font-size: 2rem;
+  font-size: 3.5rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
 .control-section p {
-  font-size: 1rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
 }
 
 .gif-placeholder {
   width: 100%;
-  max-width: 800px;
-  height: 400px;
+  max-width: 1300px;
+  height: 700px;
   margin: 0 auto;
   background-color: #111;
   display: flex;

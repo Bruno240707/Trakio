@@ -10,7 +10,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <div style={{ paddingTop: "45px", minHeight: "100vh" }}>
+      <div style={{ paddingTop: "80px", minHeight: "100vh" }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Graficos" element={<Graficos />} />
