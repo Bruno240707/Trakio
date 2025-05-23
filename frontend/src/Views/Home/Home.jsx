@@ -1,5 +1,4 @@
 import "./Home.css";
-import camara from "C:/Users/48113202/Trakio/frontend/src/Imagenes/camara.png";
 
 
 const Home = () => {
@@ -22,7 +21,7 @@ const Home = () => {
             </div>
           </div>
           <div className="hero-image">
-            <img src={camara}/>
+            <img />
           </div>
         </section>
 
