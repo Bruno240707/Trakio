@@ -21,6 +21,7 @@ const Home = () => {
           </div>
           <div className="hero-image">
             <img src="../src/Imagenes/camara.png"/>
+            <img />
           </div>
         </section>
 
