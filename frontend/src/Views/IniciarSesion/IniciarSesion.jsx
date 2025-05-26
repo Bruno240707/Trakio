@@ -20,12 +20,12 @@ const IniciarSesion = () => {
 
           <div className="input-group">
             <i className="fas fa-user"></i>
-            <input type="text" placeholder="Salvador Soncini" />
+            <input type="text" placeholder="Username" />
           </div>
 
           <div className="input-group">
             <i className="fas fa-envelope"></i>
-            <input type="email" placeholder="salvadorsoncini@gmail.com" />
+            <input type="email" placeholder="Gmail" />
           </div>
 
           <div className="input-group">
