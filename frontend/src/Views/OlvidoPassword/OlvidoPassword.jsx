@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./IniciarSesion.css";
+import "./OlvidoPassword.css";
 
-const IniciarSesion = () => {
+const OlvidoPassword = () => {
   return (
     <>
       <img src="../src/Imagenes/fondoLogIn.png" alt="FondoDelLogIn" className="fondoLog" />
@@ -18,25 +18,22 @@ const IniciarSesion = () => {
         <div className="contenidoLog login-container">
           <img src="../src/Imagenes/logo.png" alt="Logo Trakio" className="logoImg" />
 
+
+
+
+          <p class="textoOlvido">Ingresa tu mail para enviar un link de recuperacion de contraseña</p>  
           <div className="input-group">
-            <i className="fas fa-user"></i>
-            <input type="text" placeholder="Company" />
+            <i className="fas fa-envelope"></i>
+            <input type="email" placeholder="Gmail" />
           </div>
 
-          <div className="input-group">
-            <i className="fas fa-lock"></i>
-            <input type="password" placeholder="Password" />
-          </div>
-
-          <button className="login-button">Iniciar sesión</button>
 
 
+          <button className="login-button">Enviar</button>
 
 
-        <div>
-        <Link to="/OlvidoPassword" class="botonOlvido">
-        ¿Olvidaste tu contraseña?
-        </Link>
+        <div className="forgot-password">
+
       </div>
 
 
@@ -47,4 +44,4 @@ const IniciarSesion = () => {
   );
 };
 
-export default IniciarSesion;
+export default OlvidoPassword;

@@ -21,7 +21,7 @@ const Footer = () => {
           <p>VALORES</p>
         </div>
         <div className="footer-column">
-          <h4>LOREM IMPSUM</h4>
+          <h4>Redes Sociales</h4>
         </div>
       </div>
 

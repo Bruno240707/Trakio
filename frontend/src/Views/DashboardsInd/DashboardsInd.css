@@ -111,10 +111,12 @@ body {
   }
   
   .employee-photo {
-    width: 80px;
-    height: 80px;
+    width:  150px;
+    height: 150px;
     border-radius: 10px;
     object-fit: cover;
+    border: 10px solid white;
+    margin-right: 5% ;
   }
   
   .grid {
