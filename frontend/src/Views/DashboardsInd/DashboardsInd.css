@@ -1,0 +1,149 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #E3E3E3;
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    width: 400px;
+    background-color: #2B2B2B;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .dropdown {
+    background-color: #F9F9F9;
+    border: 2px solid #38497E;
+    color: #000000;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  .user-list {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1;
+  }
+  
+  .user-list li {
+    background-color: #38497E;
+    color: white;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+  }
+  
+  .delete {
+    background-color: #F9F9F9;
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+  
+  .vista-general {
+    background-color: #0D84A2;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+  
+  .arrow {
+    font-size: 18px;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 40px;
+    background-color: #F9F9F9;
+  }
+  
+  h1 {
+    color: #000;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .employee-card {
+    background-color: #E3E3E3;
+    border-radius: 10px;
+    padding: 30px;
+  }
+  
+  .employee-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  
+  .employee-name {
+    background-color: #38497E;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .employee-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 10px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #CCC;
+    position: relative;
+  }
+  
+
+  
+  .card::before {
+    transform: rotate(45deg);
+  }
+  
+  .card::after {
+    transform: rotate(-45deg);
+  }
+  

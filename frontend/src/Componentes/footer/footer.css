@@ -16,7 +16,6 @@
 .left-section {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .barra-lateral {
@@ -29,7 +28,7 @@
 
 .logo-text {
   color: white;
-  font-size: 24px; /* más grande */
+  font-size: 24px;
   font-weight: bold;
   letter-spacing: 2px;
 }

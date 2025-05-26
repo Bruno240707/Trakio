@@ -66,8 +66,8 @@ import './doughnutchart.css';
               labels: {
                 color: "white",
                 font: {
-                  size: '40%'
-                },
+                  size: '30%'
+                },            
               },
               position: "right",
             },
