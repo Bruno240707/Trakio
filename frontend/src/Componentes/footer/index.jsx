@@ -26,9 +26,11 @@ const Footer = () => {
           <p>VALORES</p>
         </div>
         <div className="footer-column">
+
           <h4>DASHBOARDS</h4>
           <p>GENERALES</p>
           <p>INDIVIDUALES</p>
+
         </div>
       </div>
 

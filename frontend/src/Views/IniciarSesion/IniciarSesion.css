@@ -10,9 +10,7 @@
     }
 
     .contenidoLog {
-      width: 40%;
       border-radius: 16px;
-      padding: 40px;
       margin-left: 27%;
     }
   .fondoLog {
@@ -145,6 +143,10 @@
       width: 200px;
       border-radius: 10px;
       margin-bottom: 50%;
+    }
+    .botonOlvido
+    {
+      color: white;
     }
 
 

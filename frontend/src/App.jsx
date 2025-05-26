@@ -8,6 +8,7 @@ import Header from "./Componentes/Header";
 import Footer from "./Componentes/footer";
 import EntradasSalidasInd from "./Views/EntradasSalidasInd/EntradasSalidasInd";
 import DashboardsInd from "./Views/DashboardsInd/DashboardsInd";
+import OlvidoPassword from "./Views/OlvidoPassword/OlvidoPassword";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/DashboardsInd" element={<DashboardsInd />} />
           <Route path="/EntradasSalidasInv" element={<EntradasSalidasInd/>} />
           <Route path="/IniciarSesion" element={<IniciarSesion />} />
+          <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
         </Routes>
         <Footer/>
       </div>

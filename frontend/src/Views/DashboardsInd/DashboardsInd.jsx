@@ -8,6 +8,18 @@ const DashboardsInd = () => {
                 <aside class="sidebar">
                 <select class="dropdown">
                     <option>Usuario ...</option>
+                    <option>Dario</option>
+                    <option>Juan</option>
+                    <option>Lucas</option>
+                    <option>Franco</option>
+                    <option>Ramiro</option>
+                    <option>Santiago</option>
+                    <option>Nicolas</option>
+                    <option>Gael</option>
+                    <option>Eitan</option>
+                    <option>Tomer</option>
+                    <option>Bruno</option>
+                    <option>Tomas</option>
                 </select>
 
                 <ul class="user-list">
