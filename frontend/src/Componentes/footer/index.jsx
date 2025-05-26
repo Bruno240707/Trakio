@@ -24,9 +24,14 @@ const Footer = () => {
           <h4>LOREM IMPSUM</h4>
         </div>
       </div>
+
+      <div className="footer-copyright">
+        Copyright © 2025 TRAKIO
+      </div>
     </footer>
   );
 };
 
 export default Footer;
+
 
