@@ -33,11 +33,11 @@ const IniciarSesion = () => {
 
 
 
-        <div>
-        <Link to="/OlvidoPassword" class="botonOlvido">
+        <div class="btnOlvido">
+        <Link to="/OlvidoPassword" class="txtOlvido">
         ¿Olvidaste tu contraseña?
         </Link>
-      </div>
+        </div>
 
 
         </div>

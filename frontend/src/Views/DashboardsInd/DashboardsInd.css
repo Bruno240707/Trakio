@@ -6,7 +6,7 @@ body {
   
   .container {
     display: flex;
-    height: 100vh;
+    height: 90vh;
   }
   
   .sidebar {
@@ -69,6 +69,7 @@ body {
     justify-content: center;
     gap: 8px;
     font-weight: 600;
+    
   }
   
   .arrow {

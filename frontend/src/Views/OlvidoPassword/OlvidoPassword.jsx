@@ -29,7 +29,7 @@ const OlvidoPassword = () => {
 
 
 
-          <button className="login-button">Enviar</button>
+          <button className="olvido-button">Enviar</button>
 
 
         <div className="forgot-password">

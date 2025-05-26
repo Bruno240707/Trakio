@@ -144,7 +144,11 @@
       border-radius: 10px;
       margin-bottom: 50%;
     }
-    .botonOlvido
+    .btnOlvido
+    {
+      margin-top: 5%;
+    }
+    .txtOlvido
     {
       color: white;
     }
