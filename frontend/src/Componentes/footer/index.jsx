@@ -12,6 +12,11 @@ const Footer = () => {
         <p className="footer-slogan">
           LA SEGURIDAD Y LA GESTIÓN, EN UN SOLO SISTEMA.
         </p>
+        <div class="footer-social">
+    <a href="#"><img src="../src/imagenes/icono_ig.png" alt="Instagram" class="social-icon" /></a>
+    <a href="#"><img src="../src/imagenes/Facebook_Logo.png" alt="Facebook" class="social-icon" /></a>
+    <a href="#"><img src="../src/imagenes/x_Logo.png" alt="X" class="social-icon" /></a>
+  </div>
       </div>
 
       <div className="footer-right">
@@ -21,7 +26,9 @@ const Footer = () => {
           <p>VALORES</p>
         </div>
         <div className="footer-column">
-          <h4>LOREM IMPSUM</h4>
+          <h4>DASHBOARDS</h4>
+          <p>GENERALES</p>
+          <p>INDIVIDUALES</p>
         </div>
       </div>
 

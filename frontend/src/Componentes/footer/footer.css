@@ -31,7 +31,6 @@
   font-size: 26px;
   font-weight: bold;
   color: white;
-<<<<<<< HEAD
   font-size: 24px;
   font-weight: bold;
   letter-spacing: 2px;
@@ -52,8 +51,6 @@
 .footer-column h4 {
   font-size: 18px; /* más grande */
   margin-bottom: 12px;
-=======
->>>>>>> 15996a8742f9ad875160ca0f158d6031d6df899f
   letter-spacing: 1px;
 }
 
@@ -110,6 +107,21 @@
   opacity: 0.8;
 }
 
+.footer-social {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 16px; /* espacio entre el texto y los íconos */
+}
 
+.social-icon {
+  width: 40px;  /* antes 28px */
+  height: 40px;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
 
-  
+.social-icon:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
