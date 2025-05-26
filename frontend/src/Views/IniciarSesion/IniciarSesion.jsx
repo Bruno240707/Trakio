@@ -5,43 +5,41 @@ import "./IniciarSesion.css";
 const IniciarSesion = () => {
   return (
     <>
-      
-      <img src="../src/Imagenes/fondoLogIn.png" alt="FondoDelLogIn" class="fondoLog" />
-      <div class="contenidoGeneral">
-      <h1 class="titulo">Introduciendo Trakio</h1>
-      <p class="textoInfo">Conectamos cámaras inteligentes con inteligencia artificial para que sepas quién entra, quién sale y cuándo. Desde mapas de calor hasta alertas de seguridad, nuestra app y plataforma web te dan el control total en tiempo real. Ideal para empresas que buscan orden, eficiencia y tranquilidad.</p>
-      <a href="#" class="boton">
-      Learn More <span class="arrow-icon">➔</span>
-      </a>
-      </div>
+      <img src="../src/Imagenes/fondoLogIn.png" alt="FondoDelLogIn" className="fondoLog" />
 
-      <div class="contenidoLog">
-      <div class="login-container">
-    <div class="logo">
-      <img src="../src/Imagenes/logo.png" alt="Logo Trakio"/>
-    </div>
+      <div className="contenedorPrincipal">
+        
+          <div className="contenidoGeneral">
+            <h1 className="titulo">Introduciendo Trakio</h1>
+            <p className="textoInfo"> Conectamos cámaras inteligentes con inteligencia artificial para que sepas quién entra, quién sale y cuándo. Desde mapas de calor hasta alertas de seguridad, nuestra app y plataforma web te dan el control total en tiempo real. Ideal para empresas que buscan orden, eficiencia y tranquilidad.</p>
+            <a href="#" className="boton">Más información <span className="arrow-icon">➔</span></a>
+          </div>
 
-    <div class="input-group">
-      <i class="fas fa-user"></i>
-      <input type="text" placeholder="Salvador Soncini"/>
-    </div>
+        <div className="contenidoLog login-container">
+          <img src="../src/Imagenes/logo.png" alt="Logo Trakio" className="logoImg" />
 
-    <div class="input-group">
-      <i class="fas fa-envelope"></i>
-      <input type="email" placeholder="salvadorsoncini@gmail.com"/>
-    </div>
+          <div className="input-group">
+            <i className="fas fa-user"></i>
+            <input type="text" placeholder="Salvador Soncini" />
+          </div>
 
-    <div class="input-group">
-      <i class="fas fa-lock"></i>
-      <input type="password" placeholder="xxxxxxxxxx"/>
-    </div>
+          <div className="input-group">
+            <i className="fas fa-envelope"></i>
+            <input type="email" placeholder="salvadorsoncini@gmail.com" />
+          </div>
 
-    <button class="login-button">Iniciar Sesion</button>
+          <div className="input-group">
+            <i className="fas fa-lock"></i>
+            <input type="password" placeholder="Password" />
+          </div>
 
-    <div class="forgot-password">
-      <a href="#">¿Olvidaste tu contraseña?</a>
-    </div>
-  </div>
+          <button className="login-button">Iniciar sesión</button>
+
+          <div className="forgot-password">
+            <a href="#">¿Olvidaste tu contraseña?</a>
+          </div>
+        </div>
+
       </div>
     </>
   );
