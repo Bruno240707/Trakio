@@ -5,9 +5,9 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-left">
-        <div className="left-section">
+ <div className="left-section">
           <div className="barra-lateral"></div>
-          <p className="logo-text">TRAKIO</p>
+          <p className="logo-text">TRAKIO</p>         
         </div>
         <p className="footer-slogan">
           LA SEGURIDAD Y LA GESTIÓN, EN UN SOLO SISTEMA.
