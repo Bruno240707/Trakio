@@ -6,23 +6,24 @@ const DashboardsInd = () => {
         <>
             <div class="container">
                 <aside class="sidebar">
-                <select class="dropdown">
-                    <option>Usuario ...</option>
-                    <option>Dario</option>
-                    <option>Juan</option>
-                    <option>Lucas</option>
-                    <option>Franco</option>
-                    <option>Ramiro</option>
-                    <option>Santiago</option>
-                    <option>Nicolas</option>
-                    <option>Gael</option>
-                    <option>Eitan</option>
-                    <option>Tomer</option>
-                    <option>Bruno</option>
-                    <option>Tomas</option>
-                </select>
+                <input class="dropdown" type="text" placeholder="Usuarios..."/>
 
                 <ul class="user-list">
+                    <li><button class="delete">✕</button> Marcelo Godoy</li>
+                    <li><button class="delete">✕</button> Fran Marap</li>
+                    <li><button class="delete">✕</button> Lionel Andres</li>
+                    <li><button class="delete">✕</button> Eitan Mas</li>
+                    <li><button class="delete">✕</button> Nicolas Blaser</li>
+                    <li><button class="delete">✕</button> Marcelo Godoy</li>
+                    <li><button class="delete">✕</button> Fran Marap</li>
+                    <li><button class="delete">✕</button> Lionel Andres</li>
+                    <li><button class="delete">✕</button> Eitan Mas</li>
+                    <li><button class="delete">✕</button> Nicolas Blaser</li>
+                    <li><button class="delete">✕</button> Marcelo Godoy</li>
+                    <li><button class="delete">✕</button> Fran Marap</li>
+                    <li><button class="delete">✕</button> Lionel Andres</li>
+                    <li><button class="delete">✕</button> Eitan Mas</li>
+                    <li><button class="delete">✕</button> Nicolas Blaser</li>
                     <li><button class="delete">✕</button> Marcelo Godoy</li>
                     <li><button class="delete">✕</button> Fran Marap</li>
                     <li><button class="delete">✕</button> Lionel Andres</li>
