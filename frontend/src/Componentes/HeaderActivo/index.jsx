@@ -8,6 +8,11 @@ const Header = () => {
        <div className="barra-lateral"></div>
        <Link to={"/"}> <p className="logo-text">TRAKIO</p></Link>
       </div>
+
+      <div>
+        <Link to={"/dashboardsInd"}> <p className="logo-text">Dashboards</p></Link>
+      </div>
+
     </header>
   );
 };
