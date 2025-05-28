@@ -51,6 +51,9 @@ const Home = () => {
           <div className="gif-placeholder">
             <span>GIFs DE CÓMO FUNCIONA</span>
           </div>
+
+          <button className="buttonGif">WEB</button>
+          <button className="buttonGif">MOBILE</button>
         </section>
 
         <section className="opinion-section">

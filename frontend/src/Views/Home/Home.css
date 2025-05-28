@@ -196,5 +196,13 @@
   font-weight: 600;
 }
 
-
-
+.buttonGif {
+  padding: 0.75rem 1.5rem;
+  margin: 1%;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  width: 10%;
+  border: 1px solid transparent;
+}

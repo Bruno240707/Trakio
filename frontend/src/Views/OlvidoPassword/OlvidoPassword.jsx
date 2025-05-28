@@ -31,6 +31,11 @@ const OlvidoPassword = () => {
 
           <button className="olvido-button">Enviar</button>
 
+          <div class="btnOlvido">
+            <Link to="/IniciarSesion" class="txtOlvido">
+              Iniciar Sesion
+            </Link>
+          </div>
 
         <div className="forgot-password">
 
