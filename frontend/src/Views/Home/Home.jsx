@@ -28,7 +28,7 @@ const Home = () => {
 
         <section className="features-section">
           <div className="feature">
-            <img src="/icons/chatbot.svg" alt="Chatbot" />
+            <img src="../src/Imagenes/laptop_chat_transparent" alt="Chatbot" />
             <p>Chatbot</p>
           </div>
           <div className="feature">
@@ -70,9 +70,40 @@ const Home = () => {
             <div className="opinion-card">
               <p className="opinion-text">La integración fue simple y la interfaz es muy intuitiva.</p>
               <p className="opinion-author">NICO K</p>
+            </div>
           </div>
-</div>
+        </section>
 
+        <section className="chatbot-info-section">
+          <h2>Consulta. Responde. Actúa.</h2>
+          <p>Información clave, a solo un mensaje de distancia.</p>
+          <div className="chatbot-info-grid">
+            <div className="chatbot-text left">
+              <p>Acceso rápido a la información</p>
+              <p>Consulta datos clave desde cualquier lugar</p>
+              <p>Respuestas inmediatas a tus consultas</p>
+            </div>
+
+            <div className="chatbot-image">
+              <img src="../src/Imagenes/laptop_chat_transparent.png" alt="Chatbot" />
+            </div>
+
+            <div className="chatbot-text right">
+              <p>Facilidad de uso</p>
+              <p>Información actualizada en tiempo real</p>
+              <p>Ahorra pasos, gana productividad</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="dashboards-showcase-section">
+          <h2>Explora nuestros dashboards</h2>
+          <div className="dashboards-grid">
+            <img src="../src/Imagenes/dashboard1.png" className="dashboard-img" />
+            <img src="../src/Imagenes/dashboard2.png" className="dashboard-img" />
+            <img src="../src/Imagenes/dashboard3.png" className="dashboard-img" />
+            <img src="../src/Imagenes/dashboard4.png" className="dashboard-img" />
+          </div>
         </section>
 
       </div>
