@@ -42,6 +42,16 @@ app.get("/api/barData", (req, res) => {
   ]);
 });
 
+app.get("/api/CompaniasRegistradas", (req, res) => {
+  res.json([
+    { nombre: "Trakio Corp", contrasenia: "trakio123" },
+    { nombre: "VisionSafe", contrasenia: "vs456secure" },
+    { nombre: "SeguriCam", contrasenia: "cam789seg" },
+    { nombre: "DataFlow", contrasenia: "flowpass321" },
+    { nombre: "OjoDigital", contrasenia: "ojo!digital2024" }
+  ]);
+});
+
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });

@@ -1,8 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./IniciarSesion.css";
 
-const IniciarSesion = () => {
+const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
+
+  const navigate = useNavigate()
+
+  const [nombreCompania, setNombreCompania] = useState("")
+  const [contrasenia, setContrasenia] = useState("")
+
+  const onClickIniciarSesion = () => {
+
+    const cuentaExiste = companiasRegistradas.some((comp) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
+
+    if (cuentaExiste) {
+      setCuentaActiva(true)
+      navigate("/dashboardsInd")
+    } 
+    else {
+      alert("Nombre de compañía o contraseña incorrectos")
+      setCuentaActiva(false)
+      setNombreCompania("")
+      setContrasenia("")
+    }
+  }
+
   return (
     <>
       <img src="../src/Imagenes/fondoLogIn.png" alt="FondoDelLogIn" className="fondoLog" />
@@ -20,20 +42,20 @@ const IniciarSesion = () => {
 
           <div className="input-group">
             <i className="fas fa-user"></i>
-            <input type="text" placeholder="Company" />
+            <input type="text" value={nombreCompania} onChange={(e) => setNombreCompania(e.target.value)} placeholder="Company" />
           </div>
 
           <div className="input-group">
             <i className="fas fa-lock"></i>
-            <input type="password" placeholder="Password" />
+            <input type="password" value={contrasenia} onChange={(e) => setContrasenia(e.target.value)} placeholder="Password" />
           </div>
 
-          <button className="login-button">Iniciar sesión</button>
+          <button className="login-button" onClick={onClickIniciarSesion}>Iniciar sesión</button>
 
 
 
 
-        <div class="btnOlvido">
+        <div className="btnOlvido">
         <Link to="/OlvidoPassword" class="txtOlvido">
         ¿Olvidaste tu contraseña?
         </Link>

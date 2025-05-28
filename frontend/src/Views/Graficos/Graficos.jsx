@@ -30,7 +30,6 @@ const Graficos = () => {
       .catch((err) => console.error("Error al cargar la API:", err));
   }, []);
 
-
   return (
     <>
     <div style={{backgroundColor: "black", width: "50px", borderRadius: "50%"}}>
