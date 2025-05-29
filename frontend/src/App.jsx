@@ -26,7 +26,7 @@ const App = () => {
 
   return (
     <>
-      {cuentaActiva ?  <HeaderActivo/> : <HeaderInactivo/>}
+      {cuentaActiva ?  <HeaderActivo setCuentaActiva={setCuentaActiva}/> : <HeaderInactivo/>}
       <div style={{ paddingTop: "80px", minHeight: "100vh" }}>
         <Routes>
           <Route path="/" element={<Home />} />
