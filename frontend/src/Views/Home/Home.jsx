@@ -16,7 +16,7 @@ const Home = () => {
               y seguridad.
             </p>
             <div className="hero-input">
-              <input type="email" placeholder="Ingresa tu correo electrónico" />
+              <input type="email" placeholder="Ingresa tu correo electrónico" maxLength={50} />
               <button>Contactanos</button>
             </div>
           </div>

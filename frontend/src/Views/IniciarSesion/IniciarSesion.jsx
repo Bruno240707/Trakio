@@ -42,25 +42,21 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
 
           <div className="input-group">
             <i className="fas fa-user"></i>
-            <input type="text" value={nombreCompania} onChange={(e) => setNombreCompania(e.target.value)} placeholder="Company" />
+            <input type="text" value={nombreCompania} onChange={(e) => setNombreCompania(e.target.value)} placeholder="Company" maxLength={40}/>
           </div>
 
           <div className="input-group">
             <i className="fas fa-lock"></i>
-            <input type="password" value={contrasenia} onChange={(e) => setContrasenia(e.target.value)} placeholder="Password" />
+            <input type="password" value={contrasenia} onChange={(e) => setContrasenia(e.target.value)} placeholder="Password" maxLength={40} />
           </div>
 
           <button className="login-button" onClick={onClickIniciarSesion}>Iniciar sesión</button>
 
-
-
-
-        <div className="btnOlvido">
-        <Link to="/OlvidoPassword" class="txtOlvido">
-        ¿Olvidaste tu contraseña?
-        </Link>
-        </div>
-
+          <div className="btnOlvido">
+            <Link to="/OlvidoPassword" class="txtOlvido">
+            ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
 
         </div>
 
