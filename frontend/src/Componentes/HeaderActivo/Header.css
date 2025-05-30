@@ -1,49 +1,81 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    margin: 0;
-    font-family: sans-serif;
-  }
-  
-  .header {
-    background-color: #484848;
-    width: 100%;
-    height: 80px;
-    padding: 0 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-  }
-  
-  .left-section {
-    display: flex;
-    align-items: center;
-  }
-  
-  .barra-lateral {
-    width: 4px;
-    height: 24px;
-    background-color: #23CDFD;
-    margin-right: 10px;
-    border-radius: 2px;
-  }
-  
-  .logo-text {
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 2px;
-  }
-  
-  .right-section {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #484848;
+  color: white;
+  padding: 20px 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Sección izquierda */
+.left-section {
+  display: flex;
+  align-items: center;
+}
+
+.barra-lateral {
+  width: 5px;
+  height: 30px;
+  background-color: #00f7ff;
+  margin-right: 10px;
+  border-radius: 2px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+
+/* Sección central centrada */
+.center-section {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Links con efecto hover línea abajo */
+.nav-link {
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  left: 0;
+  bottom: -4px;
+  background-color: #00f7ff;
+  transition: 0.3s;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link:hover {
+  color: #00f7ff;
+}
+
+/* Sección derecha 
+.right-section {
     background-color: #1a1a1a;
     border-radius: 10px;
   }
@@ -60,21 +92,54 @@
   
   .login-link:hover {
     background-color: #23cdfd;
+  }*/
+.right-section {
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Botón cerrar sesión sin background al hover */
+.logout-button {
+  background-color: #1a1a1a;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s ease;
+  display: inline-block;
+}
+
+
+.logout-button:hover {
+  background-color: #23cdfd;
+  /* No background fill */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
   }
-  
-  @media (max-width: 600px) {
-    .header {
-      padding: 0 16px;
-      height: 70px;
-    }
-  
-    .logo-text {
-      font-size: 16px;
-    }
-  
-    .login-link {
-      padding: 8px 16px;
-      font-size: 13px;
-    }
+
+  .logo-text {
+    font-size: 20px;
   }
-  
+
+  .center-section {
+    gap: 30px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+  }
+
+  .logout-button {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+}
+

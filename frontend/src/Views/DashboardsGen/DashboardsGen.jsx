@@ -32,6 +32,7 @@ const DashboardsGen = () => {
 
   return (
     <>
+    
       <div class="vista-general">
         <Link to={"/DashboardsInd"}>Vista Individual</Link>
       </div>
