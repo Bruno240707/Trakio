@@ -1,0 +1,11 @@
+.fondoInfo
+{
+    position: fixed;    
+    width: 100%;
+    object-fit: cover;  
+    z-index: -1;     
+}
+.tituloInfo
+{
+
+}

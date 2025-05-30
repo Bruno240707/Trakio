@@ -3,7 +3,22 @@ import "./Informacion.css"
 const Informacion = () => {
     return (
         <>
-            <p> HOLAAAA </p>
+            <img src="../src/Imagenes/fondoInfo.png" alt="FondoInformacion" className="fondoInfo" />
+
+            <div class="contenedorPrincipal">
+
+                <h1 class="tituloInfo">Sobre Trako</h1>
+
+
+            </div>
+
+
+
+
+
+
+
+
         </>
     )
 }
