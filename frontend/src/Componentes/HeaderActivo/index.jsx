@@ -22,7 +22,7 @@
           <Link to={"/dashboardsInd"}>
             <p className="nav-link">Dashboards</p>
           </Link>
-          <Link to={"/tiempoReal"}>
+          <Link to={"/TiempoRealGen"}>
             <p className="nav-link">Tiempo Real</p>
           </Link>
         </div>
