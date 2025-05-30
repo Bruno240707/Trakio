@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./TiempoRealGen.css"
 import CardTiempoReal from "../../Componentes/CardTiempoReal";
 
@@ -13,8 +13,7 @@ const TiempoRealGen = () => {
           .then((data) => setDataEntradasSalidas(data))
           .catch((err) => console.error("Error al cargar la API:", err));
       }, []);
-
-
+      
     return (
         <>
         <div>
@@ -23,7 +22,7 @@ const TiempoRealGen = () => {
             </div>
 
             <div>
-                <CardTiempoReal dataEmpleado={dataEntradasSalidas}/>
+                <CardTiempoReal dataEntradasSalidas={dataEntradasSalidas}/>
             </div>
             
 

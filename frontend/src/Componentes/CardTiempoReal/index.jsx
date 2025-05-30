@@ -1,6 +1,6 @@
 
 
-const CardTiempoReal = ({dataEmpleado}) =>{
+const CardTiempoReal = ({dataEntradasSalidas}) =>{
     return (
         <>
         <div>
