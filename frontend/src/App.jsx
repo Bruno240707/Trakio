@@ -5,7 +5,7 @@ import Home from "./Views/Home/Home";
 import DashboardsGen from "./Views/DashboardsGen/DashboardsGen";
 import IniciarSesion from "./Views/IniciarSesion/IniciarSesion";
 import Footer from "./Componentes/footer";
-import EntradasSalidasInd from "./Views/EntradasSalidasInd/EntradasSalidasInd";
+import TiempoRealGen from "./Views/TiempoRealGen/TiempoRealGen";
 import DashboardsInd from "./Views/DashboardsInd/DashboardsInd";
 import OlvidoPassword from "./Views/OlvidoPassword/OlvidoPassword";
 import HeaderInactivo from "./Componentes/HeaderInactivo";
@@ -32,7 +32,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/DashboardsGen" element={<DashboardsGen />} />
           <Route path="/DashboardsInd" element={<DashboardsInd />} />
-          <Route path="/EntradasSalidasInv" element={<EntradasSalidasInd/>} />
+          <Route path="/TiempoRealGen" element={<TiempoRealGen/>} />
           <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva}/>} />
           <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
           <Route path="/Informacion" element={<Informacion />} />
