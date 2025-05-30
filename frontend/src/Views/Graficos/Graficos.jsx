@@ -32,10 +32,7 @@ const Graficos = () => {
 
   return (
     <>
-    <div style={{backgroundColor: "black", width: "50px", borderRadius: "50%"}}>
-        <Link to={"/"} style={{fontSize: 20, color: "White"}}>←</Link>
-    </div>
-    <Link to={"/EntradasSalidasInd/"}>EntradasSalidasInd</Link>
+    
 
       <div className="grafico-container">
         <LineChart lineData={lineData}/>
