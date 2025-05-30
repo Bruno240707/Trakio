@@ -1,13 +1,13 @@
 import { Chart as ChartJS, defaults } from "chart.js/auto"
 import { Bar, Doughnut, Line } from "react-chartjs-2"
-import '../Graficos/Graficos.css'
+import './DashboardsGen.css'
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"   
 import DoughnutChart from "../../Componentes/DoughnutChart/index";
 import LineChart from "../../Componentes/LineChart/index";
 import BarChart from "../../Componentes/BarChart/index"
 
-const Graficos = () => {
+const DashboardsGen = () => {
 
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
@@ -32,10 +32,9 @@ const Graficos = () => {
 
   return (
     <>
-    <div style={{backgroundColor: "black", width: "50px", borderRadius: "50%"}}>
-        <Link to={"/"} style={{fontSize: 20, color: "White"}}>←</Link>
-    </div>
-    <Link to={"/EntradasSalidasInd/"}>EntradasSalidasInd</Link>
+      <div class="vista-general">
+        <Link to={"/DashboardsInd"}>Vista Individual</Link>
+      </div>
 
       <div className="grafico-container">
         <LineChart lineData={lineData}/>
@@ -52,4 +51,4 @@ const Graficos = () => {
   )
 }
 
-export default Graficos
+export default DashboardsGen

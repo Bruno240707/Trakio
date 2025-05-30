@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import "./DashboardsInd.css"
 
 const DashboardsInd = () => {
@@ -31,9 +32,9 @@ const DashboardsInd = () => {
                     <li><button class="delete">✕</button> Nicolas Blaser</li>
                 </ul>
 
-                <button class="vista-general">
-                    Vista General <span class="arrow">➔</span>
-                </button>
+                <div class="vista-general">
+                    <Link to={"/DashboardsGen"}>Vista General</Link>
+                </div>
                 </aside>
 
                 <main class="main-content">
