@@ -26,6 +26,12 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
     }
   }
 
+  const onClickMasInfo = () => {
+    navigate("/Informacion")
+  }
+
+  
+
   return (
     <>
       <img src="../src/Imagenes/fondoLogIn.png" alt="FondoDelLogIn" className="fondoLog" />
@@ -35,7 +41,7 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
           <div className="contenidoGeneral">
             <h1 className="titulo">Introduciendo Trakio</h1>
             <p className="textoInfo"> Conectamos cámaras inteligentes con inteligencia artificial para que sepas quién entra, quién sale y cuándo. Desde mapas de calor hasta alertas de seguridad, nuestra app y plataforma web te dan el control total en tiempo real. Ideal para empresas que buscan orden, eficiencia y tranquilidad.</p>
-            <a href="#" className="boton"> <Link to="/Informacion" class="txtOlvido">Más información</Link><span className="arrow-icon">➔</span></a>
+            <button className="boton" onClick={onClickMasInfo}> <p>Más información</p><span className="arrow-icon">➔</span></button>
           </div>
 
         <div className="contenidoLog login-container">
