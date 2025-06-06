@@ -1,17 +1,25 @@
 
 import { useEffect, useState } from "react";
 import "./TiempoRealGen.css"
-import CardTiempoReal from "../../Componentes/CardTiempoReal";
+import CardTiempoReal from "../../Componentes/CardTiempoReal/index";
 
 const TiempoRealGen = () => {
 
     const [dataEntradasSalidas, setDataEntradasSalidas] = useState([])
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/entradasSalidasTiempoReal")
-          .then((res) => res.json())
-          .then((data) => setDataEntradasSalidas(data))
-          .catch((err) => console.error("Error al cargar la API:", err));
+        const fetchData = () => {
+          fetch("http://localhost:3001/api/entradasSalidasTiempoReal")
+            .then((res) => res.json())
+            .then((data) => setDataEntradasSalidas(data))
+            .catch((err) => console.error("Error al cargar la API:", err));
+        };
+    
+        fetchData();
+    
+        const intervalId = setInterval(fetchData, 5000);
+    
+        return () => clearInterval(intervalId);
       }, []);
       
     return (
@@ -22,7 +30,13 @@ const TiempoRealGen = () => {
             </div>
 
             <div>
-                <CardTiempoReal dataEntradasSalidas={dataEntradasSalidas}/>
+                {dataEntradasSalidas.map(d => (
+                    <CardTiempoReal
+                    hora={d.hora}
+                    nombre={d.nombreEmpleado}
+                    tipo={d.tipo}
+                    />
+                ))}
             </div>
             
 

@@ -44,6 +44,7 @@ app.get("/api/barData", (req, res) => {
 
 app.get("/api/CompaniasRegistradas", (req, res) => {
   res.json([
+    { nombre: "Prueba", contrasenia: "Prueba" },
     { nombre: "Trakio Corp", contrasenia: "trakio123" },
     { nombre: "VisionSafe", contrasenia: "vs456secure" },
     { nombre: "SeguriCam", contrasenia: "cam789seg" },
