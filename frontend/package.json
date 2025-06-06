@@ -12,6 +12,7 @@
   "dependencies": {
     "chart.js": "^4.4.9",
     "express": "^5.1.0",
+    "fa6": "^2.0.1",
     "install": "^0.13.0",
     "npm": "^11.4.0",
     "react": "^19.1.0",
