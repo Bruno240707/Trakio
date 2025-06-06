@@ -22,6 +22,17 @@
       object-fit: cover;  
       z-index: -1;        
     }
+
+    .error-message {
+      color: #ff4c4c;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 14px;
+      margin-top: 8px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
     
     .contenidoEncima {
       position: relative;
