@@ -10,7 +10,7 @@ import DashboardsInd from "./Views/DashboardsInd/DashboardsInd";
 import OlvidoPassword from "./Views/OlvidoPassword/OlvidoPassword";
 import Informacion from "./Views/Informacion/Informacion";
 import Layout from "./Views/Layout/Layout";
-import Error404 from "./Views/Error404/error404"
+import Error404 from "./Views/Error404/Error404"
 //
 
 const App = () => {
