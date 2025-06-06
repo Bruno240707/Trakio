@@ -6,7 +6,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    
   }
   
   .notfound-code {
@@ -35,6 +35,8 @@
     border-radius: 5px;
     font-weight: bold;
     transition: background-color 0.3s;
+    margin-left: 35%;
+    margin-right: 35%;
   }
   
   .notfound-link:hover {
