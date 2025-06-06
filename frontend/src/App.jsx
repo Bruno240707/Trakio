@@ -12,6 +12,7 @@ import Informacion from "./Views/Informacion/Informacion";
 import Layout from "./Views/Layout/Layout";
 import Error404 from "./Views/Error404/Error404"
 //
+import RutasProtegidas from "./Componentes/RutasProtegidas/RutasProtegidas"
 
 const App = () => {
 
@@ -29,13 +30,18 @@ const App = () => {
     <>
         <Routes>
           <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva}/>}>
+
             <Route index element={<Home />} />
-            <Route path="/DashboardsGen" element={<DashboardsGen />} />
-            <Route path="/DashboardsInd" element={<DashboardsInd />} />
-            <Route path="/TiempoRealGen" element={<TiempoRealGen/>} />
             <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva}/>} />
             <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
             <Route path="/Informacion" element={<Informacion />} />
+            
+            <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
+              <Route path="/DashboardsGen" element={<DashboardsGen />} />
+              <Route path="/DashboardsInd" element={<DashboardsInd />} />
+              <Route path="/TiempoRealGen" element={<TiempoRealGen />} />
+            </Route>
+
             <Route path="*" element={<Error404/>} />
           </Route>
         </Routes>

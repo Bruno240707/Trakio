@@ -8,6 +8,7 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
 
   const [nombreCompania, setNombreCompania] = useState("")
   const [contrasenia, setContrasenia] = useState("")
+  const [mensajeErrorInicio, setMensajeErrorInicio] = useState("")
 
   const onClickIniciarSesion = () => {
 
@@ -18,7 +19,7 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
       navigate("/dashboardsInd")
     } 
     else {
-      alert("Nombre de compañía o contraseña incorrectos")
+      setMensajeErrorInicio("Nombre de compañía o contraseña incorrectos")
       setCuentaActiva(false)
       setNombreCompania("")
       setContrasenia("")
@@ -49,6 +50,8 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
             <i className="fas fa-lock"></i>
             <input type="password" value={contrasenia} onChange={(e) => setContrasenia(e.target.value)} placeholder="Password" maxLength={40} />
           </div>
+
+          <p className="error-message">{mensajeErrorInicio}</p>
 
           <button className="login-button" onClick={onClickIniciarSesion}>Iniciar sesión</button>
 
