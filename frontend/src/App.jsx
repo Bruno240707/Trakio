@@ -10,6 +10,7 @@ import DashboardsInd from "./Views/DashboardsInd/DashboardsInd";
 import OlvidoPassword from "./Views/OlvidoPassword/OlvidoPassword";
 import Informacion from "./Views/Informacion/Informacion";
 import Layout from "./Views/Layout/Layout";
+import Error404 from "./Views/Error404/error404"
 //
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva}/>} />
             <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
             <Route path="/Informacion" element={<Informacion />} />
+            <Route path="*" element={<Error404/>} />
           </Route>
         </Routes>
     </>
