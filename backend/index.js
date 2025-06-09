@@ -44,12 +44,12 @@ app.get("/api/barData", (req, res) => {
 
 app.get("/api/CompaniasRegistradas", (req, res) => {
   res.json([
-    { nombre: "Prueba", contrasenia: "Prueba" },
-    { nombre: "Trakio Corp", contrasenia: "trakio123" },
-    { nombre: "VisionSafe", contrasenia: "vs456secure" },
-    { nombre: "SeguriCam", contrasenia: "cam789seg" },
-    { nombre: "DataFlow", contrasenia: "flowpass321" },
-    { nombre: "OjoDigital", contrasenia: "ojo!digital2024" }
+    { nombre: "Prueba", contrasenia: "Prueba", logo: "../frontend/src/Imagenes/cocaCola.png" },
+    { nombre: "Trakio Corp", contrasenia: "trakio123", logo: "../frontend/src/Imagenes/cocaCola.png" },
+    { nombre: "VisionSafe", contrasenia: "vs456secure", logo: "../frontend/src/Imagenes/cocaCola.png" },
+    { nombre: "SeguriCam", contrasenia: "cam789seg", logo: "../frontend/src/Imagenes/cocaCola.png" },
+    { nombre: "DataFlow", contrasenia: "flowpass321", logo: "../frontend/src/Imagenes/cocaCola.png" },
+    { nombre: "OjoDigital", contrasenia: "ojo!digital2024", logo: "../frontend/src/Imagenes/cocaCola.png" }
   ]);
 });
 
@@ -60,8 +60,12 @@ app.get("/api/entradasSalidasTiempoReal", (req, res) => {
     { nombreEmpleado: "María Fernández", tipo: "entrada", hora: "08:00" },
     { nombreEmpleado: "Carlos Díaz", tipo: "salida", hora: "18:00" },
     { nombreEmpleado: "Sofía Martínez", tipo: "entrada", hora: "08:05" },
+    { nombreEmpleado: "Jose Martínez", tipo: "entrada", hora: "09:05" },
+
   ]);
 });
+
+
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
