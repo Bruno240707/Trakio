@@ -10,7 +10,7 @@
 }
 .contenidoInfo
 {
-    height: 200vh;
+    height: 250vh;
 }
 .tituloInfo
 {
@@ -46,14 +46,6 @@
     margin-left: 15%;
     margin-right: 15%;
 }
-.card1
-{
-    background-color: #FFFFFF8F;
-    margin-top: 5%;
-    margin-left: 28%;
-    margin-right: 57%;
-    text-align: center;
-}
 .btnInfo
 {
     padding: 3px;
@@ -67,19 +59,23 @@
     margin-top: 6%;
     margin-bottom: 6%;
 }
-.nameCard1
+.nameCard
 {
     font-size: 3vh;
 }
-.rolI1
+.rol
 {   
     color: white;
     font-size: 4vh;
 }
-
-
-
-
+.card1
+{
+    background-color: #FFFFFF8F;
+    margin-top: 5%;
+    margin-left: 28%;
+    margin-right: 57%;
+    text-align: center;
+}
 .card2
 {
     background-color: #FFFFFF8F;
@@ -88,18 +84,6 @@
     margin-right: 57%;
     text-align: center;
 }
-
-.nameCard2
-{
-    font-size: 3vh;
-}
-.rol2
-{   
-    color: white;
-    font-size: 4vh;
-}
-
-
 .card3
 {
     background-color: #FFFFFF8F;
@@ -107,16 +91,6 @@
     margin-left: 28%;
     margin-right: 57%;
     text-align: center;
-}
-
-.nameCard3
-{
-    font-size: 3vh;
-}
-.rolI3
-{   
-    color: white;
-    font-size: 4vh;
 }
 .card4
 {
@@ -126,13 +100,13 @@
     margin-right: 57%;
     text-align: center;
 }
-
-.nameCard4
+.fotoI
 {
-    font-size: 3vh;
+    width: 80%;
+    height: 80%;
+    border-radius: 15px;
+    padding-top: 15px;
 }
-.rolI4
-{   
-    color: white;
-    font-size: 4vh;
-}
+
+
+
