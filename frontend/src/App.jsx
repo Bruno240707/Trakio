@@ -18,6 +18,8 @@ const App = () => {
 
   const [companiasRegistradas, setCompaniasRegistradas] = useState([])
   const [cuentaActiva, setCuentaActiva] = useState(false)
+  const [logoActivo, setLogoActivo] = useState("")
+
 
   useEffect(() => {
     fetch("http://localhost:3001/api/CompaniasRegistradas")
@@ -29,10 +31,10 @@ const App = () => {
   return (
     <>
         <Routes>
-          <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva}/>}>
+          <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva} logoActivo={logoActivo}/>}>
 
             <Route index element={<Home />} />
-            <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva}/>} />
+            <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva} setLogoActivo={setLogoActivo}/>} />
             <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
             <Route path="/Informacion" element={<Informacion />} />
             

@@ -1,7 +1,7 @@
   import { Link, useNavigate } from "react-router-dom";
   import "./Header.css";
 
-  const Header = ({ setCuentaActiva }) => {
+  const Header = ({ setCuentaActiva, logoActivo }) => {
     const navigate = useNavigate();
 
     const cerrarSesion = () => {
@@ -14,7 +14,7 @@
         <div className="left-section">
           <div className="barra-lateral"></div>
           <Link to={"/"}>
-            <p className="logo-text">TRAKIO</p>
+          <img src={logoActivo}/>
           </Link>
         </div>
 

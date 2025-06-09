@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./IniciarSesion.css";
 
-const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
+const IniciarSesion = ({companiasRegistradas, setCuentaActiva, setLogoActivo}) => {
 
   const navigate = useNavigate()
 
@@ -12,9 +12,10 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
 
   const onClickIniciarSesion = () => {
 
-    const cuentaExiste = companiasRegistradas.some((comp) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
+    const compania = companiasRegistradas.find((comp) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
 
-    if (cuentaExiste) {
+    if (compania) {
+      setLogoActivo(compania.logo)
       setCuentaActiva(true)
       navigate("/dashboardsInd")
     } 
@@ -23,6 +24,7 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
       setCuentaActiva(false)
       setNombreCompania("")
       setContrasenia("")
+      setLogoActivo("")
     }
   }
 

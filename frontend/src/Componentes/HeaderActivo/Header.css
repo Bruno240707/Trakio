@@ -14,7 +14,13 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Sección izquierda */
+.left-section img {
+  max-width: 80px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer; 
+}
+
 .left-section {
   display: flex;
   align-items: center;
