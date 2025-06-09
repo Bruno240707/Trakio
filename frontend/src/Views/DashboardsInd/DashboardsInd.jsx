@@ -7,7 +7,7 @@ const DashboardsInd = () => {
         <>
             <div class="container">
                 <aside class="sidebar">
-                <input class="dropdown" type="text" placeholder="Usuarios..."/>
+                <input class="dropdown" type="text" placeholder="Empleados..."/>
 
                 <ul class="user-list">
                     <li><button class="delete">✕</button> Marcelo Godoy</li>

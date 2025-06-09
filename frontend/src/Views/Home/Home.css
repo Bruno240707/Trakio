@@ -104,10 +104,9 @@
 }
 
 .feature img {
-  width: 64px;
-  height: 64px;
+  width: 50%;
+  height: 100%;
   margin-bottom: 0;
-  filter: invert(100%) brightness(150%);
 }
 
 .feature p {

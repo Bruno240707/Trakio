@@ -36,11 +36,11 @@ const Home = () => {
             <p>Dashboards</p>
           </div>
           <div className="feature">
-            <img src="/src/imagenes/heatmap.jfif" alt="Heat Maps" />
-            <p>Heat Maps</p>
+            <img src="/src/imagenes/heatmap.png" alt="Reports" />
+            <p>Heat Map</p>
           </div>
           <div className="feature">
-            <img src="/src/imagenes/reports.jpg" alt="Reports" />
+            <img src="/src/imagenes/reports.png" alt="Reports" />
             <p>Reports</p>
           </div>
         </section>
@@ -85,7 +85,7 @@ const Home = () => {
             </div>
 
             <div className="chatbot-image">
-              <img src="../src/Imagenes/laptop_chat_transparent.png" alt="Chatbot" />
+              <img src="../src/Imagenes/chatbot.png" alt="Chatbot" />
             </div>
 
             <div className="chatbot-text right">
