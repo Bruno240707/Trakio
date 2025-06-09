@@ -24,7 +24,7 @@ const OlvidoPassword = () => {
           <p class="textoOlvido">Ingresa tu mail para enviar un link de recuperacion de contraseña</p>  
           <div className="input-group">
             <i className="fas fa-envelope"></i>
-            <input type="email" placeholder="Gmail" />
+            <input type="email" placeholder="Gmail" maxLength={40}/>
           </div>
 
 
