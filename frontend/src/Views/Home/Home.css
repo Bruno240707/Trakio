@@ -298,3 +298,38 @@
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
 }
 
+.features-section {
+  display: flex;
+  justify-content: center;
+  gap: 100px; /* antes 60px → ahora más separados */
+  padding: 40px 20px;
+  background-color: #0d0f11;
+}
+
+.feature-item {
+  text-align: center;
+  width: 140px;
+}
+
+.feature-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  filter: brightness(1.2);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.feature-item img:hover {
+  transform: scale(1.05);
+  filter: brightness(1.4);
+  
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.feature-item p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #f0f0f0;
+}
+
+

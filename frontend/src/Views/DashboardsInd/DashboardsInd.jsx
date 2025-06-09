@@ -67,3 +67,83 @@ const DashboardsInd = () => {
 }
 
 export default DashboardsInd
+
+
+/*import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./DashboardsInd.css";
+
+const DashboardsInd = () => {
+  const [users, setUsers] = useState([
+    "Marcelo Godoy",
+    "Fran Marap",
+    "Lionel Andres",
+    "Eitan Mas",
+    "Nicolas Blaser",
+    "Marcelo Godoy",
+    "Fran Marap",
+    "Lionel Andres",
+    "Eitan Mas",
+    "Nicolas Blaser",
+    "Marcelo Godoy",
+    "Fran Marap",
+    "Lionel Andres",
+    "Eitan Mas",
+    "Nicolas Blaser",
+    "Marcelo Godoy",
+    "Fran Marap",
+    "Lionel Andres",
+    "Eitan Mas",
+    "Nicolas Blaser",
+  ]);
+
+  const handleDelete = (index) => {
+    const updatedUsers = users.filter((_, i) => i !== index);
+    setUsers(updatedUsers);
+  };
+
+  return (
+    <>
+      <div className="container">
+        <aside className="sidebar">
+          <input className="dropdown" type="text" placeholder="Usuarios..." />
+
+          <ul className="user-list">
+            {users.map((user, index) => (
+              <li key={index}>
+                <button className="delete" onClick={() => handleDelete(index)}>✕</button> {user}
+              </li>
+            ))}
+          </ul>
+
+          <div className="vista-general">
+            <Link to={"/DashboardsGen"}>Vista General</Link>
+          </div>
+        </aside>
+
+        <main className="main-content">
+          <h1>Información de Empleado</h1>
+          <div className="employee-card">
+            <div className="employee-header">
+              <button className="employee-name">Francisco Marapode</button>
+              <img
+                src="https://randomuser.me/api/portraits/men/75.jpg"
+                alt="Empleado"
+                className="employee-photo"
+              />
+            </div>
+
+            <div className="grid">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div className="card" key={i}></div>
+              ))}
+            </div>
+          </div>
+        </main>
+      </div>
+    </>
+  );
+};
+
+export default DashboardsInd;
+*/

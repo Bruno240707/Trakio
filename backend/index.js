@@ -60,6 +60,7 @@ app.get("/api/entradasSalidasTiempoReal", (req, res) => {
     { nombreEmpleado: "María Fernández", tipo: "entrada", hora: "08:00" },
     { nombreEmpleado: "Carlos Díaz", tipo: "salida", hora: "18:00" },
     { nombreEmpleado: "Sofía Martínez", tipo: "entrada", hora: "08:05" },
+  
   ]);
 });
 

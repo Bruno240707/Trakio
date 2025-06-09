@@ -8,6 +8,11 @@ const Footer = () => {
   const Informacion = () => {
     navigate("/informacion"); 
   };
+  
+  const DashboardsGen = () => {
+    navigate("/DashboardsGen"); 
+  };
+
 
   const DashboardsInd = () => { // <-- Corregí el nombre de la función
     navigate("/DashboardsInd"); 
@@ -38,7 +43,7 @@ const Footer = () => {
         </div>
         <div className="footer-column">
           <h4>DASHBOARDS</h4>
-          <p>GENERALES</p>
+          <p onClick={DashboardsGen}>GENERALES</p>
           <p onClick={DashboardsInd}>INDIVIDUALES</p> {/* Cambié el nombre de la función aquí */}
         </div>
       </div>

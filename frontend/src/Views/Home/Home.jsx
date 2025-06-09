@@ -28,19 +28,19 @@ const Home = () => {
 
         <section className="features-section">
           <div className="feature">
-            <img src="../src/Imagenes/laptop_chat_transparent" alt="Chatbot" />
+            <img src="../src/Imagenes/chatbot.png" alt="Chatbot" />
             <p>Chatbot</p>
           </div>
           <div className="feature">
-            <img src="/icons/dashboard.svg" alt="Dashboards" />
+            <img src="/src/Imagenes/dashboards.png" alt="Dashboards" />
             <p>Dashboards</p>
           </div>
           <div className="feature">
-            <img src="/icons/heatmap.svg" alt="Heat Maps" />
+            <img src="/src/imagenes/heatmap.jfif" alt="Heat Maps" />
             <p>Heat Maps</p>
           </div>
           <div className="feature">
-            <img src="/icons/reports.svg" alt="Reports" />
+            <img src="/src/imagenes/reports.jpg" alt="Reports" />
             <p>Reports</p>
           </div>
         </section>
