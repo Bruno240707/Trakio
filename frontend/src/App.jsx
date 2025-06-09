@@ -31,10 +31,10 @@ const App = () => {
   return (
     <>
         <Routes>
-          <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva}/>}>
+          <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva} logoActivo={logoActivo}/>}>
 
             <Route index element={<Home />} />
-            <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva} logoActivo={setLogoActivo}/>} />
+            <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva} setLogoActivo={setLogoActivo}/>} />
             <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
             <Route path="/Informacion" element={<Informacion />} />
             

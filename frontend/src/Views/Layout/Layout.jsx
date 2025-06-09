@@ -6,10 +6,10 @@ import HeaderInactivo from "../../Componentes/HeaderInactivo"
 import Footer from "../../Componentes/footer"
 
 
-const Layout = ({cuentaActiva, setCuentaActiva}) => {
+const Layout = ({cuentaActiva, setCuentaActiva, logoActivo}) => {
     return (
         <>
-            {cuentaActiva ?  <HeaderActivo setCuentaActiva={setCuentaActiva}/> : <HeaderInactivo/>}
+            {cuentaActiva ?  <HeaderActivo logoActivo={logoActivo} setCuentaActiva={setCuentaActiva}/> : <HeaderInactivo/>}
             <div style={{ paddingTop: "80px", minHeight: "100vh" }}>
             <Outlet></Outlet>
 

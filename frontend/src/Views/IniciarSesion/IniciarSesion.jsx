@@ -12,12 +12,11 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva, setLogoActivo}) =
 
   const onClickIniciarSesion = () => {
 
-    const cuentaExiste = companiasRegistradas.some((comp) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
-    const compania = companiasRegistradas.find((c) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
+    const compania = companiasRegistradas.find((comp) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
 
-    if (cuentaExiste) {
-      setCuentaActiva(true)
+    if (compania) {
       setLogoActivo(compania.logo)
+      setCuentaActiva(true)
       navigate("/dashboardsInd")
     } 
     else {
@@ -25,6 +24,7 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva, setLogoActivo}) =
       setCuentaActiva(false)
       setNombreCompania("")
       setContrasenia("")
+      setLogoActivo("")
     }
   }
 
