@@ -68,37 +68,18 @@
     color: white;
     font-size: 4vh;
 }
-.card1
-{
-    background-color: #FFFFFF8F;
-    margin-top: 5%;
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
     margin-left: 28%;
-    margin-right: 57%;
-    text-align: center;
+    margin-right: 28%;
+    margin-top: 5%;
 }
-.card2
-{
+.card1, .card2, .card3, .card4 {
     background-color: #FFFFFF8F;
-    margin-top: 5%;
-    margin-left: 28%;
-    margin-right: 57%;
     text-align: center;
-}
-.card3
-{
-    background-color: #FFFFFF8F;
-    margin-top: 5%;
-    margin-left: 28%;
-    margin-right: 57%;
-    text-align: center;
-}
-.card4
-{
-    background-color: #FFFFFF8F;
-    margin-top: 5%;
-    margin-left: 28%;
-    margin-right: 57%;
-    text-align: center;
+    padding: 10px;
 }
 .fotoI
 {

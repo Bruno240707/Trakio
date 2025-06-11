@@ -14,33 +14,34 @@ const Informacion = () => {
                 <hr class="linea"></hr>
                 <h3 class="qInfo">¿Quienes somos?</h3>
 
-                <div class="card1">
-                    <img src="../src/Imagenes/messi.jpg" alt="Bruno Massaccesi" className="fotoI" />
-                    <h1 class="rol">Ceo</h1>
-                    <h2 class="nameCard">Bruno Massaccesi</h2>
-                    <button class="btnInfo" type="submit">Contacto</button>
+                <div class="cards-grid">
+                    <div class="card1">
+                        <img src="../src/Imagenes/messi.jpg" alt="Bruno Massaccesi" className="fotoI" />
+                        <h1 class="rol">Ceo</h1>
+                        <h2 class="nameCard">Bruno Massaccesi</h2>
+                        <button class="btnInfo" type="submit">Contacto</button>
+                    </div>
 
-                </div>
+                    <div class="card2">
+                        <img src="../src/Imagenes/messi.jpg" alt="Bruno Marasi" className="fotoI" />
+                        <h1 class="rol">Ceo</h1>
+                        <h2 class="nameCard">Bruno Marasi</h2>
+                        <button class="btnInfo" type="submit">Contacto</button>
+                    </div>
 
-                <div class="card2">
-                    <img src="../src/Imagenes/messi.jpg" alt="Bruno Marasi" className="fotoI" />
-                    <h1 class="rol">Ceo</h1>
-                    <h2 class="nameCard">Bruno Marasi</h2>
-                    <button class="btnInfo" type="submit">Contacto</button>
-                </div>
+                    <div class="card3">
+                        <img src="../src/Imagenes/messi.jpg" alt="Nicolas Blaser" className="fotoI" />
+                        <h1 class="rol">Ceo</h1>
+                        <h2 class="nameCard">Nicolas Blaser</h2>
+                        <button class="btnInfo" type="submit">Contacto</button>
+                    </div>
 
-                <div class="card3">
-                    <img src="../src/Imagenes/messi.jpg" alt="Nicolas Blaser" className="fotoI" />
-                    <h1 class="rol">Ceo</h1>
-                    <h2 class="nameCard">Nicolas Blaser</h2>
-                    <button class="btnInfo" type="submit">Contacto</button>
-                </div>
-
-                <div class="card4">
-                    <img src="../src/Imagenes/messi.jpg" alt="Salvador Soncini" className="fotoI" />
-                    <h1 class="rol">Ceo</h1>
-                    <h2 class="nameCard">Salvador Soncini</h2>
-                    <button class="btnInfo" type="submit">Contacto</button>
+                    <div class="card4">
+                        <img src="../src/Imagenes/messi.jpg" alt="Salvador Soncini" className="fotoI" />
+                        <h1 class="rol">Ceo</h1>
+                        <h2 class="nameCard">Salvador Soncini</h2>
+                        <button class="btnInfo" type="submit">Contacto</button>
+                    </div>
                 </div>
 
 
