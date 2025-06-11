@@ -16,7 +16,7 @@ const Informacion = () => {
 
                 <div class="cards-grid">
                     <div class="card1">
-                        <img src="../src/Imagenes/messi.jpg" alt="Bruno Massaccesi" className="fotoI" />
+                        <img src="../src/Imagenes/bruno.png" alt="Bruno Massaccesi" className="fotoI" />
                         <h1 class="rol">Ceo</h1>
                         <h2 class="nameCard">Bruno Massaccesi</h2>
                         <button class="btnInfo" type="submit">Contacto</button>
@@ -30,7 +30,7 @@ const Informacion = () => {
                     </div>
 
                     <div class="card3">
-                        <img src="../src/Imagenes/messi.jpg" alt="Nicolas Blaser" className="fotoI" />
+                        <img src="../src/Imagenes/nicolas.png" alt="Nicolas Blaser" className="fotoI" />
                         <h1 class="rol">Ceo</h1>
                         <h2 class="nameCard">Nicolas Blaser</h2>
                         <button class="btnInfo" type="submit">Contacto</button>
