@@ -123,15 +123,16 @@ const DashboardsInd = () => {
               <div class="card">
                 <BarChart barData={barData} />
               </div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
+              <div class="card">
+                <BarChart barData={barData} />
+              </div>
+              <div class="card">
+                <DoughnutChart doughnutData={doughnutData} />
+              </div>
+              <div class="card">
+                <LineChart lineData={lineData} />
+              </div>
+
             </div>
           </div>
         </main>
