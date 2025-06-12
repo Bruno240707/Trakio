@@ -56,7 +56,7 @@ app.get("/api/CompaniasRegistradas", (req, res) => {
     { nombre: "instagram", contrasenia: "instagram", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" },
     { nombre: "twitter", contrasenia: "twitter", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1245px-Logo_of_Twitter.svg.png" },
     { nombre: "facebook", contrasenia: "facebook", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtBILdC5ouxGYjeaYJPmVqMsSpsItocXSI5A&s" },
-    { nombre: "OjoDigital", contrasenia: "ojo!digital2024", logo: "../frontend/src/Imagenes/bruno.png" }
+    { nombre: "trakio", contrasenia: "trakio2025", logo: "../frontend/src/Imagenes/logo.png" }
   ]);
 });
 
