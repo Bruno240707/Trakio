@@ -7,13 +7,90 @@
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 100px;
-
 }
-
 
 .logo {
   height: 16em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
+}
+
+.vista-individual {
+  width: fit-content;
+  margin: 2rem auto 4rem auto;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #4a90e2, #357ABD);
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(53, 122, 189, 0.3);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vista-individual:hover {
+  background: linear-gradient(135deg, #357ABD, #4a90e2);
+  box-shadow: 0 12px 20px rgba(53, 122, 189, 0.5);
+  transform: scale(1.05);
+}
+
+.vista-individual a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+}
+
+.vista-individual a:hover {
+  color: #d1eaff;
+  text-shadow: 0 0 8px rgba(209, 234, 255, 0.8);
+}
+
+.stats-panel {
+  max-width: 700px;
+  margin: 0 auto 3rem auto;
+  background-color: #0a1f44;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 8px 20px rgba(10, 31, 68, 0.7);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-item .icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-item .number {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.stat-item .label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: normal;
+  max-width: 100px;
 }

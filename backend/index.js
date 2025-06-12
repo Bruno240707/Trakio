@@ -6,6 +6,8 @@ const port = 3001;
 
 app.use(cors());
 
+
+// Grafico en lineas
 app.get("/api/lineData", (req, res) => {
   res.json([
     { label: "Lunes", Regularidad: 100},
@@ -18,6 +20,8 @@ app.get("/api/lineData", (req, res) => {
   ]);
 });
 
+
+// Grafico en rueda
 app.get("/api/doughnutData", (req, res) => {
   res.json([
     { label: "A Tiempo", value: 70 },
@@ -25,6 +29,8 @@ app.get("/api/doughnutData", (req, res) => {
   ]);
 });
 
+
+// Grafico en barras
 app.get("/api/barData", (req, res) => {
   res.json([
     { label: "8AM", Entradas: 1, Salidas: 30 },
@@ -42,6 +48,8 @@ app.get("/api/barData", (req, res) => {
   ]);
 });
 
+
+// Users LogIn
 app.get("/api/CompaniasRegistradas", (req, res) => {
   res.json([
     { nombre: "coca", contrasenia: "cola", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/2560px-Coca-Cola_logo.svg.png" },
@@ -52,6 +60,8 @@ app.get("/api/CompaniasRegistradas", (req, res) => {
   ]);
 });
 
+
+// Registro E/S en tiempo real
 app.get("/api/entradasSalidasTiempoReal", (req, res) => {
   res.json([
     { nombreEmpleado: "Ana Gómez", tipo: "entrada", hora: "08:15" },
@@ -59,10 +69,8 @@ app.get("/api/entradasSalidasTiempoReal", (req, res) => {
     { nombreEmpleado: "María Fernández", tipo: "entrada", hora: "08:00" },
     { nombreEmpleado: "Carlos Díaz", tipo: "salida", hora: "18:00" },
     { nombreEmpleado: "Sofía Martínez", tipo: "entrada", hora: "08:05" },
-  
   ]);
 });
-
 
 
 app.listen(port, () => {
