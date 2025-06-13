@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 //VIEWS
 import Home from "./Views/Home/Home";
 import DashboardsGen from "./Views/DashboardsGen/DashboardsGen";
+import Contacto from "./Views/Contacto/Contacto";
 import IniciarSesion from "./Views/IniciarSesion/IniciarSesion";
 import TiempoRealGen from "./Views/TiempoRealGen/TiempoRealGen";
 import DashboardsInd from "./Views/DashboardsInd/DashboardsInd";
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva} setLogoActivo={setLogoActivo}/>} />
             <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
             <Route path="/Informacion" element={<Informacion />} />
+            <Route path="/Contacto" element={<Contacto />} />
             
             <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
               <Route path="/DashboardsGen" element={<DashboardsGen />} />
