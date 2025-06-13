@@ -21,6 +21,17 @@ body {
     align-items: center;
     gap: 16px;
 }
+
+.lista-registros {
+  max-height: 600px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.lista-registros::-webkit-scrollbar {
+  display: none;
+}
   
   .registro-completo {
     display: flex;

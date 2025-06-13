@@ -64,11 +64,16 @@ app.get("/api/CompaniasRegistradas", (req, res) => {
 // Registro E/S en tiempo real
 app.get("/api/entradasSalidasTiempoReal", (req, res) => {
   res.json([
-    { nombreEmpleado: "Ana Gómez", tipo: "entrada", hora: "08:15" },
-    { nombreEmpleado: "Luis Pérez", tipo: "salida", hora: "17:30" },
-    { nombreEmpleado: "María Fernández", tipo: "entrada", hora: "08:00" },
-    { nombreEmpleado: "Carlos Díaz", tipo: "salida", hora: "18:00" },
-    { nombreEmpleado: "Sofía Martínez", tipo: "entrada", hora: "08:05" },
+    { nombreEmpleado: "Jose Alfonso", tipo: "entrada", hora: "18:05"},
+    { nombreEmpleado: "Ana Gómez", tipo: "entrada", hora: "13:05" },
+    { nombreEmpleado: "Luis Pérez", tipo: "salida", hora: "12:05" },
+    { nombreEmpleado: "María Fernández", tipo: "entrada", hora: "11:05" },
+    { nombreEmpleado: "Carlos Díaz", tipo: "salida", hora: "11:00" },
+    { nombreEmpleado: "Sofía Martínez", tipo: "entrada", hora: "09:00" },
+    { nombreEmpleado: "Nicolas Blaser", tipo: "salida", hora: "08:30 " },
+    { nombreEmpleado: "Salvador Soncini", tipo: "entrada", hora: " 08:15"},
+    { nombreEmpleado: "Jose Alfonso", tipo: "entrada", hora: "08:05"  },
+
   ]);
 });
 

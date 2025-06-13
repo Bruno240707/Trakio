@@ -18,6 +18,10 @@ const Footer = () => {
     navigate("/DashboardsInd"); 
   };
 
+  const Contacto = () => { // <-- Corregí el nombre de la función
+    navigate("/Contacto"); 
+  };
+
   return (
     <footer className="footer">
       <div className="footer-left">
@@ -38,7 +42,7 @@ const Footer = () => {
       <div className="footer-right">
         <div className="footer-column">
           <h4>SOBRE NOSOTROS</h4>
-          <p>CONTACTO</p>
+          <p onClick={Contacto}>CONTACTO</p>
           <p onClick={Informacion}>INFORMACION</p>
         </div>
         <div className="footer-column">
