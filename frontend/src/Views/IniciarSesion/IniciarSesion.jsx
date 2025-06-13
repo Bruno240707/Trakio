@@ -17,6 +17,10 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva, setLogoActivo}) =
     if (compania) {
       setLogoActivo(compania.logo)
       setCuentaActiva(true)
+      // Save login state in sessionStorage
+      sessionStorage.setItem("cuentaActiva", "true")
+      // Save logo URL in sessionStorage
+      sessionStorage.setItem("logoActivo", compania.logo)
       navigate("/dashboardsInd")
     } 
     else {
@@ -25,6 +29,10 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva, setLogoActivo}) =
       setNombreCompania("")
       setContrasenia("")
       setLogoActivo("")
+      // Clear login state in sessionStorage
+      sessionStorage.removeItem("cuentaActiva")
+      // Clear logo URL in sessionStorage
+      sessionStorage.removeItem("logoActivo")
     }
   }
 

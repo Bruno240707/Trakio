@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 //VIEWS
 import Home from "./Views/Home/Home";
@@ -12,14 +12,40 @@ import OlvidoPassword from "./Views/OlvidoPassword/OlvidoPassword";
 import Informacion from "./Views/Informacion/Informacion";
 import Layout from "./Views/Layout/Layout";
 import Error404 from "./Views/Error404/Error404"
+import SessionStorageTest from "./Views/SessionStorageTest/SessionStorageTest";
 //
 import RutasProtegidas from "./Componentes/RutasProtegidas/RutasProtegidas"
 
 const App = () => {
 
+  const navigate = useNavigate();
+
   const [companiasRegistradas, setCompaniasRegistradas] = useState([])
-  const [cuentaActiva, setCuentaActiva] = useState(false)
+  const [cuentaActiva, setCuentaActiva] = useState()
   const [logoActivo, setLogoActivo] = useState("")
+
+  useEffect(() => {
+    const savedCuentaActiva = sessionStorage.getItem("cuentaActiva")
+    const savedLogoActivo = sessionStorage.getItem("logoActivo")
+
+    if (savedCuentaActiva === "true") {
+      setCuentaActiva(true)
+      setLogoActivo(savedLogoActivo)
+      navigate("/DashboardsInd")
+    }
+  }, [])
+
+  useEffect(() => {
+    if (cuentaActiva) {
+      sessionStorage.setItem("cuentaActiva", "true")
+      sessionStorage.setItem("logoActivo", logoActivo)
+      navigate("/DashboardsInd")
+    } else {
+      sessionStorage.removeItem("cuentaActiva")
+      sessionStorage.removeItem("logoActivo")
+    }
+  }, [cuentaActiva])
+
 
 
   useEffect(() => {
@@ -35,16 +61,16 @@ const App = () => {
           <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva} logoActivo={logoActivo}/>}>
 
             <Route index element={<Home />} />
-            <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva} setLogoActivo={setLogoActivo}/>} />
-            <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
-            <Route path="/Informacion" element={<Informacion />} />
-            <Route path="/Contacto" element={<Contacto />} />
-            
-            <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
-              <Route path="/DashboardsGen" element={<DashboardsGen />} />
-              <Route path="/DashboardsInd" element={<DashboardsInd />} />
-              <Route path="/TiempoRealGen" element={<TiempoRealGen />} />
-            </Route>
+          <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva} setLogoActivo={setLogoActivo}/>} />
+          <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
+          <Route path="/Informacion" element={<Informacion />} />
+          <Route path="/Contacto" element={<Contacto />} />
+          <Route path="/SessionStorageTest" element={<SessionStorageTest />} />
+          <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
+            <Route path="/DashboardsGen" element={<DashboardsGen />} />
+            <Route path="/DashboardsInd" element={<DashboardsInd />} />
+            <Route path="/TiempoRealGen" element={<TiempoRealGen />} />
+          </Route>
 
             <Route path="*" element={<Error404/>} />
           </Route>
