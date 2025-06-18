@@ -2,6 +2,12 @@ import "./Home.css";
 
 
 const Home = () => {
+
+  const masContacto = () => {
+    navigate("/Contacto")
+  }
+
+
   return (
     <>
       <div className="home-container">
@@ -17,7 +23,7 @@ const Home = () => {
             </p>
             <div className="hero-input">
               <input type="email" placeholder="Ingresa tu correo electrónico" maxLength={50} />
-              <button>Contactanos</button>
+              <button onClick={masContacto} >Contactanos</button>
             </div>
           </div>
           <div className="hero-image">

@@ -17,7 +17,7 @@ export default function Contacto() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Correo enviado correctamente');
+    alert('Consulta enviada correctamente, te enviaremos la respuesta via mail !');
     setFormData({
       nombre: '',
       email: '',
@@ -27,7 +27,8 @@ export default function Contacto() {
 
   return (
     <div className="contacto-container">
-      <h1 className="contacto-titulo">Contacto</h1>
+      <h1 className="contacto-titulo">¡ Contactanos !</h1>
+      <img src="../src/Imagenes/logo.png" alt="logo" class="logoContacto" />
       <form onSubmit={handleSubmit} className="contacto-formulario">
         <div className="form-grupo">
           <label htmlFor="nombre" className="form-label">Nombre:</label>
@@ -54,7 +55,7 @@ export default function Contacto() {
           />
         </div>
         <div className="form-grupo">
-          <label htmlFor="mensaje" className="form-label">Mensaje:</label>
+          <label htmlFor="mensaje" className="form-label">Consulta:</label>
           <textarea
             id="mensaje"
             name="mensaje"
@@ -64,7 +65,7 @@ export default function Contacto() {
             className="form-textarea"
           />
         </div>
-        <button type="submit" className="form-boton">Enviar</button>
+        <button type="submit" className="contacto-individual">Enviar</button>
       </form>
     </div>
   );
