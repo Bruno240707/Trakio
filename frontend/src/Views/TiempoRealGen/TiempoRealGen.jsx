@@ -20,7 +20,7 @@ const TiempoRealGen = () => {
 
   return (
     <div className="tiempo-real-container">
-      <h1 class="title-real">¡ Entradas y Salidas en Tiempo Real !</h1>
+      <h1>Entradas y Salidas en Tiempo Real</h1>
 
       <div className="lista-registros">
         {dataEntradasSalidas.map((d, i) => (
