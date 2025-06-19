@@ -21,28 +21,21 @@ const App = () => {
   const navigate = useNavigate();
 
   const [companiasRegistradas, setCompaniasRegistradas] = useState([])
-  const [cuentaActiva, setCuentaActiva] = useState()
-  const [logoActivo, setLogoActivo] = useState("")
+  const [cuentaActiva, setCuentaActiva] = useState(null)
 
   useEffect(() => {
     const savedCuentaActiva = sessionStorage.getItem("cuentaActiva")
-    const savedLogoActivo = sessionStorage.getItem("logoActivo")
 
-    if (savedCuentaActiva === "true") {
-      setCuentaActiva(true)
-      setLogoActivo(savedLogoActivo)
-      navigate("/DashboardsInd")
+    if (savedCuentaActiva) {
+      setCuentaActiva(JSON.parse(savedCuentaActiva))
     }
   }, [])
 
   useEffect(() => {
     if (cuentaActiva) {
-      sessionStorage.setItem("cuentaActiva", "true")
-      sessionStorage.setItem("logoActivo", logoActivo)
-      navigate("/DashboardsInd")
+      sessionStorage.setItem("cuentaActiva", JSON.stringify(cuentaActiva))
     } else {
       sessionStorage.removeItem("cuentaActiva")
-      sessionStorage.removeItem("logoActivo")
     }
   }, [cuentaActiva])
 
@@ -58,19 +51,19 @@ const App = () => {
   return (
     <>
         <Routes>
-          <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva} logoActivo={logoActivo}/>}>
-
+          <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva}/>}>
             <Route index element={<Home />} />
-          <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva} setLogoActivo={setLogoActivo}/>} />
-          <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
-          <Route path="/Informacion" element={<Informacion />} />
-          <Route path="/Contacto" element={<Contacto />} />
-          <Route path="/SessionStorageTest" element={<SessionStorageTest />} />
-          <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
-            <Route path="/DashboardsGen" element={<DashboardsGen />} />
-            <Route path="/DashboardsInd" element={<DashboardsInd />} />
-            <Route path="/TiempoRealGen" element={<TiempoRealGen />} />
-          </Route>
+            <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva}/>} />
+            <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
+            <Route path="/Informacion" element={<Informacion />} />
+            <Route path="/Contacto" element={<Contacto />} />
+            <Route path="/SessionStorageTest" element={<SessionStorageTest />} />
+            
+            <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
+              <Route path="/DashboardsGen" element={<DashboardsGen />} />
+              <Route path="/DashboardsInd" element={<DashboardsInd />} />
+              <Route path="/TiempoRealGen" element={<TiempoRealGen />} />
+            </Route>
 
             <Route path="*" element={<Error404/>} />
           </Route>

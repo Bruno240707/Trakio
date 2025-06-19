@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./IniciarSesion.css";
 
-const IniciarSesion = ({companiasRegistradas, setCuentaActiva, setLogoActivo}) => {
+const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
 
   const navigate = useNavigate()
 
@@ -15,25 +15,19 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva, setLogoActivo}) =
     const compania = companiasRegistradas.find((comp) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
 
     if (compania) {
-      setLogoActivo(compania.logo)
-      setCuentaActiva(true)
-      // Save login state in sessionStorage
-      sessionStorage.setItem("cuentaActiva", "true")
-      // Save logo URL in sessionStorage
-      sessionStorage.setItem("logoActivo", compania.logo)
+      setCuentaActiva(compania)
+
+      sessionStorage.setItem("cuentaActiva", JSON.stringify(compania))
+
       navigate("/dashboardsInd")
     } 
     else {
       setMensajeErrorInicio("Nombre de compañía o contraseña incorrectos")
-      setCuentaActiva(false)
+      setCuentaActiva(null)
       setNombreCompania("")
       setContrasenia("")
-      setLogoActivo("")
-      // Clear login state in sessionStorage
-      sessionStorage.removeItem("cuentaActiva")
-      // Clear logo URL in sessionStorage
-      sessionStorage.removeItem("logoActivo")
-    }
+
+      sessionStorage.removeItem("cuentaActiva")    }
   }
 
   const onClickMasInfo = () => {
