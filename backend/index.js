@@ -1,11 +1,25 @@
 import express from "express";
 import cors from "cors";
+import db from "./db.js";
+import fs from "fs";
 
 const app = express();
 const port = 3001;
 
 app.use(cors());
 
+
+// Endpoint para probar los eventos desde el JSON
+app.get("/api/eventos", (req, res) => {
+  try {
+    const rawData = fs.readFileSync("./event_logger.event.json", "utf-8");
+    const data = JSON.parse(rawData);
+    res.json(data);
+  } catch (error) {
+    console.error("Error al leer el JSON:", error);
+    res.status(500).json({ error: "No se pudo leer el archivo JSON" });
+  }
+});
 
 // Grafico en lineas
 app.get("/api/lineData", (req, res) => {
@@ -19,7 +33,6 @@ app.get("/api/lineData", (req, res) => {
     { label: "Domingo", Regularidad:4 }
   ]);
 });
-
 
 // Grafico en rueda
 app.get("/api/doughnutData", (req, res) => {
@@ -51,15 +64,18 @@ app.get("/api/barData", (req, res) => {
 
 // Users LogIn
 app.get("/api/CompaniasRegistradas", (req, res) => {
-  res.json([
-    { nombre: "coca", contrasenia: "cola", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/2560px-Coca-Cola_logo.svg.png" },
-    { nombre: "instagram", contrasenia: "instagram", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" },
-    { nombre: "twitter", contrasenia: "twitter", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1245px-Logo_of_Twitter.svg.png" },
-    { nombre: "facebook", contrasenia: "facebook", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtBILdC5ouxGYjeaYJPmVqMsSpsItocXSI5A&s" },
-    { nombre: "trakio", contrasenia: "trakio2025", logo: "../frontend/src/Imagenes/logo.png" }
-  ]);
+  const query = `
+    SELECT b.name AS nombre,
+           '1234' AS contrasenia, -- contraseñas simuladas
+           '' AS logo
+    FROM concierge_building b
+    LIMIT 10
+  `;
+  db.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: "Error en la consulta" });
+    res.json(results);
+  });
 });
-
 
 // Registro E/S en tiempo real
 app.get("/api/entradasSalidasTiempoReal", (req, res) => {

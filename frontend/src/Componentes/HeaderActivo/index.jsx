@@ -9,12 +9,16 @@
       navigate("/");
     };
 
+
     return (
       <header className="header">
         <div className="left-section">
           <div className="barra-lateral"></div>
           <Link to={"/"}>
-          <img src={cuentaActiva.logo}/>
+          {cuentaActiva.logo
+            ? <img src={cuentaActiva.logo} alt="Logo" />
+            : <p className="logo-text">Trakio</p>
+          }
           </Link>
         </div>
 
