@@ -10,3 +10,9 @@ hacer funcional los empleados y lo q vimos en EFSI de crear views con id para ca
 investigar recuperar contraseña, q mande el mail
 agregar mucha informacion y fotos formales en view informacion
 estilar bien contacto y que sea funcional
+
+
+
+posible mapa de calor:
+
+https://labex.io/es/tutorials/javascript-building-a-react-github-heatmap-contributions-445705#instalar-las-dependencias-necesarias
