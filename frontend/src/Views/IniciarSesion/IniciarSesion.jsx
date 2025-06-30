@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./IniciarSesion.css";
 
-const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
+const IniciarSesion = ({setCuentaActiva}) => {
 
   const navigate = useNavigate()
 

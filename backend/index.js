@@ -10,17 +10,49 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
-// Endpoint para probar los eventos desde el JSON
-app.get("/api/eventos", (req, res) => {
-  try {
-    const rawData = fs.readFileSync("./event_logger.event.json", "utf-8");
-    const data = JSON.parse(rawData);
-    res.json(data);
-  } catch (error) {
-    console.error("Error al leer el JSON:", error);
-    res.status(500).json({ error: "No se pudo leer el archivo JSON" });
-  }
+// Users LogIn
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+
+  const query = `
+    SELECT u.username, u.password
+    FROM restapi_user u
+    WHERE u.username = ? AND u.password = ?
+  `;
+
+  db.query(query, [username, password], (err, results) => {
+    if (err) return res.status(500).json({ error: "Error en la consulta" });
+
+    if (results.length > 0) {
+      // Usuario encontrado y password coincide
+      res.json({ success: true, user: results[0] });
+    } else {
+      // No encontrado o password incorrecta
+      res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
+    }
+  });
 });
+
+// traer Workers
+app.get("/api/workers", (req, res) => {
+  const query = `
+    SELECT *
+    FROM workers
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error al obtener los trabajadores:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+
+    res.json(results);
+  });
+});
+
+// traer usuarios registrados
+
+
 
 // Grafico en lineas
 app.get("/api/lineData", (req, res) => {
@@ -60,30 +92,6 @@ app.get("/api/barData", (req, res) => {
     { label: "18PM", Entradas: 22, Salidas: 15 },
 
   ]);
-});
-
-
-// Users LogIn
-app.post("/api/login", (req, res) => {
-  const { username, password } = req.body;
-
-  const query = `
-    SELECT u.username, u.password
-    FROM restapi_user u
-    WHERE u.username = ? AND u.password = ?
-  `;
-
-  db.query(query, [username, password], (err, results) => {
-    if (err) return res.status(500).json({ error: "Error en la consulta" });
-
-    if (results.length > 0) {
-      // Usuario encontrado y password coincide
-      res.json({ success: true, user: results[0] });
-    } else {
-      // No encontrado o password incorrecta
-      res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
-    }
-  });
 });
 
 // Registro E/S en tiempo real

@@ -20,7 +20,7 @@ const App = () => {
 
   const navigate = useNavigate();
 
-  const [companiasRegistradas, setCompaniasRegistradas] = useState([])
+  const [workers, setWorkers] = useState([])
   const [cuentaActiva, setCuentaActiva] = useState(null)
 
   useEffect(() => {
@@ -39,13 +39,11 @@ const App = () => {
     }
   }, [cuentaActiva])
 
-
-
   useEffect(() => {
-    fetch("http://localhost:3001/api/CompaniasRegistradas")
-      .then((res) => res.json())
-      .then((data) => setCompaniasRegistradas(data))
-      .catch((err) => console.error("Error al cargar la API:", err));
+    fetch("http://localhost:3001/api/workers")
+      .then(res => res.json())
+      .then(data => setWorkers(data))
+      .catch(err => console.error("Error al traer trabajadores", err));
   }, []);
 
   return (
@@ -53,7 +51,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout cuentaActiva={cuentaActiva} setCuentaActiva={setCuentaActiva}/>}>
             <Route index element={<Home />} />
-            <Route path="/IniciarSesion" element={<IniciarSesion companiasRegistradas={companiasRegistradas} setCuentaActiva={setCuentaActiva}/>} />
+            <Route path="/IniciarSesion" element={<IniciarSesion setCuentaActiva={setCuentaActiva}/>} />
             <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
             <Route path="/Informacion" element={<Informacion />} />
             <Route path="/Contacto" element={<Contacto />} />
