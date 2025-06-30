@@ -6,29 +6,37 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
 
   const navigate = useNavigate()
 
-  const [nombreCompania, setNombreCompania] = useState("")
+  const [username, setUsername] = useState("")
   const [contrasenia, setContrasenia] = useState("")
   const [mensajeErrorInicio, setMensajeErrorInicio] = useState("")
 
-  const onClickIniciarSesion = () => {
-
-    const compania = companiasRegistradas.find((comp) => comp.nombre === nombreCompania && comp.contrasenia === contrasenia)
-
-    if (compania) {
-      setCuentaActiva(compania)
-
-      sessionStorage.setItem("cuentaActiva", JSON.stringify(compania))
-
-      navigate("/dashboardsInd")
-    } 
-    else {
-      setMensajeErrorInicio("Nombre de compañía o contraseña incorrectos")
-      setCuentaActiva(null)
-      setNombreCompania("")
-      setContrasenia("")
-
-      sessionStorage.removeItem("cuentaActiva")    }
-  }
+  const onClickIniciarSesion = async () => {
+    setMensajeErrorInicio("");
+  
+    try {
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password: contrasenia }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        setCuentaActiva(data.user);
+        sessionStorage.setItem("cuentaActiva", JSON.stringify(data.user));
+        navigate("/dashboardsInd");
+      } else {
+        const errorData = await response.json();
+        setMensajeErrorInicio(errorData.message || "Error en inicio de sesión");
+        setCuentaActiva(null);
+        setUsername("");
+        setContrasenia("");
+        sessionStorage.removeItem("cuentaActiva");
+      }
+    } catch (error) {
+      setMensajeErrorInicio("Error de conexión con el servidor");
+    }
+  };
 
   const onClickMasInfo = () => {
     navigate("/Informacion")
@@ -53,7 +61,7 @@ const IniciarSesion = ({companiasRegistradas, setCuentaActiva}) => {
 
           <div className="input-group">
             <i className="fas fa-user"></i>
-            <input type="text" value={nombreCompania} onChange={(e) => setNombreCompania(e.target.value)} placeholder="Company" maxLength={40}/>
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" maxLength={40}/>
           </div>
 
           <div className="input-group">

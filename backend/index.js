@@ -4,10 +4,11 @@ import db from "./db.js";
 import fs from "fs";
 
 const app = express();
+
 const port = 3001;
 
 app.use(cors());
-
+app.use(express.json());
 
 // Endpoint para probar los eventos desde el JSON
 app.get("/api/eventos", (req, res) => {
@@ -63,17 +64,25 @@ app.get("/api/barData", (req, res) => {
 
 
 // Users LogIn
-app.get("/api/CompaniasRegistradas", (req, res) => {
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+
   const query = `
-    SELECT b.name AS nombre,
-           '1234' AS contrasenia, -- contraseñas simuladas
-           '' AS logo
-    FROM concierge_building b
-    LIMIT 10
+    SELECT u.username, u.password
+    FROM restapi_user u
+    WHERE u.username = ? AND u.password = ?
   `;
-  db.query(query, (err, results) => {
+
+  db.query(query, [username, password], (err, results) => {
     if (err) return res.status(500).json({ error: "Error en la consulta" });
-    res.json(results);
+
+    if (results.length > 0) {
+      // Usuario encontrado y password coincide
+      res.json({ success: true, user: results[0] });
+    } else {
+      // No encontrado o password incorrecta
+      res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
+    }
   });
 });
 
