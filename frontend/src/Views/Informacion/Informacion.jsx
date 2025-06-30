@@ -7,6 +7,7 @@ const Informacion = () => {
 
             <div class="contenidoInfo">
 
+                <img src="../src/Imagenes/logo.png" alt="logo" class="logoinfo" />
                 <h1 class="tituloInfo">Sobre Trakio</h1>
                 <h2 class="sloganInfo">La seguridad y la gestión, en un solo sistema.</h2>
                 <h3 class="qInfo">¿Que somos?</h3>
