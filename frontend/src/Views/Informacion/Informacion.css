@@ -10,7 +10,7 @@
 }
 .contenidoInfo
 {
-    height: 180vh;
+    height: 200vh;
 }
 .tituloInfo
 {
@@ -117,4 +117,15 @@
 }
 .btnInfo:hover {
     background-color: #2980b9;
+}
+
+
+.logoinfo
+{
+    margin-left: 46%;
+    height: 120px;
+    width: 120px;
+    border: 0.5px solid black;
+    border-radius: 15px;
+    margin-top: 5%;
 }
