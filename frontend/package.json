@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "chart.js": "^4.4.9",
     "express": "^5.1.0",
     "fa6": "^2.0.1",
