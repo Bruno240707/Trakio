@@ -16,6 +16,7 @@
     "concurrently": "^9.1.2"
   },
   "dependencies": {
+    "dotenv": "^17.0.1",
     "fa6": "^2.0.1"
   }
 }

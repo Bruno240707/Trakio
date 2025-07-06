@@ -11,32 +11,37 @@ const IniciarSesion = ({setCuentaActiva}) => {
   const [mensajeErrorInicio, setMensajeErrorInicio] = useState("")
 
   const onClickIniciarSesion = async () => {
-    setMensajeErrorInicio("");
-  
-    try {
-      const response = await fetch("http://localhost:3001/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password: contrasenia }),
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        setCuentaActiva(data.user);
-        sessionStorage.setItem("cuentaActiva", JSON.stringify(data.user));
-        navigate("/dashboardsInd");
-      } else {
-        const errorData = await response.json();
-        setMensajeErrorInicio(errorData.message || "Error en inicio de sesión");
-        setCuentaActiva(null);
-        setUsername("");
-        setContrasenia("");
-        sessionStorage.removeItem("cuentaActiva");
-      }
-    } catch (error) {
-      setMensajeErrorInicio("Error de conexión con el servidor");
+  setMensajeErrorInicio("");
+
+  try {
+    const response = await fetch("http://localhost:3001/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password: contrasenia }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setCuentaActiva(data.user);
+
+      // Guardás el usuario y el token en sessionStorage
+      sessionStorage.setItem("cuentaActiva", JSON.stringify(data.user));
+      sessionStorage.setItem("token", data.token);
+
+      navigate("/dashboardsInd");
+    } else {
+      const errorData = await response.json();
+      setMensajeErrorInicio(errorData.message || "Error en inicio de sesión");
+      setCuentaActiva(null);
+      setUsername("");
+      setContrasenia("");
+      sessionStorage.removeItem("cuentaActiva");
+      sessionStorage.removeItem("token");
     }
-  };
+  } catch (error) {
+    setMensajeErrorInicio("Error de conexión con el servidor");
+  }
+};
 
   const onClickMasInfo = () => {
     navigate("/Informacion")

@@ -2,6 +2,10 @@ import express from "express";
 import cors from "cors";
 import db from "./db.js";
 import fs from "fs";
+import jwt from "jsonwebtoken";
+import crypto from "node:crypto";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -10,26 +14,56 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
+const SECRET_KEY = "trakio_super_secreta_12345!@#";
+
+function verificarPassword(plainPassword, hashedPassword) {
+  const [algorithm, iterationsStr, salt, storedHash] = hashedPassword.split("$");
+  const iterations = parseInt(iterationsStr, 10);
+
+  return new Promise((resolve, reject) => {
+    if (!salt || !storedHash || !iterationsStr || !algorithm) {
+      return reject(new Error("Hash mal formado"));
+    }
+
+    crypto.pbkdf2(plainPassword, salt, iterations, 32, "sha256", (err, derivedKey) => {
+      if (err) return reject(err);
+      const derivedBase64 = derivedKey.toString("base64");
+      resolve(derivedBase64 === storedHash);
+    });
+  });
+}
+
 // Users LogIn
-app.post("/api/login", (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
 
-  const query = `
-    SELECT u.username, u.password
-    FROM restapi_user u
-    WHERE u.username = ? AND u.password = ?
-  `;
+  const query = `SELECT id, username, password FROM restapi_user WHERE username = ?`;
 
-  db.query(query, [username, password], (err, results) => {
+  db.query(query, [username], async (err, results) => {
     if (err) return res.status(500).json({ error: "Error en la consulta" });
 
-    if (results.length > 0) {
-      // Usuario encontrado y password coincide
-      res.json({ success: true, user: results[0] });
-    } else {
-      // No encontrado o password incorrecta
-      res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
+    if (results.length === 0) {
+      return res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
     }
+
+    const user = results[0];
+    const isValid = await verificarPassword(password, user.password);
+
+    if (!isValid) {
+      return res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      SECRET_KEY,
+      { expiresIn: "2h" }
+    );
+
+    res.json({
+      success: true,
+      user: { id: user.id, username: user.username },
+      token
+    });
   });
 });
 
