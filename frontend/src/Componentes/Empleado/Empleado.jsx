@@ -5,7 +5,7 @@ const Empleado = ({ empleado }) => {
   return (
     <Link to={`/DashboardsInd/${empleado.id}`} className="empleado-nombre">
         <li className="empleado-item">
-        <button className="delete">✕</button>
+        <img className="delete" src={empleado.foto_url}/>
             {empleado.nombre}
         </li>
     </Link>
