@@ -1,0 +1,27 @@
+.empleado-item {
+  background-color: #38497E;
+  color: white;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.delete {
+  background-color: #F9F9F9;
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.empleado-nombre {
+  text-decoration: none;
+  color: white;
+}

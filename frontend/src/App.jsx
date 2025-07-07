@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 //VIEWS
@@ -13,7 +13,6 @@ import OlvidoPassword from "./Views/OlvidoPassword/OlvidoPassword";
 import Informacion from "./Views/Informacion/Informacion";
 import Layout from "./Views/Layout/Layout";
 import Error404 from "./Views/Error404/Error404"
-import SessionStorageTest from "./Views/SessionStorageTest/SessionStorageTest";
 //
 import RutasProtegidas from "./Componentes/RutasProtegidas/RutasProtegidas"
 
@@ -45,14 +44,6 @@ const App = () => {
 
   }, []);
 
-
-  useEffect(() => {
-    fetch("http://localhost:3001/api/workers")
-      .then(res => res.json())
-      .then(data => setWorkers(data))
-      .catch(err => console.error("Error al traer trabajadores", err));
-  }, []);
-
   return (
     <>
         <Routes>
@@ -62,11 +53,11 @@ const App = () => {
             <Route path="/OlvidoPassword" element={<OlvidoPassword />} />
             <Route path="/Informacion" element={<Informacion />} />
             <Route path="/Contacto" element={<Contacto />} />
-            <Route path="/SessionStorageTest" element={<SessionStorageTest />} />
             
             <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
               <Route path="/DashboardsGen" element={<DashboardsGen />} />
-              <Route path="/DashboardsInd" element={<DashboardsInd />} />
+              <Route path="/DashboardsInd" element={<Navigate to="/DashboardsInd/1" />} />
+              <Route path="/DashboardsInd/:workerId" element={<DashboardsInd />} />
               <Route path="/TiempoRealGen" element={<TiempoRealGen />} />
             </Route>
 

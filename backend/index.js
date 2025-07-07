@@ -68,11 +68,8 @@ app.post("/api/login", async (req, res) => {
 });
 
 // traer Workers
-app.get("/api/workers", (req, res) => {
-  const query = `
-    SELECT *
-    FROM workers
-  `;
+app.get("/api/getWorkers", (req, res) => {
+  const query = `SELECT * FROM workers`;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -98,8 +95,8 @@ app.get("/api/lineData", (req, res) => {
   ]);
 });
 
-app.get("/api/eventsEntradasSalidasByWorkerAndDate", (req, res) => {
-  const workerId = 1; // fijo según requerimiento
+app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
+  const workerId = req.params.workerId;  
   const date = '2025-05-22'; // fijo según requerimiento
   const eventType = 'door-unlocked-from-app';
 
