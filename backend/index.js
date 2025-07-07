@@ -178,11 +178,6 @@ app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
 
-
-
-
-
-
 // Registro E/S en tiempo real
 app.get("/api/entradasSalidasTiempoReal", (req, res) => {
   res.json([
@@ -225,7 +220,7 @@ app.get("/api/worker-events", (req, res) => {
            END AS event_direction
     FROM numerados
     WHERE created_at >= CURDATE()
-    ORDER BY created_at;
+    ORDER BY created_at DESC;
   `;
 
   db.query(query, (err, results) => {

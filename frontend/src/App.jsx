@@ -20,7 +20,7 @@ const App = () => {
 
   const navigate = useNavigate();
 
-  const [workers, setWorkers] = useState([])
+  const [empleados, setEmpleados] = useState([])
   const [cuentaActiva, setCuentaActiva] = useState(null)
   const [loading, setLoading] = useState(true);
 
@@ -44,6 +44,13 @@ const App = () => {
 
   }, []);
 
+    useEffect(() => {
+    fetch(`http://localhost:3001/api/getWorkers`)
+      .then((res) => res.json())
+      .then((data) => setEmpleados(data))
+      .catch((err) => console.error("Error al cargar la API:", err));
+  }, [])
+
   return (
     <>
         <Routes>
@@ -56,9 +63,9 @@ const App = () => {
             
             <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
               <Route path="/DashboardsGen" element={<DashboardsGen />} />
-              <Route path="/DashboardsInd" element={<Navigate to="/DashboardsInd/1" />} />
-              <Route path="/DashboardsInd/:workerId" element={<DashboardsInd />} />
-              <Route path="/TiempoRealGen" element={<TiempoRealGen />} />
+              <Route path="/DashboardsInd" element={<Navigate to="/DashboardsInd/1" empleados={empleados} />} />
+              <Route path="/DashboardsInd/:workerId" element={<DashboardsInd empleados={empleados}/>} />
+              <Route path="/TiempoRealGen" element={<TiempoRealGen empleados={empleados}/>} />
             </Route>
 
             <Route path="*" element={<Error404/>} />

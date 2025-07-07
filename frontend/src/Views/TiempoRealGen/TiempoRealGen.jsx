@@ -1,42 +1,64 @@
 import { useEffect, useState } from "react";
 import "./TiempoRealGen.css";
+import axios from 'axios';
 import CardTiempoReal from "../../Componentes/CardTiempoReal/index";
 
-const TiempoRealGen = () => {
-  const [dataEntradasSalidas, setDataEntradasSalidas] = useState([]);
+const TiempoRealGen = ({ empleados }) => {
+
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const fetchData = () => {
-      fetch("http://localhost:3001/api/entradasSalidasTiempoReal")
-        .then((res) => res.json())
-        .then((data) => setDataEntradasSalidas(data))
-        .catch((err) => console.error("Error al cargar la API:", err));
+    const fetchEvents = () => {
+      axios.get('http://localhost:3001/api/worker-events')
+        .then(response => {
+          setEvents(response.data);
+          console.log(events)
+        })
+        .catch(error => {
+          console.error('Error fetching events:', error);
+        });
     };
 
-    fetchData();
-    const intervalId = setInterval(fetchData, 5000);
+    fetchEvents();
+
+    const intervalId = setInterval(fetchEvents, 5000);
+
     return () => clearInterval(intervalId);
   }, []);
 
+    const workerActual = (id) =>{
+      const empleadoActual = empleados.find((e) => e.id == id)
+      const nombreActual = empleadoActual.nombre
+      return nombreActual
+    }
+  
   return (
     <div className="tiempo-real-container">
       <h1>Entradas y Salidas en Tiempo Real</h1>
 
       <div className="lista-registros">
-        {dataEntradasSalidas.map((d, i) => (
-          <div key={i} className="registro-completo">
-            {d.tipo === "salida" ? (
-            <img src="../src/Imagenes/salida.png" className="icono-tipo" />
-            ) : (
-            <img src="../src/Imagenes/entrada.png" className="icono-tipo" />
-            )}
-            <CardTiempoReal
-              hora={d.hora}
-              nombre={d.nombreEmpleado}
-              tipo={d.tipo}
-            />
-          </div>
-        ))}
+        {Array.isArray(events) && events.length > 0 ? (
+          events.map(event => (
+            <div key={event.id} className="registro-completo">
+              {event.event_direction == "Exit" ? (
+                <img src="../src/Imagenes/salida.png" className="icono-tipo" />
+                ) : (
+                <img src="../src/Imagenes/entrada.png" className="icono-tipo" />
+              )}
+              <CardTiempoReal
+                hora={new Date(event.created_at).toLocaleString('es-AR', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                })}
+                nombre={workerActual(event.worker_id)}
+                tipo={event.event_direction}
+              />
+            </div>
+          ))
+        ) : (
+          <p>No hay eventos para mostrar.</p>
+        )}
       </div>
     </div>
   );

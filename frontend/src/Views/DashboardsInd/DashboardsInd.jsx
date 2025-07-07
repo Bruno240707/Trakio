@@ -6,11 +6,10 @@ import BarChart from "../../Componentes/BarChart/index"
 import Empleados from "../../Componentes/Empleados/Empleados"
 import "./DashboardsInd.css"
 
-const DashboardsInd = () => {
+const DashboardsInd = ({ empleados }) => {
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
   const [barData, setBarData] = useState([])
-  const [empleados, setEmpleados] = useState([])
 
   const { workerId } = useParams()
 
@@ -24,11 +23,6 @@ const DashboardsInd = () => {
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err))
-
-    fetch(`http://localhost:3001/api/getWorkers`)
-      .then((res) => res.json())
-      .then((data) => setEmpleados(data))
-      .catch((err) => console.error("Error al cargar la API:", err));
   }, [])
 
   useEffect(() => {
