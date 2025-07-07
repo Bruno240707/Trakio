@@ -6,6 +6,7 @@
 
     const cerrarSesion = () => {
       setCuentaActiva(false);
+      sessionStorage.removeItem("token");
       navigate("/");
     };
 

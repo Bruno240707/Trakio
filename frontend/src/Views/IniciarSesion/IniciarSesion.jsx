@@ -25,7 +25,6 @@ const IniciarSesion = ({setCuentaActiva}) => {
       setCuentaActiva(data.user);
 
       // Guardás el usuario y el token en sessionStorage
-      sessionStorage.setItem("cuentaActiva", JSON.stringify(data.user));
       sessionStorage.setItem("token", data.token);
 
       navigate("/dashboardsInd");
@@ -35,7 +34,6 @@ const IniciarSesion = ({setCuentaActiva}) => {
       setCuentaActiva(null);
       setUsername("");
       setContrasenia("");
-      sessionStorage.removeItem("cuentaActiva");
       sessionStorage.removeItem("token");
     }
   } catch (error) {

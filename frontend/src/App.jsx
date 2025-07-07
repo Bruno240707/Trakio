@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 //VIEWS
 import Home from "./Views/Home/Home";
@@ -22,22 +23,28 @@ const App = () => {
 
   const [workers, setWorkers] = useState([])
   const [cuentaActiva, setCuentaActiva] = useState(null)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedCuentaActiva = sessionStorage.getItem("cuentaActiva")
+    const token = sessionStorage.getItem("token");
 
-    if (savedCuentaActiva) {
-      setCuentaActiva(JSON.parse(savedCuentaActiva))
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setCuentaActiva({
+          id: decoded.id,
+          username: decoded.username
+        });
+      } catch (err) {
+        console.error("Token inválido o expirado", err);
+        sessionStorage.removeItem("token");
+      }
     }
-  }, [])
 
-  useEffect(() => {
-    if (cuentaActiva) {
-      sessionStorage.setItem("cuentaActiva", JSON.stringify(cuentaActiva))
-    } else {
-      sessionStorage.removeItem("cuentaActiva")
-    }
-  }, [cuentaActiva])
+    setLoading(false);
+
+  }, []);
+
 
   useEffect(() => {
     fetch("http://localhost:3001/api/workers")
