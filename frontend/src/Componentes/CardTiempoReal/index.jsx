@@ -1,13 +1,11 @@
 import "./CardTiempoReal.css"
 
-const CardTiempoReal = ({hora, nombre, tipo}) =>{
+const CardTiempoReal = ({hora, nombre, tipo, foto}) =>{
     return (
         <>
         <div className="card-tiempo">
             <span className="hora">{hora}</span>
-            <div className="circulo">
-                <span className="x">✕</span>
-            </div>
+                <img src={foto} className="x"/>
             <div className="info">
                 <p className="nombre">{nombre}</p>
                 <p className={`tipo ${tipo.toLowerCase()}`}>{tipo}</p>

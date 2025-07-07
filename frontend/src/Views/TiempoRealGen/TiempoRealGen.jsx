@@ -28,8 +28,7 @@ const TiempoRealGen = ({ empleados }) => {
 
     const workerActual = (id) =>{
       const empleadoActual = empleados.find((e) => e.id == id)
-      const nombreActual = empleadoActual.nombre
-      return nombreActual
+      return empleadoActual
     }
   
   return (
@@ -51,8 +50,9 @@ const TiempoRealGen = ({ empleados }) => {
                   minute: '2-digit',
                   second: '2-digit'
                 })}
-                nombre={workerActual(event.worker_id)}
+                nombre={workerActual(event.worker_id).nombre}
                 tipo={event.event_direction}
+                foto={workerActual(event.worker_id).foto_url}
               />
             </div>
           ))
