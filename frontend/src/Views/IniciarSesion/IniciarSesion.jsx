@@ -24,7 +24,6 @@ const IniciarSesion = ({setCuentaActiva}) => {
       const data = await response.json();
       setCuentaActiva(data.user);
 
-      // Guardás el usuario y el token en sessionStorage
       sessionStorage.setItem("token", data.token);
 
       navigate("/dashboardsInd");
@@ -77,7 +76,7 @@ const IniciarSesion = ({setCuentaActiva}) => {
           <button className="login-button" onClick={onClickIniciarSesion}>Iniciar sesión</button>
 
           <div className="btnOlvido">
-            <Link to="/OlvidoPassword" class="txtOlvido">
+            <Link to="/OlvidoPassword" className="txtOlvido">
             ¿Olvidaste tu contraseña?
             </Link>
           </div>

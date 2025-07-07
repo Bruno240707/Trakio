@@ -29,107 +29,107 @@ const DashboardsInd = () => {
 
   return (
     <>
-      <div class="container">
-        <aside class="sidebar">
-          <input class="dropdown" type="text" placeholder="Empleados..." />
+      <div className="container">
+        <aside className="sidebar">
+          <input className="dropdown" type="text" placeholder="Empleados..." />
 
-          <ul class="user-list">
+          <ul className="user-list">
             <li>
-              <button class="delete">✕</button> Marcelo Godoy
+              <button className="delete">✕</button> Marcelo Godoy
             </li>
             <li>
-              <button class="delete">✕</button> Fran Marap
+              <button className="delete">✕</button> Fran Marap
             </li>
             <li>
-              <button class="delete">✕</button> Lionel Andres
+              <button className="delete">✕</button> Lionel Andres
             </li>
             <li>
-              <button class="delete">✕</button> Eitan Mas
+              <button className="delete">✕</button> Eitan Mas
             </li>
             <li>
-              <button class="delete">✕</button> Nicolas Blaser
+              <button className="delete">✕</button> Nicolas Blaser
             </li>
             <li>
-              <button class="delete">✕</button> Marcelo Godoy
+              <button className="delete">✕</button> Marcelo Godoy
             </li>
             <li>
-              <button class="delete">✕</button> Fran Marap
+              <button className="delete">✕</button> Fran Marap
             </li>
             <li>
-              <button class="delete">✕</button> Lionel Andres
+              <button className="delete">✕</button> Lionel Andres
             </li>
             <li>
-              <button class="delete">✕</button> Eitan Mas
+              <button className="delete">✕</button> Eitan Mas
             </li>
             <li>
-              <button class="delete">✕</button> Nicolas Blaser
+              <button className="delete">✕</button> Nicolas Blaser
             </li>
             <li>
-              <button class="delete">✕</button> Marcelo Godoy
+              <button className="delete">✕</button> Marcelo Godoy
             </li>
             <li>
-              <button class="delete">✕</button> Fran Marap
+              <button className="delete">✕</button> Fran Marap
             </li>
             <li>
-              <button class="delete">✕</button> Lionel Andres
+              <button className="delete">✕</button> Lionel Andres
             </li>
             <li>
-              <button class="delete">✕</button> Eitan Mas
+              <button className="delete">✕</button> Eitan Mas
             </li>
             <li>
-              <button class="delete">✕</button> Nicolas Blaser
+              <button className="delete">✕</button> Nicolas Blaser
             </li>
             <li>
-              <button class="delete">✕</button> Marcelo Godoy
+              <button className="delete">✕</button> Marcelo Godoy
             </li>
             <li>
-              <button class="delete">✕</button> Fran Marap
+              <button className="delete">✕</button> Fran Marap
             </li>
             <li>
-              <button class="delete">✕</button> Lionel Andres
+              <button className="delete">✕</button> Lionel Andres
             </li>
             <li>
-              <button class="delete">✕</button> Eitan Mas
+              <button className="delete">✕</button> Eitan Mas
             </li>
             <li>
-              <button class="delete">✕</button> Nicolas Blaser
+              <button className="delete">✕</button> Nicolas Blaser
             </li>
           </ul>
 
-          <div class="vista-general">
+          <div className="vista-general">
             <Link to={"/DashboardsGen"}>Vista General</Link>
           </div>
         </aside>
 
-        <main class="main-content">
+        <main className="main-content">
           <h1>Informacion de Empleado</h1>
-          <div class="employee-card">
-            <div class="employee-header">
-              <button class="employee-name">Francisco Marapode</button>
+          <div className="employee-card">
+            <div className="employee-header">
+              <button className="employee-name">Francisco Marapode</button>
               <img
                 src="https://randomuser.me/api/portraits/men/75.jpg"
                 alt="Empleado"
-                class="employee-photo"
+                className="employee-photo"
               />
             </div>
 
-            <div class="grid">
-              <div class="card">
+            <div className="grid">
+              <div className="card">
                 <LineChart lineData={lineData} />
               </div>
-              <div class="card">
+              <div className="card">
                 <DoughnutChart doughnutData={doughnutData} />
               </div>
-              <div class="card">
+              <div className="card">
                 <BarChart barData={barData} />
               </div>
-              <div class="card">
+              <div className="card">
                 <BarChart barData={barData} />
               </div>
-              <div class="card">
+              <div className="card">
                 <DoughnutChart doughnutData={doughnutData} />
               </div>
-              <div class="card">
+              <div className="card">
                 <LineChart lineData={lineData} />
               </div>
 
