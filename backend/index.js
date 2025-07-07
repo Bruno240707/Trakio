@@ -177,6 +177,15 @@ app.get("/api/barData", (req, res) => {
   ]);
 });
 
+app.listen(port, () => {
+  console.log(`Servidor corriendo en http://localhost:${port}`);
+});
+
+
+
+
+
+
 // Registro E/S en tiempo real
 app.get("/api/entradasSalidasTiempoReal", (req, res) => {
   res.json([
@@ -194,6 +203,41 @@ app.get("/api/entradasSalidasTiempoReal", (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+// query para las entradas y salida de los workers en tiempo real del dia de hoy
+app.get("/api/worker-events", (req, res) => {
+  const query = `
+    WITH eventos_filtrados AS (
+      SELECT *
+      FROM eventos
+      WHERE 
+        event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+        AND DATE(created_at) = CURDATE()
+    ),
+    numerados AS (
+      SELECT *,
+             ROW_NUMBER() OVER (
+               PARTITION BY worker_id, DATE(created_at)
+               ORDER BY created_at
+             ) - 1 AS evento_previo_count
+      FROM eventos_filtrados
+    )
+    SELECT *,
+           CASE 
+             WHEN MOD(evento_previo_count, 2) = 0 THEN 'Entrance'
+             ELSE 'Exit'
+           END AS event_direction
+    FROM numerados
+    WHERE created_at >= CURDATE()
+    ORDER BY created_at;
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error al obtener eventos de entrada/salida:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+
+    res.json(results);
+  });
 });
+
