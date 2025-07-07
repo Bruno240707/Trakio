@@ -84,9 +84,6 @@ app.get("/api/workers", (req, res) => {
   });
 });
 
-// traer usuarios registrados
-
-
 
 // Grafico en lineas
 app.get("/api/lineData", (req, res) => {
@@ -99,6 +96,58 @@ app.get("/api/lineData", (req, res) => {
     { label: "Sabado", Regularidad:5 },
     { label: "Domingo", Regularidad:4 }
   ]);
+});
+
+app.get("/api/eventsEntradasSalidasByWorkerAndDate", (req, res) => {
+  const workerId = 1; // fijo según requerimiento
+  const date = '2025-05-22'; // fijo según requerimiento
+  const eventType = 'door-unlocked-from-app';
+
+  const query = `
+    SELECT created_at
+    FROM eventos
+    WHERE worker_id = ?
+      AND DATE(created_at) = ?
+      AND event_type = ?
+    ORDER BY created_at ASC
+  `;
+
+  db.query(query, [workerId, date, eventType], (err, results) => {
+    if (err) {
+      console.error("Error en la consulta de eventos:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+
+    // Tomar los primeros dos y últimos dos eventos
+    const selectedEvents = [];
+    if (results.length >= 2) {
+      selectedEvents.push(results[0]);
+      if (results.length > 1) selectedEvents.push(results[1]);
+      if (results.length > 3) {
+        selectedEvents.push(results[results.length - 2]);
+        selectedEvents.push(results[results.length - 1]);
+      }
+    } else {
+      // Si hay menos de 2 eventos, tomar todos
+      selectedEvents.push(...results);
+    }
+
+    // Asignar alternancia Entrada/Salida
+    let isEntrada = true;
+    const responseData = selectedEvents.map(row => {
+      const dateObj = new Date(row.created_at);
+      const label = dateObj.toTimeString().slice(0,5); // HH:mm
+      const tipo = isEntrada ? "Entradas" : "Salidas";
+      isEntrada = !isEntrada;
+      return {
+        label,
+        Entradas: tipo === "Entradas" ? 1 : 0,
+        Salidas: tipo === "Salidas" ? 1 : 0
+      };
+    });
+
+    res.json(responseData);
+  });
 });
 
 // Grafico en rueda

@@ -21,7 +21,8 @@ const DashboardsInd = () => {
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err))
 
-    fetch("http://localhost:3001/api/barData")
+    // Cambiado para usar el nuevo endpoint con datos reales de entradas y salidas
+    fetch("http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate")
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err))
