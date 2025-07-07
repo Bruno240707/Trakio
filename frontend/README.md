@@ -1,12 +1,51 @@
-# React + Vite
+entrada y salida x fecha de base de datos:
+WITH eventos_filtrados AS (
+  SELECT *
+  FROM eventos
+  WHERE 
+    event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+    AND DATE(created_at) =  '2025-04-22'
+),
+numerados AS (
+  SELECT *,
+         ROW_NUMBER() OVER (
+           PARTITION BY worker_id, DATE(created_at)
+           ORDER BY created_at
+         ) - 1 AS evento_previo_count
+  FROM eventos_filtrados
+)
+SELECT *,
+       CASE 
+         WHEN MOD(evento_previo_count, 2) = 0 THEN 'Entrance'
+         ELSE 'Exit'
+       END AS event_direction
+FROM numerados
+WHERE created_at >= '2025-04-22 00:00:00'
+ORDER BY created_at;
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+-----------------------------------------------------------
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+entrada y salida por fecha actual:
+WITH eventos_filtrados AS (
+  SELECT *
+  FROM eventos
+  WHERE 
+    event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+    AND DATE(created_at) = CURDATE()
+),
+numerados AS (
+  SELECT *,
+         ROW_NUMBER() OVER (
+           PARTITION BY worker_id, DATE(created_at)
+           ORDER BY created_at
+         ) - 1 AS evento_previo_count
+  FROM eventos_filtrados
+)
+SELECT *,
+       CASE 
+         WHEN MOD(evento_previo_count, 2) = 0 THEN 'Entrance'
+         ELSE 'Exit'
+       END AS event_direction
+FROM numerados
+WHERE created_at >= CURDATE()
+ORDER BY created_at;
