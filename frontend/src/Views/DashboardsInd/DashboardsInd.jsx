@@ -3,6 +3,8 @@ import { useState, useEffect, use } from "react"
 import DoughnutChart from "../../Componentes/DoughnutChart/index"
 import LineChart from "../../Componentes/LineChart/index"
 import BarChart from "../../Componentes/BarChart/index"
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Empleados from "../../Componentes/Empleados/Empleados"
 import "./DashboardsInd.css"
 
@@ -18,8 +20,19 @@ const DashboardsInd = ({ empleados }) => {
   const { workerId } = useParams()
 
   const enviarFecha = () => {
-    cargarEntradasFiltradas()
-  }
+    let y = year;
+    let m = month;
+    let d = day;
+  
+    if (y && !m && d) {
+      d = "";
+    }
+    
+    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${y}&month=${m}&day=${d}`)
+      .then((res) => res.json())
+      .then((data) => setBarData(data))
+      .catch((err) => console.error("Error al cargar la API:", err));
+  };
 
   useEffect(() => {
     fetch("http://localhost:3001/api/doughnutData")
@@ -75,32 +88,38 @@ const DashboardsInd = ({ empleados }) => {
                 <p>Cargando...</p>
               )}
 
-              <div className="fecha-inputs">
-                <p>Filtrar por fecha (año / mes / día):</p>
-                <input
-                  type="number"
-                  placeholder="Año (YYYY)"
-                  min="2000"
-                  max="2100"
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
-                />
-                <input
-                  type="number"
-                  placeholder="Mes (MM)"
-                  min="1"
-                  max="12"
-                  value={month}
-                  onChange={(e) => setMonth(e.target.value)}
-                />
-                <input
-                  type="number"
-                  placeholder="Día (DD)"
-                  min="1"
-                  max="31"
-                  value={day}
-                  onChange={(e) => setDay(e.target.value)}
-                />
+          <div style={{ display: "flex", gap: "10px" }}>
+          <DatePicker
+            selected={year ? new Date(year, 0) : null}
+            onChange={(date) => setYear(date ? date.getFullYear().toString() : "")}
+            showYearPicker
+            dateFormat="yyyy"
+            placeholderText="Año"
+            yearItemNumber={10}
+            isClearable
+          />
+
+          <DatePicker
+            selected={month ? new Date(0, parseInt(month) - 1) : null}
+            onChange={(date) => setMonth(date ? (date.getMonth() + 1).toString().padStart(2, "0") : "")}
+            showMonthYearPicker
+            dateFormat="MM"
+            placeholderText="Mes"
+            isClearable
+          />
+
+          <DatePicker
+            selected={
+              day && year && month
+                ? new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+                : null
+            }
+            onChange={(date) => setDay(date ? date.getDate().toString().padStart(2, "0") : "")}
+            dateFormat="dd"
+            placeholderText="Día"
+            isClearable
+          />
+
                 <button onClick={enviarFecha}>Enviar</button>
               </div>
 

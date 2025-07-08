@@ -106,7 +106,7 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
     month = (today.getMonth() + 1).toString(); // getMonth() da 0-11
     day = today.getDate().toString();
   }
-
+  
   let query = `
     SELECT created_at
     FROM eventos
