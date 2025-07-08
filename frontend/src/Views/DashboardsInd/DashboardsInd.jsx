@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import DoughnutChart from "../../Componentes/DoughnutChart/index"
 import LineChart from "../../Componentes/LineChart/index"
 import BarChart from "../../Componentes/BarChart/index"
@@ -10,14 +10,15 @@ const DashboardsInd = ({ empleados }) => {
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
   const [barData, setBarData] = useState([])
-  const [fecha, setFecha] = useState("")
+  
+  const [year, setYear] = useState("")
+  const [month, setMonth] = useState("")
+  const [day, setDay] = useState("")
 
   const { workerId } = useParams()
 
-  const date = '2025-05-21'
-
-  const enviarFecha = () => {
-
+  const enviarFecha = (year, month, day) => {
+    cargarEntradasFiltradas()
   }
 
   useEffect(() => {
@@ -33,11 +34,18 @@ const DashboardsInd = ({ empleados }) => {
   }, [])
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?date=${date}`)
+    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${year}&month=${month}&day=${day}`)
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
-  }, [workerId, date])
+  }, [workerId])
+
+  const cargarEntradasFiltradas = () => {
+    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${year}&month=${month}&day=${day}`)
+      .then((res) => res.json())
+      .then((data) => setBarData(data))
+      .catch((err) => console.error("Error al cargar la API:", err));
+  };
 
   const workerActual = empleados.find((e) => e.id == workerId)
 
@@ -67,14 +75,33 @@ const DashboardsInd = ({ empleados }) => {
                 <p>Cargando...</p>
               )}
 
-              <div>
-                <p>FECHA: </p>
+              <div className="fecha-inputs">
+                <p>Filtrar por fecha (año / mes / día):</p>
                 <input
-                  type="date"
-                  value={fecha}
-                  onChange={(e) => setFecha(e.target.value)}
+                  type="number"
+                  placeholder="Año (YYYY)"
+                  min="2000"
+                  max="2100"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
                 />
-                <button>Enviar</button>
+                <input
+                  type="number"
+                  placeholder="Mes (MM)"
+                  min="1"
+                  max="12"
+                  value={month}
+                  onChange={(e) => setMonth(e.target.value)}
+                />
+                <input
+                  type="number"
+                  placeholder="Día (DD)"
+                  min="1"
+                  max="31"
+                  value={day}
+                  onChange={(e) => setDay(e.target.value)}
+                />
+                <button onClick={() => enviarFecha(year, month, day)}>Enviar</button>
               </div>
 
               {workerActual ? (

@@ -96,20 +96,35 @@ app.get("/api/lineData", (req, res) => {
 });
 
 app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
-  const workerId = req.params.workerId;  
-  const date = req.query.date;
+  const workerId = req.params.workerId;
+  const { year, month, day } = req.query;
   const eventType = 'door-unlocked-from-app';
 
-  const query = `
+  let query = `
     SELECT created_at
     FROM eventos
     WHERE worker_id = ?
-      AND DATE(created_at) = ?
       AND event_type = ?
-    ORDER BY created_at ASC
   `;
 
-  db.query(query, [workerId, date, eventType], (err, results) => {
+  const params = [workerId, eventType];
+
+  if (year) {
+    query += " AND YEAR(created_at) = ?";
+    params.push(year);
+  }
+  if (month) {
+    query += " AND MONTH(created_at) = ?";
+    params.push(month);
+  }
+  if (day) {
+    query += " AND DAY(created_at) = ?";
+    params.push(day);
+  }
+
+  query += " ORDER BY created_at ASC";
+
+  db.query(query, params, (err, results) => {
     if (err) {
       console.error("Error en la consulta de eventos:", err);
       return res.status(500).json({ error: "Error en la consulta" });
@@ -125,7 +140,6 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
         selectedEvents.push(results[results.length - 1]);
       }
     } else {
-      // Si hay menos de 2 eventos, tomar todos
       selectedEvents.push(...results);
     }
 
@@ -146,6 +160,7 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
     res.json(responseData);
   });
 });
+
 
 // Grafico en rueda
 app.get("/api/doughnutData", (req, res) => {
