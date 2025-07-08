@@ -17,7 +17,7 @@ const DashboardsInd = ({ empleados }) => {
 
   const { workerId } = useParams()
 
-  const enviarFecha = (year, month, day) => {
+  const enviarFecha = () => {
     cargarEntradasFiltradas()
   }
 
@@ -101,7 +101,7 @@ const DashboardsInd = ({ empleados }) => {
                   value={day}
                   onChange={(e) => setDay(e.target.value)}
                 />
-                <button onClick={() => enviarFecha(year, month, day)}>Enviar</button>
+                <button onClick={enviarFecha}>Enviar</button>
               </div>
 
               {workerActual ? (

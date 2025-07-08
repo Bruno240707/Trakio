@@ -97,8 +97,15 @@ app.get("/api/lineData", (req, res) => {
 
 app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
   const workerId = req.params.workerId;
-  const { year, month, day } = req.query;
+  let { year, month, day } = req.query;
   const eventType = 'door-unlocked-from-app';
+
+  if (!year && !month && !day) {
+    const today = new Date();
+    year = today.getFullYear().toString();
+    month = (today.getMonth() + 1).toString(); // getMonth() da 0-11
+    day = today.getDate().toString();
+  }
 
   let query = `
     SELECT created_at
