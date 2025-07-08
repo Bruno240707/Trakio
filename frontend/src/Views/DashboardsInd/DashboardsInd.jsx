@@ -10,8 +10,15 @@ const DashboardsInd = ({ empleados }) => {
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
   const [barData, setBarData] = useState([])
+  const [fecha, setFecha] = useState("")
 
   const { workerId } = useParams()
+
+  const date = '2025-05-21'
+
+  const enviarFecha = () => {
+
+  }
 
   useEffect(() => {
     fetch("http://localhost:3001/api/doughnutData")
@@ -26,11 +33,11 @@ const DashboardsInd = ({ empleados }) => {
   }, [])
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}`)
+    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?date=${date}`)
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
-  }, [workerId])
+  }, [workerId, date])
 
   const workerActual = empleados.find((e) => e.id == workerId)
 
@@ -59,6 +66,16 @@ const DashboardsInd = ({ empleados }) => {
               ) : (
                 <p>Cargando...</p>
               )}
+
+              <div>
+                <p>FECHA: </p>
+                <input
+                  type="date"
+                  value={fecha}
+                  onChange={(e) => setFecha(e.target.value)}
+                />
+                <button>Enviar</button>
+              </div>
 
               {workerActual ? (
                 <img

@@ -97,7 +97,7 @@ app.get("/api/lineData", (req, res) => {
 
 app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
   const workerId = req.params.workerId;  
-  const date = '2025-05-22'; // fijo según requerimiento
+  const date = req.query.date;
   const eventType = 'door-unlocked-from-app';
 
   const query = `
