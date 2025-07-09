@@ -69,14 +69,30 @@ app.post("/api/login", async (req, res) => {
 
 // traer Workers
 app.get("/api/getWorkers", (req, res) => {
-  const query = `SELECT * FROM workers`;
+  const filtro = req.query.filtro?.trim() || "";
 
-  db.query(query, (err, results) => {
+  let query = `
+    SELECT id, nombre, apellido, foto_url 
+    FROM workers 
+  `;
+  let valores = [];
+
+  if (filtro.includes(" ")) {
+    // filtro tiene espacio => "nombre apellido"
+    const [nombreFiltro, apellidoFiltro] = filtro.split(" ", 2);
+    query += " WHERE nombre LIKE ? AND apellido LIKE ?";
+    valores = [`${nombreFiltro}%`, `${apellidoFiltro}%`];
+  } else {
+    // filtro sin espacio => solo nombre
+    query += " WHERE nombre LIKE ?";
+    valores = [`${filtro}%`];
+  }
+
+  db.query(query, valores, (err, results) => {
     if (err) {
       console.error("Error al obtener los trabajadores:", err);
       return res.status(500).json({ error: "Error en la consulta" });
     }
-
     res.json(results);
   });
 });

@@ -17,6 +17,9 @@ const DashboardsInd = ({ empleados }) => {
   const [month, setMonth] = useState("")
   const [day, setDay] = useState("")
 
+  const [empleadosFiltrados, setEmpleados] = useState([])
+  const [filtro, setFiltro] = useState("")
+
   const { workerId } = useParams()
 
   const enviarFecha = () => {
@@ -46,6 +49,13 @@ const DashboardsInd = ({ empleados }) => {
       .catch((err) => console.error("Error al cargar la API:", err))
   }, [])
 
+useEffect(() => {
+    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtro}`)
+      .then((res) => res.json())
+      .then((data) => setEmpleados(data))
+      .catch((err) => console.error("Error al cargar la API:", err));
+}, [filtro])
+
   useEffect(() => {
     fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${year}&month=${month}&day=${day}`)
       .then((res) => res.json())
@@ -53,23 +63,35 @@ const DashboardsInd = ({ empleados }) => {
       .catch((err) => console.error("Error al cargar la API:", err));
   }, [workerId])
 
-  const cargarEntradasFiltradas = () => {
-    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${year}&month=${month}&day=${day}`)
-      .then((res) => res.json())
-      .then((data) => setBarData(data))
-      .catch((err) => console.error("Error al cargar la API:", err));
-  };
-
   const workerActual = empleados.find((e) => e.id == workerId)
 
   return (
     <>
       <div className="container">
         <aside className="sidebar">
-          <input className="dropdown" type="text" placeholder="Empleados..." />
+
+
+        <div className="input-search-container">
+          <input
+            type="text"
+            className="input-search"
+            placeholder="Empleados..."
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+          />
+          {filtro && (
+            <button
+              className="input-search-clear"
+              onClick={() => setFiltro("")}
+              aria-label="Limpiar búsqueda"
+            >
+              ×
+            </button>
+          )}
+        </div>
 
           <ul className="user-list">
-            <Empleados empleados={empleados}/>
+            <Empleados empleados={empleadosFiltrados}/>
           </ul>
 
           <div className="vista-general">
@@ -83,7 +105,7 @@ const DashboardsInd = ({ empleados }) => {
             <div className="employee-header">
 
               {workerActual ? (
-                <p className="employee-name">{workerActual.nombre}</p>
+                <p className="employee-name">{workerActual.nombre} {workerActual.apellido}</p>
               ) : (
                 <p>Cargando...</p>
               )}

@@ -6,7 +6,7 @@ const Empleado = ({ empleado }) => {
     <Link to={`/DashboardsInd/${empleado.id}`} className="empleado-nombre">
         <li className="empleado-item">
         <img className="delete" src={empleado.foto_url}/>
-            {empleado.nombre}
+            {empleado.nombre} {empleado.apellido}
         </li>
     </Link>
 

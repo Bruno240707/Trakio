@@ -19,6 +19,45 @@ body {
     overflow: hidden;
   }
 
+  .input-search-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.input-search {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 0.75rem; /* padding derecho para la X */
+  font-size: 1rem;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-search-clear {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.input-search-clear:hover {
+  color: #333;
+}
+
+
   .dropdown {
     background-color: #F9F9F9;
     border: 2px solid #38497E;
@@ -28,6 +67,8 @@ body {
     border-radius: 6px;
     margin-bottom: 20px;
   }
+  
+
   
 .user-list {
   padding: 0;
