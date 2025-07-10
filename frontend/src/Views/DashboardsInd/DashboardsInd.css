@@ -94,7 +94,7 @@ body {
     border: none;
     padding: 12px;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 24px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -103,7 +103,7 @@ body {
     font-weight: 600;
     margin-top: 20px;
     position: relative;
-    height: 7%;
+    height: 12%;
   }
   
   .vista-general a {
@@ -140,6 +140,7 @@ body {
     background-color: #E3E3E3;
     border-radius: 10px;
     padding: 30px;
+    padding-bottom: 195px;
   }
   
   .employee-header {
@@ -148,7 +149,31 @@ body {
     justify-content: space-between;
     margin-bottom: 30px;
   }
+
+  .enviarInd
+  {
+    background-color: #0D84A2;
+    color: white;
+    border: none;
+    padding: 6px;
+    padding-left: 13px;
+    padding-right: 13px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+  .enviarInd:hover
+  {
+      transition: 1.3s;
+      background-color: #38497E;
+  }
   
+
   .employee-name {
     background-color: #38497E;
     color: white;
@@ -175,6 +200,7 @@ body {
     max-height: 500px;
     overflow-y: auto;
     padding-right: 10px;
+    margin-top: 5%;
   }
   
   .card {

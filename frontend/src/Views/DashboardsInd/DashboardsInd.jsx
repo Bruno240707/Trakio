@@ -110,39 +110,86 @@ useEffect(() => {
                 <p>Cargando...</p>
               )}
 
-          <div style={{ display: "flex", gap: "10px" }}>
-          <DatePicker
-            selected={year ? new Date(year, 0) : null}
-            onChange={(date) => setYear(date ? date.getFullYear().toString() : "")}
-            showYearPicker
-            dateFormat="yyyy"
-            placeholderText="Año"
-            yearItemNumber={10}
-            isClearable
-          />
+<div
+  style={{
+    display: "flex",
+    gap: "10px",
+    backgroundColor: "#e0e0e0",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    alignItems: "center",
+    justifyContent: "center",
+  }}
+>
+  <DatePicker
+    selected={year ? new Date(year, 0) : null}
+    onChange={(date) => setYear(date ? date.getFullYear().toString() : "")}
+    showYearPicker
+    dateFormat="yyyy"
+    placeholderText="Año"
+    yearItemNumber={10}
+    isClearable
+    wrapperClassName="date-input"
+    popperPlacement="bottom"
+    customInput={
+      <input
+        style={{
+          padding: "6px 10px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+          width: "70px",
+        }}
+      />
+    }
+  />
 
-          <DatePicker
-            selected={month ? new Date(0, parseInt(month) - 1) : null}
-            onChange={(date) => setMonth(date ? (date.getMonth() + 1).toString().padStart(2, "0") : "")}
-            showMonthYearPicker
-            dateFormat="MM"
-            placeholderText="Mes"
-            isClearable
-          />
+  <DatePicker
+    selected={month ? new Date(0, parseInt(month) - 1) : null}
+    onChange={(date) => setMonth(date ? (date.getMonth() + 1).toString().padStart(2, "0") : "")}
+    showMonthYearPicker
+    dateFormat="MM"
+    placeholderText="Mes"
+    isClearable
+    wrapperClassName="date-input"
+    popperPlacement="bottom"
+    customInput={
+      <input
+        style={{
+          padding: "6px 10px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+          width: "70px",
+        }}
+      />
+    }
+  />
 
-          <DatePicker
-            selected={
-              day && year && month
-                ? new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
-                : null
-            }
-            onChange={(date) => setDay(date ? date.getDate().toString().padStart(2, "0") : "")}
-            dateFormat="dd"
-            placeholderText="Día"
-            isClearable
-          />
+  <DatePicker
+    selected={
+      day && year && month
+        ? new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+        : null
+    }
+    onChange={(date) => setDay(date ? date.getDate().toString().padStart(2, "0") : "")}
+    dateFormat="dd"
+    placeholderText="Día"
+    isClearable
+    wrapperClassName="date-input"
+    popperPlacement="bottom"
+    customInput={
+      <input
+        style={{
+          padding: "6px 10px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+          width: "70px",
+        }}
+      />
+    }
+  />
 
-                <button onClick={enviarFecha}>Enviar</button>
+
+                <button class="enviarInd" onClick={enviarFecha}>Enviar</button>
               </div>
 
               {workerActual ? (
@@ -167,16 +214,6 @@ useEffect(() => {
               <div className="card">
                 <BarChart barData={barData} />
               </div>
-              <div className="card">
-                <BarChart barData={barData} />
-              </div>
-              <div className="card">
-                <DoughnutChart doughnutData={doughnutData} />
-              </div>
-              <div className="card">
-                <LineChart lineData={lineData} />
-              </div>
-
             </div>
           </div>
         </main>
