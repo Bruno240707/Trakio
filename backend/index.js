@@ -211,6 +211,54 @@ app.get("/api/barData", (req, res) => {
   ]);
 });
 
+app.get("/api/dashboardStats", (req, res) => {
+  const queryTotalEmpleados = "SELECT COUNT(*) AS total FROM workers";
+
+  const queryLlegadas = `
+    WITH primera_llegada AS (
+      SELECT *,
+             ROW_NUMBER() OVER (
+               PARTITION BY worker_id, DATE(created_at)
+               ORDER BY created_at
+             ) AS rn
+      FROM eventos
+      WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+    )
+    SELECT 
+      SUM(CASE WHEN TIME(created_at) <= '15:00:00' THEN 1 ELSE 0 END) AS llegadas_a_tiempo,
+      SUM(CASE WHEN TIME(created_at) >  '15:00:00' THEN 1 ELSE 0 END) AS llegadas_tarde
+    FROM primera_llegada
+    WHERE rn = 1;
+  `;
+
+  db.query(queryTotalEmpleados, (err, totalResults) => {
+    if (err) {
+      console.error("Error al obtener total empleados:", err);
+      return res.status(500).json({ error: "Error en la consulta total empleados" });
+    }
+
+    db.query(queryLlegadas, (err, llegadasResults) => {
+      if (err) {
+        console.error("Error al obtener llegadas:", err);
+        return res.status(500).json({ error: "Error en la consulta llegadas" });
+      }
+
+      const totalEmpleados = totalResults[0].total || 0;
+      const llegadasATiempo = llegadasResults[0].llegadas_a_tiempo || 0;
+      const llegadasTarde = llegadasResults[0].llegadas_tarde || 0;
+
+      res.json({
+        totalEmpleados,
+        llegadasATiempo,
+        llegadasTarde
+      });
+    });
+  });
+});
+
+
+
+
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });

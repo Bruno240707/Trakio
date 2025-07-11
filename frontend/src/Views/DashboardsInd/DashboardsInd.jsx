@@ -65,13 +65,15 @@ useEffect(() => {
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
 
-    if (workerId > empleados.length) {
-      navigate("*")
-    }
-
   }, [workerId])
 
   const workerActual = empleados.find((e) => e.id == workerId)
+
+  const workerExists = empleados.some(emp => emp.id == workerId);
+
+  if (!workerExists) {
+    navigate("/error404")
+  }
 
   return (
     <>
