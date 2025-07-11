@@ -114,7 +114,6 @@ app.get("/api/lineData", (req, res) => {
 app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
   const workerId = req.params.workerId;
   let { year, month, day } = req.query;
-  const eventType = 'door-unlocked-from-app';
 
   if (!year && !month && !day) {
     const today = new Date();
@@ -127,10 +126,10 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
     SELECT created_at
     FROM eventos
     WHERE worker_id = ?
-      AND event_type = ?
+      AND event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
   `;
 
-  const params = [workerId, eventType];
+  const params = [workerId];
 
   if (year) {
     query += " AND YEAR(created_at) = ?";

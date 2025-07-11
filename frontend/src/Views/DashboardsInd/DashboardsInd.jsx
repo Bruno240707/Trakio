@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate, Navigate } from "react-router-dom"
 import { useState, useEffect, use } from "react"
 import DoughnutChart from "../../Componentes/DoughnutChart/index"
 import LineChart from "../../Componentes/LineChart/index"
@@ -9,6 +9,9 @@ import Empleados from "../../Componentes/Empleados/Empleados"
 import "./DashboardsInd.css"
 
 const DashboardsInd = ({ empleados }) => {
+
+  const navigate = useNavigate();
+
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
   const [barData, setBarData] = useState([])
@@ -61,6 +64,11 @@ useEffect(() => {
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
+
+    if (workerId > empleados.length) {
+      navigate("*")
+    }
+
   }, [workerId])
 
   const workerActual = empleados.find((e) => e.id == workerId)
