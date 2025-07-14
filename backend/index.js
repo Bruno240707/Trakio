@@ -118,7 +118,7 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
   if (!year && !month && !day) {
     const today = new Date();
     year = today.getFullYear().toString();
-    month = (today.getMonth() + 1).toString(); // getMonth() da 0-11
+    month = (today.getMonth() + 1).toString();
     day = today.getDate().toString();
   }
   

@@ -33,6 +33,11 @@ const DashboardsInd = ({ empleados }) => {
     if (y && !m && d) {
       d = "";
     }
+
+    if (!y) {
+      m = "";
+      d = "";
+    }
     
     fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${y}&month=${m}&day=${d}`)
       .then((res) => res.json())
@@ -73,6 +78,24 @@ useEffect(() => {
 
   if (!workerExists) {
     navigate("/error404")
+  }
+
+  const onChangeDay = (date) => {
+    if (!month) {
+      setDay("")
+    }
+    else {
+      setDay(date ? date.getDate().toString().padStart(2, "0") : "")
+    }
+  }
+
+  const onChangeMonth = (date) => {
+    if (!year) {
+      setMonth("")
+    }
+    else {
+      setMonth(date ? (date.getMonth() + 1).toString().padStart(2, "0") : "")    
+    }
   }
 
   return (
@@ -154,8 +177,12 @@ useEffect(() => {
   />
 
   <DatePicker
-    selected={month ? new Date(0, parseInt(month) - 1) : null}
-    onChange={(date) => setMonth(date ? (date.getMonth() + 1).toString().padStart(2, "0") : "")}
+    selected={
+      year && month
+        ? new Date(parseInt(year), parseInt(month) - 1)
+        : null
+    }    
+    onChange={(date) => onChangeMonth(date)}
     showMonthYearPicker
     dateFormat="MM"
     placeholderText="Mes"
@@ -180,7 +207,7 @@ useEffect(() => {
         ? new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
         : null
     }
-    onChange={(date) => setDay(date ? date.getDate().toString().padStart(2, "0") : "")}
+    onChange={(date) => onChangeDay(date)}
     dateFormat="dd"
     placeholderText="Día"
     isClearable
@@ -199,7 +226,7 @@ useEffect(() => {
   />
 
 
-                <button class="enviarInd" onClick={enviarFecha}>Enviar</button>
+                <button className="enviarInd" onClick={enviarFecha}>Enviar</button>
               </div>
 
               {workerActual ? (
@@ -224,7 +251,33 @@ useEffect(() => {
               <div className="card">
                 <BarChart barData={barData} />
               </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
+              <div className="card">
+              </div>
             </div>
+
+
           </div>
         </main>
       </div>
