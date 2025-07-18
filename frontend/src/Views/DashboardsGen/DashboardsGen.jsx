@@ -87,16 +87,16 @@ const DashboardsGen = () => {
         </div>
       </div>
 
-      <div className="grafico-container">
-        <LineChart lineData={lineData}/>
-      </div>
-
-      <div className="grafico-container">
+      <div className="graficos-flex">
+        <div className="grafico-container">
+          <LineChart lineData={lineData}/>
+        </div>
+        <div className="grafico-container">
           <DoughnutChart doughnutData={doughnutData}/>
-      </div>
-
-      <div className="grafico-container">
-        <BarChart barData={barData}/>
+        </div>
+        <div className="grafico-container">
+          <BarChart barData={barData}/>
+        </div>
       </div>
     </>
   )
