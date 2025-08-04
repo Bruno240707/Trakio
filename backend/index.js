@@ -318,3 +318,70 @@ app.get("/api/worker-events", (req, res) => {
   });
 });
 
+app.get("/api/lineData/:workerId", (req, res) => {
+  const { workerId } = req.params;
+  const { year, month } = req.query;
+
+  if (!workerId || !year || !month) {
+    return res.status(400).json({ error: "Faltan parámetros (workerId, year, month)" });
+  }
+
+  const query = `
+  WITH primeras_entradas AS (
+    SELECT 
+      worker_id,
+      DATE(created_at) AS fecha_local,
+      TIME(created_at) AS hora_local,
+      ROW_NUMBER() OVER (
+        PARTITION BY worker_id, DATE(created_at)
+        ORDER BY created_at ASC
+      ) AS rn
+    FROM eventos
+    WHERE 
+      event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+      AND worker_id = ?
+      AND YEAR(created_at) = ?
+      AND MONTH(created_at) = ?
+  )
+  SELECT 
+    DAYNAME(fecha_local) AS dia,
+    DAYOFWEEK(fecha_local) AS orden_dia,
+    ROUND(
+      SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
+      1
+    ) AS porcentaje_temprano
+  FROM primeras_entradas
+  WHERE rn = 1
+  GROUP BY dia, orden_dia
+  ORDER BY orden_dia;
+`;
+
+
+  db.query(query, [workerId, year, month], (err, results) => {
+    if (err) {
+      console.error("Error al obtener datos de línea:", err);
+      return res.status(500).json({ error: "Error al consultar la base de datos" });
+    }
+
+    // Días ordenados Lunes a Domingo con sus DAYOFWEEK correspondientes
+    const diasOrdenados = [
+      { label: "Lunes", orden_dia: 2 },
+      { label: "Martes", orden_dia: 3 },
+      { label: "Miércoles", orden_dia: 4 },
+      { label: "Jueves", orden_dia: 5 },
+      { label: "Viernes", orden_dia: 6 },
+      { label: "Sábado", orden_dia: 7 },
+      { label: "Domingo", orden_dia: 1 }
+    ];
+
+    const lineData = diasOrdenados.map(({ label, orden_dia }) => {
+      const encontrado = results.find(r => r.orden_dia === orden_dia);
+      return {
+        label,
+        Regularidad: encontrado ? parseFloat(encontrado.porcentaje_temprano) : 0
+      };
+    });
+
+    res.json(lineData);
+  });
+});

@@ -50,12 +50,16 @@ const DashboardsInd = ({ empleados }) => {
       .then((res) => res.json())
       .then((data) => setDoughnutData(data))
       .catch((err) => console.error("Error al cargar la API:", err))
+  }, [])
 
-    fetch("http://localhost:3001/api/lineData")
+  useEffect(() => {
+    if (!workerId || !year || !month) return;
+  
+    fetch(`http://localhost:3001/api/lineData/${workerId}?year=${year}&month=${month}`)
       .then((res) => res.json())
       .then((data) => setLineData(data))
-      .catch((err) => console.error("Error al cargar la API:", err))
-  }, [])
+      .catch((err) => console.error("Error al cargar lineData:", err));
+  }, [workerId, year, month]);
 
 useEffect(() => {
     fetch(`http://localhost:3001/api/getWorkers?filtro=${filtro}`)
