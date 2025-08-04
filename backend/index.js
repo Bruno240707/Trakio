@@ -320,42 +320,44 @@ app.get("/api/worker-events", (req, res) => {
 
 app.get("/api/lineData/:workerId", (req, res) => {
   const { workerId } = req.params;
-  const { year, month } = req.query;
+  let { year, month } = req.query; // let para poder reasignar
 
-  if (!workerId || !year || !month) {
-    return res.status(400).json({ error: "Faltan parámetros (workerId, year, month)" });
+  // Si no viene año o mes, usar el mes y año actual
+  if (!year || !month) {
+    const today = new Date();
+    year = today.getFullYear().toString();
+    month = (today.getMonth() + 1).toString().padStart(2, "0"); // opcional para formato 2 dígitos
   }
 
   const query = `
-  WITH primeras_entradas AS (
+    WITH primeras_entradas AS (
+      SELECT 
+        worker_id,
+        DATE(created_at) AS fecha_local,
+        TIME(created_at) AS hora_local,
+        ROW_NUMBER() OVER (
+          PARTITION BY worker_id, DATE(created_at)
+          ORDER BY created_at ASC
+        ) AS rn
+      FROM eventos
+      WHERE 
+        event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+        AND worker_id = ?
+        AND YEAR(created_at) = ?
+        AND MONTH(created_at) = ?
+    )
     SELECT 
-      worker_id,
-      DATE(created_at) AS fecha_local,
-      TIME(created_at) AS hora_local,
-      ROW_NUMBER() OVER (
-        PARTITION BY worker_id, DATE(created_at)
-        ORDER BY created_at ASC
-      ) AS rn
-    FROM eventos
-    WHERE 
-      event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
-      AND worker_id = ?
-      AND YEAR(created_at) = ?
-      AND MONTH(created_at) = ?
-  )
-  SELECT 
-    DAYNAME(fecha_local) AS dia,
-    DAYOFWEEK(fecha_local) AS orden_dia,
-    ROUND(
-      SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
-      1
-    ) AS porcentaje_temprano
-  FROM primeras_entradas
-  WHERE rn = 1
-  GROUP BY dia, orden_dia
-  ORDER BY orden_dia;
-`;
-
+      DAYNAME(fecha_local) AS dia,
+      DAYOFWEEK(fecha_local) AS orden_dia,
+      ROUND(
+        SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
+        1
+      ) AS porcentaje_temprano
+    FROM primeras_entradas
+    WHERE rn = 1
+    GROUP BY dia, orden_dia
+    ORDER BY orden_dia;
+  `;
 
   db.query(query, [workerId, year, month], (err, results) => {
     if (err) {
@@ -363,7 +365,6 @@ app.get("/api/lineData/:workerId", (req, res) => {
       return res.status(500).json({ error: "Error al consultar la base de datos" });
     }
 
-    // Días ordenados Lunes a Domingo con sus DAYOFWEEK correspondientes
     const diasOrdenados = [
       { label: "Lunes", orden_dia: 2 },
       { label: "Martes", orden_dia: 3 },
