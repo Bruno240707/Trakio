@@ -1,6 +1,14 @@
 import "./CardTiempoReal.css"
+import { useNavigate, Navigate } from "react-router-dom";
 
-const CardTiempoReal = ({hora, nombre, tipo, foto}) =>{
+const CardTiempoReal = ({hora, nombre, tipo, foto, id}) =>{
+
+    const navigate = useNavigate();
+
+    const irAlEmpleado = (id) => {
+        navigate("/DashboardsInd/" + id)
+    }
+
     return (
         <>
         <div className="card-tiempo">
@@ -10,6 +18,7 @@ const CardTiempoReal = ({hora, nombre, tipo, foto}) =>{
                 <p className="nombre">{nombre}</p>
                 <p className={`tipo ${tipo.toLowerCase()}`}>{tipo}</p>
             </div>
+            <button onClick={() => irAlEmpleado(id)}>Ir al empleado</button>
         </div>
         </>
     )

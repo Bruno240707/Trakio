@@ -53,6 +53,7 @@ const TiempoRealGen = ({ empleados }) => {
                 nombre={workerActual(event.worker_id).nombre}
                 tipo={event.event_direction}
                 foto={workerActual(event.worker_id).foto_url}
+                id={workerActual(event.worker_id).id}
               />
             </div>
           ))
