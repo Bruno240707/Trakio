@@ -26,7 +26,7 @@ const LineChart = ({ lineData }) => {
           plugins: {
             title: {
               display: true,
-              text: "Regularidad de Empleo",
+              text: "Regularidad de Empleo x Mes",
               color: "white",
               font: {
                 size: 20,
@@ -41,7 +41,12 @@ const LineChart = ({ lineData }) => {
             },
             tooltip: {
               callbacks: {
-                label: (context) => `${context.parsed.y}%`
+                label: function (context) {
+                  const index = context.dataIndex;
+                  const temprano = lineData[index]?.temprano ?? 0;
+                  const tarde = lineData[index]?.tarde ?? 0;
+                  return `Temprano: ${temprano} día(s), Tarde: ${tarde} día(s)`;
+                }
               }
             }
           },

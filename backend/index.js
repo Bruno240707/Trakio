@@ -320,13 +320,12 @@ app.get("/api/worker-events", (req, res) => {
 
 app.get("/api/lineData/:workerId", (req, res) => {
   const { workerId } = req.params;
-  let { year, month } = req.query; // let para poder reasignar
+  let { year, month } = req.query;
 
-  // Si no viene año o mes, usar el mes y año actual
   if (!year || !month) {
     const today = new Date();
     year = today.getFullYear().toString();
-    month = (today.getMonth() + 1).toString().padStart(2, "0"); // opcional para formato 2 dígitos
+    month = (today.getMonth() + 1).toString().padStart(2, "0");
   }
 
   const query = `
@@ -349,6 +348,9 @@ app.get("/api/lineData/:workerId", (req, res) => {
     SELECT 
       DAYNAME(fecha_local) AS dia,
       DAYOFWEEK(fecha_local) AS orden_dia,
+      SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) AS temprano,
+      SUM(CASE WHEN hora_local >= '09:00:00' THEN 1 ELSE 0 END) AS tarde,
+      COUNT(*) AS total_dias,
       ROUND(
         SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
         1
@@ -379,7 +381,9 @@ app.get("/api/lineData/:workerId", (req, res) => {
       const encontrado = results.find(r => r.orden_dia === orden_dia);
       return {
         label,
-        Regularidad: encontrado ? parseFloat(encontrado.porcentaje_temprano) : 0
+        Regularidad: encontrado ? parseFloat(encontrado.porcentaje_temprano) : 0,
+        temprano: encontrado ? encontrado.temprano : 0,
+        tarde: encontrado ? encontrado.tarde : 0
       };
     });
 
