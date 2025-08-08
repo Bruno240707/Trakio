@@ -263,23 +263,6 @@ app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
 
-// Registro E/S en tiempo real
-app.get("/api/entradasSalidasTiempoReal", (req, res) => {
-  res.json([
-    { nombreEmpleado: "Jose Alfonso", tipo: "entrada", hora: "18:05"},
-    { nombreEmpleado: "Ana Gómez", tipo: "entrada", hora: "13:05" },
-    { nombreEmpleado: "Luis Pérez", tipo: "salida", hora: "12:05" },
-    { nombreEmpleado: "María Fernández", tipo: "entrada", hora: "11:05" },
-    { nombreEmpleado: "Carlos Díaz", tipo: "salida", hora: "11:00" },
-    { nombreEmpleado: "Sofía Martínez", tipo: "entrada", hora: "09:00" },
-    { nombreEmpleado: "Nicolas Blaser", tipo: "salida", hora: "08:30 " },
-    { nombreEmpleado: "Salvador Soncini", tipo: "entrada", hora: " 08:15"},
-    { nombreEmpleado: "Jose Alfonso", tipo: "entrada", hora: "08:05"  },
-
-  ]);
-});
-
-
 // query para las entradas y salida de los workers en tiempo real del dia de hoy
 app.get("/api/worker-events", (req, res) => {
   const query = `
@@ -346,8 +329,7 @@ app.get("/api/lineData/:workerId", (req, res) => {
         AND MONTH(created_at) = ?
     )
     SELECT 
-      DAYNAME(fecha_local) AS dia,
-      DAYOFWEEK(fecha_local) AS orden_dia,
+      CEIL(DAY(fecha_local) / 7) AS semana_mes,
       SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) AS temprano,
       SUM(CASE WHEN hora_local >= '09:00:00' THEN 1 ELSE 0 END) AS tarde,
       COUNT(*) AS total_dias,
@@ -357,8 +339,8 @@ app.get("/api/lineData/:workerId", (req, res) => {
       ) AS porcentaje_temprano
     FROM primeras_entradas
     WHERE rn = 1
-    GROUP BY dia, orden_dia
-    ORDER BY orden_dia;
+    GROUP BY semana_mes
+    ORDER BY semana_mes;
   `;
 
   db.query(query, [workerId, year, month], (err, results) => {
@@ -367,18 +349,16 @@ app.get("/api/lineData/:workerId", (req, res) => {
       return res.status(500).json({ error: "Error al consultar la base de datos" });
     }
 
-    const diasOrdenados = [
-      { label: "Lunes", orden_dia: 2 },
-      { label: "Martes", orden_dia: 3 },
-      { label: "Miércoles", orden_dia: 4 },
-      { label: "Jueves", orden_dia: 5 },
-      { label: "Viernes", orden_dia: 6 },
-      { label: "Sábado", orden_dia: 7 },
-      { label: "Domingo", orden_dia: 1 }
+    const semanasOrdenadas = [
+      { label: "Semana 1", semana_mes: 1 },
+      { label: "Semana 2", semana_mes: 2 },
+      { label: "Semana 3", semana_mes: 3 },
+      { label: "Semana 4", semana_mes: 4 },
+      { label: "Semana 5", semana_mes: 5 } 
     ];
 
-    const lineData = diasOrdenados.map(({ label, orden_dia }) => {
-      const encontrado = results.find(r => r.orden_dia === orden_dia);
+    const lineData = semanasOrdenadas.map(({ label, semana_mes }) => {
+      const encontrado = results.find(r => r.semana_mes === semana_mes);
       return {
         label,
         Regularidad: encontrado ? parseFloat(encontrado.porcentaje_temprano) : 0,
@@ -390,3 +370,64 @@ app.get("/api/lineData/:workerId", (req, res) => {
     res.json(lineData);
   });
 });
+
+
+
+
+
+
+
+
+//GRAFICOS GENERALES
+
+app.get("/api/eventsEntradasSalidasAllWorkers", (req, res) => {
+  // Obtener mes y año actual si no se pasan por query
+  let { year, month } = req.query;
+
+  if (!year || !month) {
+    const today = new Date();
+    year = today.getFullYear().toString();
+    month = (today.getMonth() + 1).toString().padStart(2, "0");
+  }
+
+  let query = `
+    SELECT 
+      HOUR(created_at) AS hora,
+      event_type
+    FROM eventos
+    WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+      AND YEAR(created_at) = ?
+      AND MONTH(created_at) = ?
+    ORDER BY created_at ASC
+  `;
+
+  const params = [year, month];
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      console.error("Error en la consulta de eventos:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+
+    // Agrupar por hora
+    const dataMap = {};
+
+    results.forEach(row => {
+      const hora = row.hora.toString().padStart(2, "0") + ":00";
+
+      if (!dataMap[hora]) {
+        dataMap[hora] = { hora, Entradas: 0, Salidas: 0 };
+      }
+
+      if (row.event_type === 'door-unlocked-from-app') {
+        dataMap[hora].Entradas++;
+      } else {
+        dataMap[hora].Salidas++;
+      }
+    });
+
+    const responseData = Object.values(dataMap);
+    res.json(responseData);
+  });
+});
+

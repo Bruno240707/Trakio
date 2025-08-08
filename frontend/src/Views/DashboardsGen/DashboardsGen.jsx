@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"   
 import DoughnutChart from "../../Componentes/DoughnutChart/index";
 import LineChart from "../../Componentes/LineChart/index";
-import BarChart from "../../Componentes/BarChart/index"
+import BarChartGeneral from "../../Componentes/BarChartGeneral/BarChartGeneral"
 
 const DashboardsGen = () => {
 
@@ -30,7 +30,7 @@ const DashboardsGen = () => {
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
 
-    fetch("http://localhost:3001/api/barData")
+    fetch("http://localhost:3001/api/eventsEntradasSalidasAllWorkers")
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
@@ -95,7 +95,7 @@ const DashboardsGen = () => {
           <DoughnutChart doughnutData={doughnutData}/>
         </div>
         <div className="grafico-container">
-          <BarChart barData={barData}/>
+          <BarChartGeneral barData={barData}/>
         </div>
       </div>
     </>
