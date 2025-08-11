@@ -121,7 +121,7 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
     month = (today.getMonth() + 1).toString();
     day = today.getDate().toString();
   }
-  
+
   let query = `
     SELECT created_at
     FROM eventos
@@ -152,44 +152,22 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
       return res.status(500).json({ error: "Error en la consulta" });
     }
 
-    // Tomar los primeros dos y últimos dos eventos
-    const selectedEvents = [];
-    if (results.length >= 2) {
-      selectedEvents.push(results[0]);
-      if (results.length > 1) selectedEvents.push(results[1]);
-      if (results.length > 3) {
-        selectedEvents.push(results[results.length - 2]);
-        selectedEvents.push(results[results.length - 1]);
-      }
-    } else {
-      selectedEvents.push(...results);
-    }
-
-    // Asignar alternancia Entrada/Salida
+    // Asignar alternancia Entrada/Salida para TODOS los eventos
     let isEntrada = true;
-    const responseData = selectedEvents.map(row => {
+    const responseData = results.map(row => {
       const dateObj = new Date(row.created_at);
-      const label = dateObj.toTimeString().slice(0,5); // HH:mm
+      const label = dateObj.toTimeString().slice(0, 5); // HH:mm
       const tipo = isEntrada ? "Entradas" : "Salidas";
       isEntrada = !isEntrada;
       return {
         label,
         Entradas: tipo === "Entradas" ? 1 : 0,
-        Salidas: tipo === "Salidas" ? 1 : 0
+        Salidas: tipo === "Salidas" ? 1 : 0,
       };
     });
 
     res.json(responseData);
   });
-});
-
-
-// Grafico en rueda
-app.get("/api/doughnutData", (req, res) => {
-  res.json([
-    { label: "A Tiempo", value: 70 },
-    { label: "Tardanzas", value: 30 }
-  ]);
 });
 
 
@@ -371,6 +349,81 @@ app.get("/api/lineData/:workerId", (req, res) => {
   });
 });
 
+app.get("/api/attendanceDoughnut/:workerId", (req, res) => {
+  const { workerId } = req.params;
+  let { year, month } = req.query;
+
+  if (!year || !month) {
+    const today = new Date();
+    year = today.getFullYear();
+    month = today.getMonth() + 1;
+  } else {
+    year = parseInt(year);
+    month = parseInt(month);
+  }
+
+  // Calcular días hábiles del mes hasta hoy (si es el mes actual)
+  const today = new Date();
+  const lastDay = (year === today.getFullYear() && month === today.getMonth() + 1)
+    ? today.getDate()
+    : new Date(year, month, 0).getDate();
+
+  const diasHabiles = [];
+  for (let day = 1; day <= lastDay; day++) {
+    const date = new Date(year, month - 1, day);
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0=Domingo, 6=Sábado
+      diasHabiles.push(date.toISOString().slice(0, 10));
+    }
+  }
+
+  const query = `
+    WITH primeras_entradas AS (
+      SELECT 
+        DATE(created_at) AS fecha_local,
+        TIME(created_at) AS hora_local,
+        ROW_NUMBER() OVER (
+          PARTITION BY DATE(created_at)
+          ORDER BY created_at ASC
+        ) AS rn
+      FROM eventos
+      WHERE 
+        event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+        AND worker_id = ?
+        AND YEAR(created_at) = ?
+        AND MONTH(created_at) = ?
+    )
+    SELECT fecha_local, hora_local
+    FROM primeras_entradas
+    WHERE rn = 1
+  `;
+
+  db.query(query, [workerId, year, month], (err, results) => {
+    if (err) {
+      console.error("Error al obtener datos de asistencia:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+
+    let aTiempo = 0, tardanza = 0, inasistencia = 0;
+
+    diasHabiles.forEach(dia => {
+      const registro = results.find(r => r.fecha_local.toISOString().slice(0, 10) === dia);
+      if (!registro) {
+        inasistencia++;
+      } else if (registro.hora_local < "09:00:00") {
+        aTiempo++;
+      } else {
+        tardanza++;
+      }
+    });
+
+    res.json([
+      { label: "A Tiempo", value: aTiempo, color: "#18b2e7" },
+      { label: "Tardanza", value: tardanza, color: "#3877f0" },
+      { label: "Inasistencia", value: inasistencia, color: "#e63946" }
+    ]);
+  });
+});
 
 
 

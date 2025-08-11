@@ -18,3 +18,8 @@ agregar mucha informacion y fotos formales en view informacion
 posible mapa de calor:
 
 https://labex.io/es/tutorials/javascript-building-a-react-github-heatmap-contributions-445705#instalar-las-dependencias-necesarias
+
+tanto individual como general el grafico de semanas calculando el porcentaje de asistencias.
+lo mismo para el mensual
+agregar filtro de año y mes en graficos individuales y generales.
+vincular los numeros de llegadas tarde y llegadas a tiempo con un detalle de los mismos

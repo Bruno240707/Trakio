@@ -44,18 +44,17 @@ const DashboardsInd = ({ empleados }) => {
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
 
-    fetch(`http://localhost:3001/api/lineData/${workerId}?year=${year}&month=${month}`)
+    fetch(`http://localhost:3001/api/lineData/${workerId}?year=${y}&month=${m}`)
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar lineData:", err));
-  };
 
-  useEffect(() => {
-    fetch("http://localhost:3001/api/doughnutData")
-      .then((res) => res.json())
-      .then((data) => setDoughnutData(data))
-      .catch((err) => console.error("Error al cargar la API:", err))
-  }, [])
+      fetch(`http://localhost:3001/api/attendanceDoughnut/${workerId}?year=${y}&month=${m}`)
+        .then((res) => res.json())
+        .then((data) => setDoughnutData(data))
+        .catch((err) => console.error("Error al cargar la API:", err))
+
+  };
 
 useEffect(() => {
     fetch(`http://localhost:3001/api/getWorkers?filtro=${filtro}`)
@@ -69,14 +68,21 @@ useEffect(() => {
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
-  }, [workerId])
+    }, [workerId, year, month, day]);
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/lineData/${workerId}?year=${year}&month=${month}`)
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
-  }, [workerId])
+    }, [workerId, year, month, day]);
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/api/attendanceDoughnut/${workerId}?year=${year}&month=${month}`)
+      .then((res) => res.json())
+      .then((data) => setDoughnutData(data))
+      .catch((err) => console.error("Error al cargar la API:", err))
+  }, [workerId, year, month, day]);
 
   const workerActual = empleados.find((e) => e.id == workerId)
 
