@@ -115,7 +115,7 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
   const workerId = req.params.workerId;
   let { year, month, day } = req.query;
 
-  if (!year && !month && !day) {
+  if (!year || !month || !day) {
     const today = new Date();
     year = today.getFullYear().toString();
     month = (today.getMonth() + 1).toString();
@@ -285,69 +285,77 @@ app.get("/api/lineData/:workerId", (req, res) => {
 
   if (!year || !month) {
     const today = new Date();
-    year = today.getFullYear().toString();
-    month = (today.getMonth() + 1).toString().padStart(2, "0");
+    year = today.getFullYear();
+    month = today.getMonth() + 1;
+  } else {
+    year = parseInt(year);
+    month = parseInt(month);
+  }
+
+  // Días hábiles
+  const diasHabiles = [];
+  const lastDay = new Date(year, month, 0).getDate();
+  for (let day = 1; day <= lastDay; day++) {
+    const date = new Date(year, month - 1, day);
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      diasHabiles.push(date.toISOString().slice(0, 10)); // 'YYYY-MM-DD'
+    }
   }
 
   const query = `
     WITH primeras_entradas AS (
-      SELECT 
-        worker_id,
-        DATE(created_at) AS fecha_local,
-        TIME(created_at) AS hora_local,
-        ROW_NUMBER() OVER (
-          PARTITION BY worker_id, DATE(created_at)
-          ORDER BY created_at ASC
-        ) AS rn
-      FROM eventos
-      WHERE 
-        event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
-        AND worker_id = ?
-        AND YEAR(created_at) = ?
-        AND MONTH(created_at) = ?
+      SELECT DATE(created_at) AS fecha_local, TIME(created_at) AS hora_local
+      FROM (
+        SELECT *,
+               ROW_NUMBER() OVER (PARTITION BY worker_id, DATE(created_at) ORDER BY created_at ASC) AS rn
+        FROM eventos
+        WHERE worker_id = ? 
+          AND event_type IN ('door-unlocked-from-app','hiplock-door-lock-open-log-event')
+          AND YEAR(created_at) = ? AND MONTH(created_at) = ?
+      ) t
+      WHERE rn = 1
     )
-    SELECT 
-      CEIL(DAY(fecha_local) / 7) AS semana_mes,
-      SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) AS temprano,
-      SUM(CASE WHEN hora_local >= '09:00:00' THEN 1 ELSE 0 END) AS tarde,
-      COUNT(*) AS total_dias,
-      ROUND(
-        SUM(CASE WHEN hora_local < '09:00:00' THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
-        1
-      ) AS porcentaje_temprano
-    FROM primeras_entradas
-    WHERE rn = 1
-    GROUP BY semana_mes
-    ORDER BY semana_mes;
+    SELECT * FROM primeras_entradas
   `;
 
   db.query(query, [workerId, year, month], (err, results) => {
-    if (err) {
-      console.error("Error al obtener datos de línea:", err);
-      return res.status(500).json({ error: "Error al consultar la base de datos" });
-    }
+    if (err) return res.status(500).json({ error: "Error en consulta" });
 
-    const semanasOrdenadas = [
-      { label: "Semana 1", semana_mes: 1 },
-      { label: "Semana 2", semana_mes: 2 },
-      { label: "Semana 3", semana_mes: 3 },
-      { label: "Semana 4", semana_mes: 4 },
-      { label: "Semana 5", semana_mes: 5 } 
-    ];
-
-    const lineData = semanasOrdenadas.map(({ label, semana_mes }) => {
-      const encontrado = results.find(r => r.semana_mes === semana_mes);
-      return {
-        label,
-        Regularidad: encontrado ? parseFloat(encontrado.porcentaje_temprano) : 0,
-        temprano: encontrado ? encontrado.temprano : 0,
-        tarde: encontrado ? encontrado.tarde : 0
-      };
+    // Mapear registros por fecha normalizada 'YYYY-MM-DD'
+    const registrosMap = {};
+    results.forEach(r => {
+      const fechaStr = new Date(r.fecha_local).toISOString().slice(0,10);
+      const [h,m,s] = r.hora_local.split(":").map(Number);
+      const horaSec = h*3600 + m*60 + s;
+      registrosMap[fechaStr] = horaSec;
     });
+
+    const semanas = [1,2,3,4,5].map(n => ({ semana: n, temprano: 0, tarde: 0, ausente: 0 }));
+    const limiteTemprano = 9*3600; // 09:00:00 en segundos
+
+    diasHabiles.forEach(fecha => {
+      const dia = new Date(fecha).getDate();
+      const semana = Math.ceil(dia/7);
+      const hora = registrosMap[fecha];
+
+      if (hora === undefined) semanas[semana-1].ausente++;
+      else if (hora < limiteTemprano) semanas[semana-1].temprano++;
+      else semanas[semana-1].tarde++;
+    });
+
+    // lineData: muestra cantidad real de días temprano, tarde y ausentes por semana
+    const lineData = semanas.map((s,i) => ({
+      label: `Semana ${i+1}`,
+      temprano: s.temprano,
+      tarde: s.tarde,
+      ausente: s.ausente
+    }));
 
     res.json(lineData);
   });
 });
+
 
 app.get("/api/attendanceDoughnut/:workerId", (req, res) => {
   const { workerId } = req.params;
