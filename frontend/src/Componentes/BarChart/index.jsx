@@ -13,14 +13,12 @@ const BarChart = ({ barData }) => {
               data: barData.map((data) => data.Entradas),
               backgroundColor: "#18b2e7",
               borderRadius: 5,
-              barPercentage: 0.5,
             },
             {
               label: "Salidas",
               data: barData.map((data) => data.Salidas),
               backgroundColor: "#3877f0",
               borderRadius: 5,
-              barPercentage: 0.5,
             },
           ],
         }}
@@ -37,8 +35,8 @@ const BarChart = ({ barData }) => {
               },
               align: "start",
               padding: {
-                bottom: 20
-              }
+                bottom: 20,
+              },
             },
             legend: {
               labels: {
@@ -48,6 +46,7 @@ const BarChart = ({ barData }) => {
           },
           scales: {
             x: {
+              stacked: true,
               ticks: {
                 color: "white",
               },
@@ -56,13 +55,14 @@ const BarChart = ({ barData }) => {
               },
             },
             y: {
+              stacked: true,
+              beginAtZero: true,
               ticks: {
                 color: "white",
               },
               grid: {
                 color: "rgba(255,255,255,0.1)",
               },
-              beginAtZero: true,
             },
           },
         }}

@@ -1,7 +1,7 @@
 import { Bar } from "react-chartjs-2";
 import './BarChartGeneral.css';
 
-const BarChart = ({ barData }) => {
+const BarChartGeneral = ({ barData }) => {
   return (
     <div className="chart-container">
       <Bar
@@ -71,4 +71,4 @@ const BarChart = ({ barData }) => {
   );
 };
 
-export default BarChart;
+export default BarChartGeneral;
