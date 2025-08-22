@@ -1,12 +1,10 @@
-import { Chart as ChartJS, defaults } from "chart.js/auto"
-import { Bar, Doughnut, Line } from "react-chartjs-2"
-import './DashboardsGen.css'
+import { Chart as ChartJS } from "chart.js/auto"
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"   
 import DoughnutChart from "../../Componentes/DoughnutChart/index";
 import LineChart from "../../Componentes/LineChart/index";
 import BarChartGeneral from "../../Componentes/BarChartGeneral/BarChartGeneral"
-
+import './DashboardsGen.css'
 
 const meses = [
   { value: 1, label: "Enero" },
@@ -27,7 +25,7 @@ const DashboardsGen = () => {
   const hoy = new Date();
   const [year, setYear] = useState(hoy.getFullYear());
   const [month, setMonth] = useState(hoy.getMonth() + 1);
-  const [week, setWeek] = useState(1);
+  const [week, setWeek] = useState(0);
 
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
@@ -50,10 +48,10 @@ const DashboardsGen = () => {
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
 
-    fetch("http://localhost:3001/api/eventsEntradasSalidasAllWorkers")
-      .then((res) => res.json())
-      .then((data) => setBarData(data))
-      .catch((err) => console.error("Error al cargar la API:", err));
+    fetch(`http://localhost:3001/api/eventsEntradasSalidasAllWorkers?year=${year}&month=${month}&week=${week}`)
+      .then(res => res.json())
+      .then(data => setBarData(data))
+      .catch(err => console.error("Error al cargar la API:", err));
 
     fetch("http://localhost:3001/api/dashboardStats")
       .then((res) => res.json())
@@ -65,11 +63,10 @@ const DashboardsGen = () => {
         });
       })
       .catch((err) => console.error("Error al cargar dashboardStats:", err));
-  }, [year, month]);
+  }, [year, month, week]);
 
   return (
     <>
-    
       <div className="vista-individual">
         <Link to={"/DashboardsInd"}>Vista Individual</Link>
       </div>
@@ -105,8 +102,7 @@ const DashboardsGen = () => {
         </div>
       </div>
 
-
-      {/* Filtro de mes, año y semana para el gráfico de entradas/salidas por hora */}
+      {/* Filtro de mes, año y semana */}
       <div className="filtro-mes-anio-semana">
         <label htmlFor="mes2">Mes:</label>
         <select id="mes2" value={month} onChange={e => setMonth(Number(e.target.value))}>
@@ -114,18 +110,20 @@ const DashboardsGen = () => {
             <option key={m.value} value={m.value}>{m.label}</option>
           ))}
         </select>
+
         <label htmlFor="anio2">Año:</label>
         <select id="anio2" value={year} onChange={e => setYear(Number(e.target.value))}>
           {Array.from({ length: 5 }, (_, i) => hoy.getFullYear() - i).map(y => (
             <option key={y} value={y}>{y}</option>
           ))}
         </select>
+
         <label htmlFor="semana">Semana:</label>
         <select id="semana" value={week} onChange={e => setWeek(Number(e.target.value))}>
-          <option value={1}>Semanas</option>
-          <option value={2}>Semana 1</option>
-          <option value={3}>Semana 2</option>
-          <option value={4}>Semana 3</option>
+          <option value={0}>Todas las semanas</option>
+          <option value={1}>Semana 1</option>
+          <option value={2}>Semana 2</option>
+          <option value={3}>Semana 3</option>
           <option value={4}>Semana 4</option>
         </select>
       </div>
@@ -145,4 +143,4 @@ const DashboardsGen = () => {
   )
 }
 
-export default DashboardsGen
+export default DashboardsGen;

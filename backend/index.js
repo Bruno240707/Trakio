@@ -515,53 +515,76 @@ app.get("/api/attendanceDoughnut/:workerId", (req, res) => {
 //GRAFICOS GENERALES
 
 app.get("/api/eventsEntradasSalidasAllWorkers", (req, res) => {
-  // Obtener mes y año actual si no se pasan por query
-  let { year, month } = req.query;
+  let { year, month, week } = req.query;
 
+  const today = new Date();
   if (!year || !month) {
-    const today = new Date();
-    year = today.getFullYear().toString();
-    month = (today.getMonth() + 1).toString().padStart(2, "0");
+    year = today.getFullYear();
+    month = today.getMonth() + 1;
+  } else {
+    year = parseInt(year);
+    month = parseInt(month);
+  }
+  week = parseInt(week) || 0;
+
+  // Obtener días hábiles del mes
+  const diasHabiles = [];
+  const lastDay = new Date(year, month, 0).getDate();
+  for (let day = 1; day <= lastDay; day++) {
+    const date = new Date(year, month - 1, day);
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) diasHabiles.push(date);
   }
 
-  let query = `
-    SELECT 
-      HOUR(created_at) AS hora,
-      event_type
+  // Filtrar por semana
+  let diasFiltrados = diasHabiles;
+  if (week >= 1 && week <= 4) {
+    const inicio = (week - 1) * 7;
+    diasFiltrados = diasHabiles.slice(inicio, Math.min(inicio + 7, diasHabiles.length));
+  }
+
+  const fechasStr = diasFiltrados.map(d => d.toISOString().slice(0,10));
+  if (fechasStr.length === 0) return res.json([]);
+
+  const placeholders = fechasStr.map(() => '?').join(',');
+
+  const query = `
+    SELECT created_at
     FROM eventos
     WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
-      AND YEAR(created_at) = ?
-      AND MONTH(created_at) = ?
+      AND DATE(created_at) IN (${placeholders})
     ORDER BY created_at ASC
   `;
 
-  const params = [year, month];
-
-  db.query(query, params, (err, results) => {
+  db.query(query, fechasStr, (err, results) => {
     if (err) {
       console.error("Error en la consulta de eventos:", err);
       return res.status(500).json({ error: "Error en la consulta" });
     }
 
-    // Agrupar por hora
+    // Agrupar por hora:minuto (10 en 10) y contar Entradas/Salidas
     const dataMap = {};
 
     results.forEach(row => {
-      const hora = row.hora.toString().padStart(2, "0") + ":00";
+      const dateObj = new Date(row.created_at);
+      const hh = dateObj.getHours();
+      const mm = Math.floor(dateObj.getMinutes() / 10) * 10;
+      const timeLabel = `${hh.toString().padStart(2,'0')}:${mm.toString().padStart(2,'0')}`;
 
-      if (!dataMap[hora]) {
-        dataMap[hora] = { hora, Entradas: 0, Salidas: 0 };
-      }
+      if (!dataMap[timeLabel]) dataMap[timeLabel] = { label: timeLabel, Entradas: 0, Salidas: 0 };
 
-      if (row.event_type === 'door-unlocked-from-app') {
-        dataMap[hora].Entradas++;
+      // Alternancia Entrada/Salida como en el individual
+      if (dataMap[timeLabel].Entradas <= dataMap[timeLabel].Salidas) {
+        dataMap[timeLabel].Entradas++;
       } else {
-        dataMap[hora].Salidas++;
+        dataMap[timeLabel].Salidas++;
       }
     });
 
-    const responseData = Object.values(dataMap);
-    res.json(responseData);
+    // Ordenar por hora antes de enviar
+    const sortedData = Object.values(dataMap).sort((a,b) => a.label.localeCompare(b.label));
+
+    res.json(sortedData);
   });
 });
 
