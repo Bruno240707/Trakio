@@ -7,7 +7,26 @@ import DoughnutChart from "../../Componentes/DoughnutChart/index";
 import LineChart from "../../Componentes/LineChart/index";
 import BarChartGeneral from "../../Componentes/BarChartGeneral/BarChartGeneral"
 
+
+const meses = [
+  { value: 1, label: "Enero" },
+  { value: 2, label: "Febrero" },
+  { value: 3, label: "Marzo" },
+  { value: 4, label: "Abril" },
+  { value: 5, label: "Mayo" },
+  { value: 6, label: "Junio" },
+  { value: 7, label: "Julio" },
+  { value: 8, label: "Agosto" },
+  { value: 9, label: "Septiembre" },
+  { value: 10, label: "Octubre" },
+  { value: 11, label: "Noviembre" },
+  { value: 12, label: "Diciembre" },
+];
+
 const DashboardsGen = () => {
+  const hoy = new Date();
+  const [year, setYear] = useState(hoy.getFullYear());
+  const [month, setMonth] = useState(hoy.getMonth() + 1);
 
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
@@ -25,7 +44,7 @@ const DashboardsGen = () => {
       .then((data) => setDoughnutData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
 
-    fetch("http://localhost:3001/api/lineData")
+    fetch(`http://localhost:3001/api/lineData?year=${year}&month=${month}`)
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
@@ -45,9 +64,7 @@ const DashboardsGen = () => {
         });
       })
       .catch((err) => console.error("Error al cargar dashboardStats:", err));
-  }, []);
-
-  console.log(dashboardStats)
+  }, [year, month]);
 
   return (
     <>
@@ -86,6 +103,22 @@ const DashboardsGen = () => {
           <div className="label">Llegadas tarde</div>
         </div>
       </div>
+
+      {/* Filtro de mes y año arriba del gráfico */}
+        <div className="filtro-mes-anio">
+          <label htmlFor="mes">Mes:</label>
+          <select id="mes" value={month} onChange={e => setMonth(Number(e.target.value))}>
+            {meses.map(m => (
+              <option key={m.value} value={m.value}>{m.label}</option>
+            ))}
+          </select>
+          <label htmlFor="anio">Año:</label>
+          <select id="anio" value={year} onChange={e => setYear(Number(e.target.value))}>
+            {Array.from({ length: 5 }, (_, i) => hoy.getFullYear() - i).map(y => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+        </div>
 
       <div className="graficos-flex">
         <div className="grafico-container">

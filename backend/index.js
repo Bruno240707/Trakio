@@ -97,18 +97,98 @@ app.get("/api/getWorkers", (req, res) => {
   });
 });
 
-
-// Grafico en lineas
 app.get("/api/lineData", (req, res) => {
-  res.json([
-    { label: "Lunes", Regularidad: 100},
-    { label: "Martes", Regularidad: 70 },
-    { label: "Miercoles", Regularidad: 90 },
-    { label: "Jueves", Regularidad: 75 },
-    { label: "Viernes", Regularidad:85 },
-    { label: "Sabado", Regularidad:5 },
-    { label: "Domingo", Regularidad:4 }
-  ]);
+  let { year, month } = req.query;
+
+  // Si no se pasan, usar mes y año actual
+  if (!year || !month) {
+    const today = new Date();
+    year = today.getFullYear();
+    month = today.getMonth() + 1;
+  } else {
+    year = parseInt(year);
+    month = parseInt(month);
+  }
+
+  // Calcular días hábiles del mes
+  const diasHabiles = [];
+  const lastDay = new Date(year, month, 0).getDate();
+  for (let day = 1; day <= lastDay && day <= 30; day++) {
+    const date = new Date(year, month - 1, day);
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      diasHabiles.push(date.toISOString().slice(0, 10)); // 'YYYY-MM-DD'
+    }
+  }
+
+  // Obtener todos los empleados
+  db.query("SELECT id FROM workers", (err, workers) => {
+    if (err) return res.status(500).json({ error: "Error obteniendo empleados" });
+
+    const empleados = workers.map(w => w.id);
+
+    // Query: primera entrada por empleado y día
+    const query = `
+      WITH primeras_entradas AS (
+        SELECT worker_id, DATE(created_at) AS fecha_local, TIME(created_at) AS hora_local
+        FROM (
+          SELECT *,
+                 ROW_NUMBER() OVER (PARTITION BY worker_id, DATE(created_at) ORDER BY created_at ASC) AS rn
+          FROM eventos
+          WHERE event_type IN ('door-unlocked-from-app','hiplock-door-lock-open-log-event')
+            AND YEAR(created_at) = ? AND MONTH(created_at) = ?
+        ) t
+        WHERE rn = 1
+      )
+      SELECT worker_id, fecha_local, hora_local
+      FROM primeras_entradas
+    `;
+
+    db.query(query, [year, month], (err, results) => {
+      if (err) return res.status(500).json({ error: "Error en consulta" });
+
+      // Mapear: fecha -> { worker_id -> hora_local }
+      const entradasPorDia = {};
+      results.forEach(r => {
+        const fechaStr = new Date(r.fecha_local).toISOString().slice(0,10);
+        if (!entradasPorDia[fechaStr]) entradasPorDia[fechaStr] = {};
+        entradasPorDia[fechaStr][r.worker_id] = r.hora_local;
+      });
+
+      // Inicializar semanas fijas
+      const semanas = [
+        { label: "Semana 1", temprano: 0, tarde: 0, ausente: 0 }, // 1-7
+        { label: "Semana 2", temprano: 0, tarde: 0, ausente: 0 }, // 8-15
+        { label: "Semana 3", temprano: 0, tarde: 0, ausente: 0 }, // 16-23
+        { label: "Semana 4", temprano: 0, tarde: 0, ausente: 0 }  // 24-30
+      ];
+      const limiteTemprano = "09:00:00";
+
+      diasHabiles.forEach(fecha => {
+        const dia = new Date(fecha).getDate();
+        let semanaIdx = -1;
+        if (dia >= 1 && dia <= 7) semanaIdx = 0;
+        else if (dia >= 8 && dia <= 15) semanaIdx = 1;
+        else if (dia >= 16 && dia <= 23) semanaIdx = 2;
+        else if (dia >= 24 && dia <= 30) semanaIdx = 3;
+        if (semanaIdx === -1) return;
+
+        // Para cada empleado, revisar si tiene entrada ese día
+        empleados.forEach(workerId => {
+          const hora_local = entradasPorDia[fecha]?.[workerId];
+          if (!hora_local) {
+            semanas[semanaIdx].ausente++;
+          } else if (hora_local < limiteTemprano) {
+            semanas[semanaIdx].temprano++;
+          } else {
+            semanas[semanaIdx].tarde++;
+          }
+        });
+      });
+
+      res.json(semanas);
+    });
+  });
 });
 
 app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
@@ -169,7 +249,6 @@ app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", (req, res) => {
     res.json(responseData);
   });
 });
-
 
 // Grafico en barras
 app.get("/api/barData", (req, res) => {
@@ -233,9 +312,6 @@ app.get("/api/dashboardStats", (req, res) => {
     });
   });
 });
-
-
-
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
@@ -356,7 +432,6 @@ app.get("/api/lineData/:workerId", (req, res) => {
   });
 });
 
-
 app.get("/api/attendanceDoughnut/:workerId", (req, res) => {
   const { workerId } = req.params;
   let { year, month } = req.query;
@@ -433,12 +508,6 @@ app.get("/api/attendanceDoughnut/:workerId", (req, res) => {
   });
 });
 
-
-
-
-
-
-
 //GRAFICOS GENERALES
 
 app.get("/api/eventsEntradasSalidasAllWorkers", (req, res) => {
@@ -491,4 +560,6 @@ app.get("/api/eventsEntradasSalidasAllWorkers", (req, res) => {
     res.json(responseData);
   });
 });
+
+
 
