@@ -1,7 +1,7 @@
 import { Chart as ChartJS } from "chart.js/auto"
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"   
-import DoughnutChart from "../../Componentes/DoughnutChart/index";
+import DoughnutChartGeneral from "../../Componentes/DoughnutChartGeneral/DoughnutChartGeneral";
 import LineChart from "../../Componentes/LineChart/index";
 import BarChartGeneral from "../../Componentes/BarChartGeneral/BarChartGeneral"
 import './DashboardsGen.css'
@@ -38,10 +38,10 @@ const DashboardsGen = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/doughnutData")
+    fetch(`http://localhost:3001/api/attendanceDoughnutAllWorkers?year=${year}&month=${month}`)
       .then((res) => res.json())
       .then((data) => setDoughnutData(data))
-      .catch((err) => console.error("Error al cargar la API:", err));
+      .catch((err) => console.error("Error al cargar la API de Doughnut:", err));
 
     fetch(`http://localhost:3001/api/lineData?year=${year}&month=${month}`)
       .then((res) => res.json())
@@ -133,7 +133,7 @@ const DashboardsGen = () => {
           <LineChart lineData={lineData}/>
         </div>
         <div className="grafico-container">
-          <DoughnutChart doughnutData={doughnutData}/>
+          <DoughnutChartGeneral doughnutData={doughnutData}/>
         </div>
         <div className="grafico-container">
           <BarChartGeneral barData={barData}/>

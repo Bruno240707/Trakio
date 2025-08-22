@@ -588,5 +588,85 @@ app.get("/api/eventsEntradasSalidasAllWorkers", (req, res) => {
   });
 });
 
+//Doughnut general
+app.get("/api/attendanceDoughnutAllWorkers", (req, res) => {
+  let { year, month } = req.query;
+
+  const today = new Date();
+  if (!year || !month) {
+    year = today.getFullYear();
+    month = today.getMonth() + 1;
+  } else {
+    year = parseInt(year);
+    month = parseInt(month);
+  }
+
+  // Calcular días hábiles del mes hasta hoy (si es el mes actual)
+  const lastDay = (year === today.getFullYear() && month === today.getMonth() + 1)
+    ? today.getDate()
+    : new Date(year, month, 0).getDate();
+
+  const diasHabiles = [];
+  for (let day = 1; day <= lastDay; day++) {
+    const date = new Date(year, month - 1, day);
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) diasHabiles.push(date.toISOString().slice(0, 10));
+  }
+
+  const query = `
+    WITH primeras_entradas AS (
+      SELECT 
+        worker_id,
+        DATE(created_at) AS fecha_local,
+        TIME(created_at) AS hora_local,
+        ROW_NUMBER() OVER (
+          PARTITION BY worker_id, DATE(created_at)
+          ORDER BY created_at ASC
+        ) AS rn
+      FROM eventos
+      WHERE 
+        event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+        AND YEAR(created_at) = ?
+        AND MONTH(created_at) = ?
+    )
+    SELECT worker_id, fecha_local, hora_local
+    FROM primeras_entradas
+    WHERE rn = 1
+  `;
+
+  db.query(query, [year, month], (err, results) => {
+    if (err) {
+      console.error("Error al obtener datos de asistencia:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+
+    // Obtener lista de trabajadores únicos de los resultados
+    const workerIds = [...new Set(results.map(r => r.worker_id))];
+
+    let aTiempo = 0, tardanza = 0, inasistencia = 0;
+
+    workerIds.forEach(workerId => {
+      diasHabiles.forEach(dia => {
+        const registro = results.find(r => r.worker_id === workerId && r.fecha_local.toISOString().slice(0,10) === dia);
+        if (!registro) {
+          inasistencia++;
+        } else if (registro.hora_local < "09:00:00") {
+          aTiempo++;
+        } else {
+          tardanza++;
+        }
+      });
+    });
+
+    res.json([
+      { label: "A Tiempo", value: aTiempo, color: "#18b2e7" },
+      { label: "Tardanza", value: tardanza, color: "#3877f0" },
+      { label: "Inasistencia", value: inasistencia, color: "#e63946" }
+    ]);
+  });
+});
+
+
+
 
 
