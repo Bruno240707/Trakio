@@ -27,6 +27,7 @@ const DashboardsGen = () => {
   const hoy = new Date();
   const [year, setYear] = useState(hoy.getFullYear());
   const [month, setMonth] = useState(hoy.getMonth() + 1);
+  const [week, setWeek] = useState(1);
 
   const [lineData, setLineData] = useState([])
   const [doughnutData, setDoughnutData] = useState([])
@@ -104,21 +105,30 @@ const DashboardsGen = () => {
         </div>
       </div>
 
-      {/* Filtro de mes y año arriba del gráfico */}
-        <div className="filtro-mes-anio">
-          <label htmlFor="mes">Mes:</label>
-          <select id="mes" value={month} onChange={e => setMonth(Number(e.target.value))}>
-            {meses.map(m => (
-              <option key={m.value} value={m.value}>{m.label}</option>
-            ))}
-          </select>
-          <label htmlFor="anio">Año:</label>
-          <select id="anio" value={year} onChange={e => setYear(Number(e.target.value))}>
-            {Array.from({ length: 5 }, (_, i) => hoy.getFullYear() - i).map(y => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
-        </div>
+
+      {/* Filtro de mes, año y semana para el gráfico de entradas/salidas por hora */}
+      <div className="filtro-mes-anio-semana">
+        <label htmlFor="mes2">Mes:</label>
+        <select id="mes2" value={month} onChange={e => setMonth(Number(e.target.value))}>
+          {meses.map(m => (
+            <option key={m.value} value={m.value}>{m.label}</option>
+          ))}
+        </select>
+        <label htmlFor="anio2">Año:</label>
+        <select id="anio2" value={year} onChange={e => setYear(Number(e.target.value))}>
+          {Array.from({ length: 5 }, (_, i) => hoy.getFullYear() - i).map(y => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
+        <label htmlFor="semana">Semana:</label>
+        <select id="semana" value={week} onChange={e => setWeek(Number(e.target.value))}>
+          <option value={1}>Semanas</option>
+          <option value={2}>Semana 1</option>
+          <option value={3}>Semana 2</option>
+          <option value={4}>Semana 3</option>
+          <option value={4}>Semana 4</option>
+        </select>
+      </div>
 
       <div className="graficos-flex">
         <div className="grafico-container">
