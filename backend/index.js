@@ -100,7 +100,6 @@ app.get("/api/getWorkers", (req, res) => {
 app.get("/api/lineData", (req, res) => {
   let { year, month } = req.query;
 
-  // Si no se pasan, usar mes y año actual
   if (!year || !month) {
     const today = new Date();
     year = today.getFullYear();
@@ -110,14 +109,18 @@ app.get("/api/lineData", (req, res) => {
     month = parseInt(month);
   }
 
-  // Calcular días hábiles del mes
-  const diasHabiles = [];
+  // Calcular días hábiles del mes y agrupar por semana
+  const semanasDias = [[], [], [], []]; // 4 semanas
   const lastDay = new Date(year, month, 0).getDate();
   for (let day = 1; day <= lastDay && day <= 30; day++) {
     const date = new Date(year, month - 1, day);
     const dayOfWeek = date.getDay();
     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-      diasHabiles.push(date.toISOString().slice(0, 10)); // 'YYYY-MM-DD'
+      const fechaStr = date.toISOString().slice(0, 10);
+      if (day >= 1 && day <= 7) semanasDias[0].push(fechaStr);
+      else if (day >= 8 && day <= 15) semanasDias[1].push(fechaStr);
+      else if (day >= 16 && day <= 23) semanasDias[2].push(fechaStr);
+      else if (day >= 24 && day <= 30) semanasDias[3].push(fechaStr);
     }
   }
 
@@ -155,38 +158,39 @@ app.get("/api/lineData", (req, res) => {
         entradasPorDia[fechaStr][r.worker_id] = r.hora_local;
       });
 
-      // Inicializar semanas fijas
+      // Inicializar acumuladores por semana
       const semanas = [
-        { label: "Semana 1", temprano: 0, tarde: 0, ausente: 0 }, // 1-7
-        { label: "Semana 2", temprano: 0, tarde: 0, ausente: 0 }, // 8-15
-        { label: "Semana 3", temprano: 0, tarde: 0, ausente: 0 }, // 16-23
-        { label: "Semana 4", temprano: 0, tarde: 0, ausente: 0 }  // 24-30
+        { label: "Semana 1", temprano: 0, tarde: 0, ausente: 0, dias: semanasDias[0].length },
+        { label: "Semana 2", temprano: 0, tarde: 0, ausente: 0, dias: semanasDias[1].length },
+        { label: "Semana 3", temprano: 0, tarde: 0, ausente: 0, dias: semanasDias[2].length },
+        { label: "Semana 4", temprano: 0, tarde: 0, ausente: 0, dias: semanasDias[3].length }
       ];
       const limiteTemprano = "09:00:00";
 
-      diasHabiles.forEach(fecha => {
-        const dia = new Date(fecha).getDate();
-        let semanaIdx = -1;
-        if (dia >= 1 && dia <= 7) semanaIdx = 0;
-        else if (dia >= 8 && dia <= 15) semanaIdx = 1;
-        else if (dia >= 16 && dia <= 23) semanaIdx = 2;
-        else if (dia >= 24 && dia <= 30) semanaIdx = 3;
-        if (semanaIdx === -1) return;
-
-        // Para cada empleado, revisar si tiene entrada ese día
-        empleados.forEach(workerId => {
-          const hora_local = entradasPorDia[fecha]?.[workerId];
-          if (!hora_local) {
-            semanas[semanaIdx].ausente++;
-          } else if (hora_local < limiteTemprano) {
-            semanas[semanaIdx].temprano++;
-          } else {
-            semanas[semanaIdx].tarde++;
-          }
+      semanasDias.forEach((diasSemana, semanaIdx) => {
+        diasSemana.forEach(fecha => {
+          empleados.forEach(workerId => {
+            const hora_local = entradasPorDia[fecha]?.[workerId];
+            if (!hora_local) {
+              semanas[semanaIdx].ausente++;
+            } else if (hora_local < limiteTemprano) {
+              semanas[semanaIdx].temprano++;
+            } else {
+              semanas[semanaIdx].tarde++;
+            }
+          });
         });
       });
 
-      res.json(semanas);
+      // Calcular promedio por semana (por día hábil)
+      const semanasPromedio = semanas.map(s => ({
+        label: s.label,
+        temprano: s.dias ? Number((s.temprano / s.dias).toFixed(2)) : 0,
+        tarde: s.dias ? Number((s.tarde / s.dias).toFixed(2)) : 0,
+        ausente: s.dias ? Number((s.ausente / s.dias).toFixed(2)) : 0
+      }));
+
+      res.json(semanasPromedio);
     });
   });
 });
