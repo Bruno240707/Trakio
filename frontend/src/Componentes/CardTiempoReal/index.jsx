@@ -18,7 +18,7 @@ const CardTiempoReal = ({hora, nombre, tipo, foto, id}) =>{
                 <p className="nombre">{nombre}</p>
                 <p className={`tipo ${tipo.toLowerCase()}`}>{tipo}</p>
             </div>
-            <button onClick={() => irAlEmpleado(id)}>Ir al empleado</button>
+            <button className="botonReal" onClick={() => irAlEmpleado(id)}>Ir al empleado</button>
         </div>
         </>
     )

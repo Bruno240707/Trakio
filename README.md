@@ -23,3 +23,11 @@ tanto individual como general el grafico de semanas calculando el porcentaje de 
 lo mismo para el mensual
 agregar filtro de año y mes en graficos individuales y generales.
 vincular los numeros de llegadas tarde y llegadas a tiempo con un detalle de los mismos
+
+DEMO 25/08:
+1. Que sea todo exportable a un excel.
+2. Sistema de configuracion interno de la empresa para configurar horarios/agregar empleados (BASICAMENTE UN ADMINISTRADOR que por ejemplo pueda elegir cual es la hora de llegada tarde, etc)
+3. Detalles de cada grafico / con informacion util
+4. Filtrar por distintas sucursales
+5. Push notificacion (basicamente cuando se agregue algo a la base de datos se actualicen a tiempo real los graficos)
+6. Profesionalisar graficos / entrada y salida individual por mes en base a jornada laboral (este grafico es en Y las horas y en X los dias del mes para asi poder comparar las llegadas por hora) / comparativa
