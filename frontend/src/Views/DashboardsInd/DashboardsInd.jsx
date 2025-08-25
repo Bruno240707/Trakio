@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Empleados from "../../Componentes/Empleados/Empleados"
 import "./DashboardsInd.css"
+import DescargarExcel from "../../Componentes/CopiarDataButton/CopiarDataButton"
 
 const DashboardsInd = ({ empleados }) => {
 
@@ -255,12 +256,15 @@ useEffect(() => {
 
             <div className="grid">
               <div className="card">
+                <DescargarExcel data={lineData}/>
                 <LineChart lineData={lineData} />
               </div>
               <div className="card">
+                <DescargarExcel data={doughnutData}/>
                 <DoughnutChart doughnutData={doughnutData} />
               </div>
               <div className="card">
+                <DescargarExcel data={barData}/>
                 <BarChart barData={barData} />
               </div>
               <div className="card">

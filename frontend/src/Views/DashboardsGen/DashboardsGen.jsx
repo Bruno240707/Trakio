@@ -5,6 +5,7 @@ import DoughnutChartGeneral from "../../Componentes/DoughnutChartGeneral/Doughnu
 import LineChart from "../../Componentes/LineChart/index";
 import BarChartGeneral from "../../Componentes/BarChartGeneral/BarChartGeneral"
 import './DashboardsGen.css'
+import DescargarExcel from "../../Componentes/CopiarDataButton/CopiarDataButton";
 
 const meses = [
   { value: 1, label: "Enero" },
@@ -130,12 +131,15 @@ const DashboardsGen = () => {
 
       <div className="graficos-flex">
         <div className="grafico-container">
+          <DescargarExcel data={lineData}/>
           <LineChart lineData={lineData}/>
         </div>
         <div className="grafico-container">
+          <DescargarExcel data={doughnutData}/>
           <DoughnutChartGeneral doughnutData={doughnutData}/>
         </div>
         <div className="grafico-container">
+          <DescargarExcel data={barData}/>
           <BarChartGeneral barData={barData}/>
         </div>
       </div>
