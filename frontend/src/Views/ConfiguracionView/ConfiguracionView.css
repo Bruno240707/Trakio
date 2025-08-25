@@ -1,0 +1,126 @@
+.configuracionContainer {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  .configuracionContainer h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-bottom: 2px solid #18b2e7;
+    padding-bottom: 0.5rem;
+  }
+  
+  .configuracionContainer h3 {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #444;
+  }
+  
+  .configuracionLista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .configuracionItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.7rem;
+    transition: background 0.2s ease;
+  }
+  
+  .configuracionItem:hover {
+    background: #eef7fb;
+  }
+  
+  .configuracionItem span {
+    flex-grow: 1;
+    margin-left: 1rem;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .configuracionFoto {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #18b2e7;
+  }
+  
+  .configuracionBoton {
+    border: none;
+    padding: 0.4rem 0.8rem;
+    margin-left: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  /* Botón eliminar */
+  .configuracionBotonEliminar {
+    background: #e63946;
+    color: #fff;
+  }
+  .configuracionBotonEliminar:hover {
+    background: #c92c38;
+  }
+  
+  /* Botón editar */
+  .configuracionBotonEditar {
+    background: #3877f0;
+    color: #fff;
+  }
+  .configuracionBotonEditar:hover {
+    background: #2f65d4;
+  }
+  
+  /* Inputs */
+  .configuracionInput {
+    display: block;
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+  }
+  .configuracionInput:focus {
+    border-color: #18b2e7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(24, 178, 231, 0.2);
+  }
+  
+  /* Botón agregar */
+  .configuracionBotonAgregar {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    background: #18b2e7;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.7rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .configuracionBotonAgregar:hover {
+    background: #1499c9;
+  }
+  

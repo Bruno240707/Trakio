@@ -30,6 +30,9 @@
           <Link to={"/TiempoRealGen"}>
             <p className="nav-link">Tiempo Real</p>
           </Link>
+          <Link to={"/ConfiguracionView"}>
+            <p className="nav-link">Configuracion</p>
+          </Link>
         </div>
 
         <div className="right-section">

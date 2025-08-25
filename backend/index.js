@@ -670,3 +670,59 @@ app.get("/api/attendanceDoughnutAllWorkers", (req, res) => {
 
 
 
+
+//CONFIGURACION QUERYS
+
+// Agregar empleado
+app.post("/api/addWorker", (req, res) => {
+  const { nombre, apellido, email, telefono, foto_url } = req.body;
+
+  if (!nombre || !apellido || !email || !telefono) {
+    return res.status(400).json({ error: "Faltan datos obligatorios" });
+  }
+
+  const query = `
+    INSERT INTO workers (nombre, apellido, email, telefono, foto_url)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+  db.query(query, [nombre, apellido, email, telefono, foto_url], (err, result) => {
+    if (err) {
+      console.error("Error al agregar trabajador:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+    res.json({ success: true, id: result.insertId });
+  });
+});
+
+// Modificar empleado
+app.put("/api/updateWorker/:id", (req, res) => {
+  const { id } = req.params;
+  const { nombre, apellido, email, telefono, foto_url } = req.body;
+
+  const query = `
+    UPDATE workers 
+    SET nombre = ?, apellido = ?, email = ?, telefono = ?, foto_url = ?
+    WHERE id = ?
+  `;
+  db.query(query, [nombre, apellido, email, telefono, foto_url, id], (err, result) => {
+    if (err) {
+      console.error("Error al modificar trabajador:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+    res.json({ success: true });
+  });
+});
+
+// Eliminar empleado
+app.delete("/api/deleteWorker/:id", (req, res) => {
+  const { id } = req.params;
+
+  const query = "DELETE FROM workers WHERE id = ?";
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error("Error al eliminar trabajador:", err);
+      return res.status(500).json({ error: "Error en la consulta" });
+    }
+    res.json({ success: true });
+  });
+});

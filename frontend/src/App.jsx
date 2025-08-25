@@ -13,8 +13,10 @@ import OlvidoPassword from "./Views/OlvidoPassword/OlvidoPassword";
 import Informacion from "./Views/Informacion/Informacion";
 import Layout from "./Views/Layout/Layout";
 import Error404 from "./Views/Error404/Error404"
+import Configuracion from "./Views/ConfiguracionView/ConfiguracionView";
 //
 import RutasProtegidas from "./Componentes/RutasProtegidas/RutasProtegidas"
+import Empleados from "./Componentes/Empleados/Empleados";
 
 const App = () => {
 
@@ -44,12 +46,19 @@ const App = () => {
 
   }, []);
 
-    useEffect(() => {
-    fetch(`http://localhost:3001/api/getWorkers`)
-      .then((res) => res.json())
-      .then((data) => setEmpleados(data))
-      .catch((err) => console.error("Error al cargar la API:", err));
-  }, [])
+  useEffect(() => {
+    const fetchEmpleados = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/getWorkers");
+        const data = await res.json();
+        setEmpleados(data);
+      } catch (err) {
+        console.error("Error al cargar la API:", err);
+      }
+    };
+
+    fetchEmpleados();
+  }, []);
 
   return (
     <>
@@ -66,6 +75,7 @@ const App = () => {
               <Route path="/DashboardsInd" element={<Navigate to="/DashboardsInd/1" />} />
               <Route path="/DashboardsInd/:workerId" element={<DashboardsInd empleados={empleados}/>} />
               <Route path="/TiempoRealGen" element={<TiempoRealGen empleados={empleados}/>} />
+              <Route path="/ConfiguracionView" element={<Configuracion empleados={empleados} setEmpleados={setEmpleados}/>} />
             </Route>
 
             <Route path="*" element={<Error404/>} />

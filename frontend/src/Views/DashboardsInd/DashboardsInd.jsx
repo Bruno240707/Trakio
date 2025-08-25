@@ -85,6 +85,7 @@ useEffect(() => {
       .catch((err) => console.error("Error al cargar la API:", err))
   }, [workerId, year, month, day]);
 
+  
   const workerActual = empleados.find((e) => e.id == workerId)
 
   const workerExists = empleados.some(emp => emp.id == workerId);
