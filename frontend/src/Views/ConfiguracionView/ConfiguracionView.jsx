@@ -1,4 +1,3 @@
-// Configuracion.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./ConfiguracionView.css";
@@ -11,6 +10,9 @@ export default function Configuracion({ empleados, setEmpleados }) {
     telefono: "",
     foto_url: ""
   });
+
+  const [editingId, setEditingId] = useState(null);
+  const [editValues, setEditValues] = useState({});
 
   // Función para traer empleados desde el backend
   const fetchEmpleados = async () => {
@@ -52,26 +54,33 @@ export default function Configuracion({ empleados, setEmpleados }) {
     }
   };
 
-  // Editar empleado
-  const handleUpdate = async (emp) => {
-    try {
-      const nombre = prompt("Nuevo nombre:", emp.nombre);
-      if (nombre === null) return;
-      const apellido = prompt("Nuevo apellido:", emp.apellido);
-      if (apellido === null) return;
-      const email = prompt("Nuevo email:", emp.email);
-      if (email === null) return;
-      const telefono = prompt("Nuevo teléfono:", emp.telefono);
-      if (telefono === null) return;
-      const foto_url = prompt("Nueva foto URL:", emp.foto_url || "");
-      if (foto_url === null) return;
+  // Iniciar edición
+  const handleEdit = (emp) => {
+    setEditingId(emp.id);
+    setEditValues({
+      nombre: emp.nombre,
+      apellido: emp.apellido,
+      email: emp.email,
+      telefono: emp.telefono,
+      foto_url: emp.foto_url || ""
+    });
+  };
 
-      const updatedEmpleado = { nombre, apellido, email, telefono, foto_url };
-      await axios.put(`http://localhost:3001/api/updateWorker/${emp.id}`, updatedEmpleado);
+  // Guardar cambios
+  const handleSave = async (id) => {
+    try {
+      await axios.put(`http://localhost:3001/api/updateWorker/${id}`, editValues);
+      setEditingId(null);
       fetchEmpleados();
     } catch (err) {
       console.error("Error actualizando empleado:", err);
     }
+  };
+
+  // Cancelar edición
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditValues({});
   };
 
   return (
@@ -81,22 +90,65 @@ export default function Configuracion({ empleados, setEmpleados }) {
       <ul className="configuracionLista">
         {empleados.map((emp) => (
           <li key={emp.id} className="configuracionItem">
-            <img src={emp.foto_url || "https://via.placeholder.com/50"} alt="foto" className="configuracionFoto" />
-            <span>{emp.nombre} {emp.apellido}</span>
-
-            <button
-              className="configuracionBoton configuracionBotonEditar"
-              onClick={() => handleUpdate(emp)}
-            >
-              ✏ Editar
-            </button>
-
-            <button
-              className="configuracionBoton configuracionBotonEliminar"
-              onClick={() => handleDelete(emp.id)}
-            >
-              🗑 Eliminar
-            </button>
+            {editingId === emp.id ? (
+              <div className="editContainer">
+                <input
+                  type="text"
+                  value={editValues.nombre}
+                  onChange={(e) => setEditValues({ ...editValues, nombre: e.target.value })}
+                  placeholder="Nombre"
+                />
+                <input
+                  type="text"
+                  value={editValues.apellido}
+                  onChange={(e) => setEditValues({ ...editValues, apellido: e.target.value })}
+                  placeholder="Apellido"
+                />
+                <input
+                  type="email"
+                  value={editValues.email}
+                  onChange={(e) => setEditValues({ ...editValues, email: e.target.value })}
+                  placeholder="Email"
+                />
+                <input
+                  type="text"
+                  value={editValues.telefono}
+                  onChange={(e) => setEditValues({ ...editValues, telefono: e.target.value })}
+                  placeholder="Teléfono"
+                />
+                <input
+                  type="text"
+                  value={editValues.foto_url}
+                  onChange={(e) => setEditValues({ ...editValues, foto_url: e.target.value })}
+                  placeholder="Foto URL"
+                />
+                <div className="editButtons">
+                  <button className="configuracionBoton configuracionBotonGuardar" onClick={() => handleSave(emp.id)}>
+                    💾 Guardar
+                  </button>
+                  <button className="configuracionBoton configuracionBotonCancelar" onClick={handleCancel}>
+                    ❌ Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <img src={emp.foto_url || "https://via.placeholder.com/50"} alt="foto" className="configuracionFoto" />
+                <span>{emp.nombre} {emp.apellido}</span>
+                <button
+                  className="configuracionBoton configuracionBotonEditar"
+                  onClick={() => handleEdit(emp)}
+                >
+                  ✏ Editar
+                </button>
+                <button
+                  className="configuracionBoton configuracionBotonEliminar"
+                  onClick={() => handleDelete(emp.id)}
+                >
+                  🗑 Eliminar
+                </button>
+              </>
+            )}
           </li>
         ))}
       </ul>

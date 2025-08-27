@@ -72,7 +72,7 @@ const App = () => {
             
             <Route element={<RutasProtegidas cuentaActiva={cuentaActiva} />}>
               <Route path="/DashboardsGen" element={<DashboardsGen />} />
-              <Route path="/DashboardsInd" element={<Navigate to="/DashboardsInd/1" />} />
+              <Route path="/DashboardsInd" element={<DashboardsInd empleados={empleados} />} />
               <Route path="/DashboardsInd/:workerId" element={<DashboardsInd empleados={empleados}/>} />
               <Route path="/TiempoRealGen" element={<TiempoRealGen empleados={empleados}/>} />
               <Route path="/ConfiguracionView" element={<Configuracion empleados={empleados} setEmpleados={setEmpleados}/>} />

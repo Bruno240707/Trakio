@@ -124,3 +124,178 @@
     background: #1499c9;
   }
   
+  /* Contenedor principal */
+.configuracionContainer {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f9fbff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.configuracionContainer h2 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.configuracionContainer h3 {
+  color: #34495e;
+  margin-top: 40px;
+  margin-bottom: 15px;
+}
+
+/* Lista de empleados */
+.configuracionLista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.configuracionItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: box-shadow 0.2s ease;
+}
+
+.configuracionItem:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Foto del empleado */
+.configuracionFoto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4a90e2;
+}
+
+/* Botones */
+.configuracionBoton {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.configuracionBotonEditar {
+  background-color: #3498db;
+  color: white;
+}
+
+.configuracionBotonEditar:hover {
+  background-color: #2980b9;
+}
+
+.configuracionBotonEliminar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.configuracionBotonEliminar:hover {
+  background-color: #c0392b;
+}
+
+.configuracionBotonAgregar {
+  margin-top: 15px;
+  background-color: #2ecc71;
+  color: white;
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+}
+
+.configuracionBotonAgregar:hover {
+  background-color: #27ae60;
+}
+
+/* Inputs de agregar nuevo empleado */
+.configuracionInput {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.configuracionInput:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Estilo edición inline */
+.editContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background-color: #eaf2fb;
+  border-radius: 8px;
+  flex-grow: 1;
+}
+
+.editContainer input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+  font-size: 14px;
+}
+
+.editButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.configuracionBotonGuardar {
+  background-color: #27ae60;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+
+.configuracionBotonGuardar:hover {
+  background-color: #219150;
+}
+
+.configuracionBotonCancelar {
+  background-color: #e67e22;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+
+.configuracionBotonCancelar:hover {
+  background-color: #d35400;
+}
+
+/* Responsividad */
+@media (max-width: 600px) {
+  .configuracionItem, .editContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .editButtons {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .configuracionBotonAgregar {
+    font-size: 14px;
+  }
+}
