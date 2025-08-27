@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import React from "react";
-import "./CopiarDataButton.css"
+import "./CopiarDataButton.css";
 
 export default function DescargarExcel({ data }) {
   const descargarExcel = () => {

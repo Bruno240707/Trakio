@@ -25,8 +25,8 @@ agregar filtro de año y mes en graficos individuales y generales.
 vincular los numeros de llegadas tarde y llegadas a tiempo con un detalle de los mismos
 
 DEMO 25/08:
-1. Que sea todo exportable a un excel. (Poner un boton en cada grafico que permita copiar el JSON)
-2. Sistema de configuracion interno de la empresa para configurar horarios/agregar empleados (BASICAMENTE UN ADMINISTRADOR que por ejemplo pueda elegir cual es la hora de llegada tarde, etc)
+1. Que sea todo exportable a un excel. (Poner un boton en cada grafico que permita copiar el JSON) CASI HECHO
+2. Sistema de configuracion interno de la empresa para configurar horarios/agregar empleados (BASICAMENTE UN ADMINISTRADOR que por ejemplo pueda elegir cual es la hora de llegada tarde, etc) (CASI HECHO, FALTA SOLO LO DE CONFIGURAR HORARIOS)
 3. Detalles de cada grafico / con informacion util
 4. Filtrar por distintas sucursales
 5. Push notificacion (basicamente cuando se agregue algo a la base de datos se actualicen a tiempo real los graficos)
