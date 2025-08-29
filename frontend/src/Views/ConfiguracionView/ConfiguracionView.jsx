@@ -13,6 +13,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
   const [filtroConf, setFiltroConf] = useState("")
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({});
+  const [deleteId, setDeleteId] = useState(null);
 
   const fetchEmpleados = async () => {
     try {
@@ -50,14 +51,8 @@ export default function Configuracion({ empleados, setEmpleados }) {
   };
 
   // Eliminar empleado
-  const handleDelete = async (id) => {
-    if (!window.confirm("¿Seguro quieres eliminar este empleado?")) return;
-    try {
-      await axios.delete(`http://localhost:3001/api/deleteWorker/${id}`);
-      fetchEmpleados();
-    } catch (err) {
-      console.error("Error eliminando empleado:", err);
-    }
+  const handleDelete = async (emp) => {
+    setDeleteId(emp.id)
   };
 
   // Iniciar edición
@@ -88,6 +83,19 @@ export default function Configuracion({ empleados, setEmpleados }) {
     setEditingId(null);
     setEditValues({});
   };
+
+  const handleDeleteConfirmado = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/api/deleteWorker/${id}`);
+      fetchEmpleados();
+    } catch (err) {
+      console.error("Error eliminando empleado:", err);
+    }
+  }
+
+  const handleCancelDelete = () => {
+    setDeleteId(null)
+  }
 
   return (
     <div className="configuracionContainer">
@@ -157,6 +165,15 @@ export default function Configuracion({ empleados, setEmpleados }) {
                   </button>
                 </div>
               </div>
+            ) : deleteId == emp.id ? (
+              <div className="editContainer">
+                  <button className="configuracionBoton configuracionBotonGuardar" onClick={() => handleDeleteConfirmado(emp.id)}>
+                   🗑️ Borrar
+                  </button>
+                  <button className="configuracionBoton configuracionBotonCancelar" onClick={handleCancelDelete}>
+                    ❌ Cancelar
+                  </button>
+              </div>
             ) : (
               <>
                 <img src={emp.foto_url || "https://via.placeholder.com/50"} alt="foto" className="configuracionFoto" />
@@ -169,7 +186,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
                 </button>
                 <button
                   className="configuracionBoton configuracionBotonEliminar"
-                  onClick={() => handleDelete(emp.id)}
+                  onClick={() => handleDelete(emp)}
                 >
                   🗑 Eliminar
                 </button>
