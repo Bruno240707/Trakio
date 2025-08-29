@@ -289,7 +289,8 @@ useEffect(() => {
         ➕ Agregar
       </button>
 
-      <h3>CONFIGURAR HORARIOS</h3>
+      <h3>Configurar horarios</h3>
+      <h4>Hora tarde</h4>
       <input
         type="time"
         value={horarioTarde}
