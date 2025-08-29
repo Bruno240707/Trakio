@@ -20,9 +20,10 @@ posible mapa de calor:
 https://labex.io/es/tutorials/javascript-building-a-react-github-heatmap-contributions-445705#instalar-las-dependencias-necesarias
 
 tanto individual como general el grafico de semanas calculando el porcentaje de asistencias.
-lo mismo para el mensual
-agregar filtro de año y mes en graficos individuales y generales.
-vincular los numeros de llegadas tarde y llegadas a tiempo con un detalle de los mismos
+lo mismo para el mensual //HECHO
+agregar filtro de año y mes en graficos individuales y generales. //HECHO
+
+vincular los numeros de llegadas tarde y llegadas a tiempo con un detalle de los mismos 
 
 DEMO 25/08:
 1. Que sea todo exportable a un excel. (Poner un boton en cada grafico que permita copiar el JSON) CASI HECHO

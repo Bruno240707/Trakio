@@ -10,11 +10,10 @@ export default function Configuracion({ empleados, setEmpleados }) {
     telefono: "",
     foto_url: ""
   });
-
+  const [filtroConf, setFiltroConf] = useState("")
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({});
 
-  // Función para traer empleados desde el backend
   const fetchEmpleados = async () => {
     try {
       const res = await axios.get("http://localhost:3001/api/getWorkers");
@@ -23,6 +22,13 @@ export default function Configuracion({ empleados, setEmpleados }) {
       console.error("Error al cargar los empleados:", err);
     }
   };
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtroConf}`)
+      .then((res) => res.json())
+      .then((data) => setEmpleados(data))
+      .catch((err) => console.error("Error al cargar la API:", err));
+  }, [filtroConf]);
   
   useEffect(() => {
     fetchEmpleados();
@@ -87,7 +93,27 @@ export default function Configuracion({ empleados, setEmpleados }) {
     <div className="configuracionContainer">
       <h2>Configuración de Empleados</h2>
 
+      <div className="input-search-container">
+          <input
+            type="text"
+            className="input-search"
+            placeholder="Empleados..."
+            value={filtroConf}
+            onChange={(e) => setFiltroConf(e.target.value)}
+          />
+          {filtroConf && (
+            <button
+              className="input-search-clear"
+              onClick={() => setFiltroConf("")}
+              aria-label="Limpiar búsqueda"
+            >
+              ×
+            </button>
+          )}
+      </div>
+
       <ul className="configuracionLista">
+        <div className="configuracionLista">
         {empleados.map((emp) => (
           <li key={emp.id} className="configuracionItem">
             {editingId === emp.id ? (
@@ -151,6 +177,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
             )}
           </li>
         ))}
+        </div>
       </ul>
 
       <h3>Agregar nuevo empleado</h3>
