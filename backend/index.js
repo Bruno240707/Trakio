@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import db from "./repositories/db.js";
 import { loginController } from "./controllers/authController.js";
 import { getWorkersController, addWorkerController, updateWorkerController, deleteWorkerController } from "./controllers/workersController.js";
 import {
@@ -43,6 +44,58 @@ app.get("/api/attendanceDoughnut/:workerId", attendanceDoughnutByWorkerControlle
 app.get("/api/eventsEntradasSalidasAllWorkers", eventsAllWorkersController);
 app.get("/api/attendanceDoughnutAllWorkers", attendanceDoughnutAllWorkersController);
 
+
+app.post('/api/configurar-hora-entrada', (req, res) => {
+  const { horaEntradaTarde } = req.body;
+
+  if (!horaEntradaTarde) {
+    return res.status(400).json({ error: 'Falta horaEntradaTarde' });
+  }
+
+  db.query(
+    'UPDATE configuracion_horarios SET hora_entrada_tarde = ? WHERE id = 1',
+    [horaEntradaTarde],
+    (err, result) => {
+      if (err) {
+        console.error("Error actualizando hora:", err);
+        return res.status(500).json({ error: 'Error actualizando hora' });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Configuración no encontrada' });
+      }
+
+      res.json({ message: 'Hora actualizada correctamente' });
+    }
+  );
+});
+
+
+app.get('/api/configurar-hora-entrada', (req, res) => {
+  console.log("GET /api/configurar-hora-entrada");
+
+  db.query(
+    'SELECT hora_entrada_tarde FROM configuracion_horarios WHERE id = 1',
+    (err, results) => {
+      if (err) {
+        console.error("Error obteniendo hora:", err); // Aquí ya lo haces
+        return res.status(500).send('Error obteniendo hora: ' + err.message);
+      }
+
+      if (results.length === 0) {
+        console.log("No hay resultados para ID 1");
+        return res.status(404).send('Configuración no encontrada');
+      }
+
+      res.json({ horaEntradaTarde: results[0].hora_entrada_tarde });
+    }
+  );
+});
+
+
+
+
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
+

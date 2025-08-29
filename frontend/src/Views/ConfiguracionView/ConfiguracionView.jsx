@@ -14,6 +14,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({});
   const [deleteId, setDeleteId] = useState(null);
+  const [horarioTarde, setHorarioTarde] = useState("");
 
   const fetchEmpleados = async () => {
     try {
@@ -31,9 +32,60 @@ export default function Configuracion({ empleados, setEmpleados }) {
       .catch((err) => console.error("Error al cargar la API:", err));
   }, [filtroConf]);
   
+
+useEffect(() => {
+  const fetchHorario = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/api/configurar-hora-entrada");
+      const data = await res.json();
+      if (data.horaEntradaTarde) {
+        setHorarioTarde(data.horaEntradaTarde.slice(0, 5));
+      }
+    } catch (error) {
+      console.error("Error obteniendo horario:", error);
+    }
+  };
+
+  fetchHorario();
+}, []);
+
+  
+
   useEffect(() => {
     fetchEmpleados();
   }, []);
+
+  const handleHorario = async () => {
+    if (!horarioTarde) {
+      alert("Seleccioná una hora primero.");
+      return;
+    }
+  
+    const horaConSegundos = `${horarioTarde}:00`;
+  
+    try {
+      const response = await fetch('http://localhost:3001/api/configurar-hora-entrada', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          horaEntradaTarde: horaConSegundos
+        })
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+  
+      alert("Horario actualizado a " + horaConSegundos);
+    } catch (error) {
+      console.error("Error actualizando horario:", error);
+      alert("Error actualizando el horario.");
+    }
+  };
+  
 
   // Agregar nuevo empleado
   const handleAdd = async () => {
@@ -235,6 +287,16 @@ export default function Configuracion({ empleados, setEmpleados }) {
       />
       <button className="configuracionBotonAgregar" onClick={handleAdd}>
         ➕ Agregar
+      </button>
+
+      <h3>CONFIGURAR HORARIOS</h3>
+      <input
+        type="time"
+        value={horarioTarde}
+        onChange={(e) => setHorarioTarde(e.target.value)}
+      />
+      <button className="configuracionBotonAgregar" onClick={handleHorario}>
+        ➕ Actualizar horario
       </button>
     </div>
   );
