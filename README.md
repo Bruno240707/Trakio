@@ -32,3 +32,5 @@ DEMO 25/08:
 4. Filtrar por distintas sucursales
 5. Push notificacion (basicamente cuando se agregue algo a la base de datos se actualicen a tiempo real los graficos)
 6. Profesionalisar graficos / entrada y salida individual por mes en base a jornada laboral (este grafico es en Y las horas y en X los dias del mes para asi poder comparar las llegadas por hora) / comparativa
+
+6 de Octubre hacer: 1, 2, 3 y 4

@@ -1,4 +1,5 @@
 import db from "../repositories/db.js";
+import { getHoraEntradaTardeForQueries } from "./configService.js";
 
 export async function getLineDataGeneral(queryParams) {
   let { year, month } = queryParams;
@@ -59,7 +60,9 @@ export async function getLineDataGeneral(queryParams) {
     { label: "Semana 3", temprano: 0, tarde: 0, ausente: 0, dias: semanasDias[2].length },
     { label: "Semana 4", temprano: 0, tarde: 0, ausente: 0, dias: semanasDias[3].length }
   ];
-  const limiteTemprano = "09:00:00";
+  const horaEntradaTarde = await getHoraEntradaTardeForQueries();
+  // Usamos la hora configurable de la base de datos como límite para llegadas a tiempo
+  const limiteTemprano = horaEntradaTarde;
 
   semanasDias.forEach((diasSemana, semanaIdx) => {
     diasSemana.forEach(fecha => {
@@ -132,6 +135,7 @@ export async function getBarData() {
 
 export async function getDashboardStats() {
   const queryTotalEmpleados = "SELECT COUNT(*) AS total FROM workers";
+  const horaEntradaTarde = await getHoraEntradaTardeForQueries();
   const queryLlegadas = `
     WITH primera_llegada AS (
       SELECT *,
@@ -143,13 +147,13 @@ export async function getDashboardStats() {
       WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
     )
     SELECT 
-      SUM(CASE WHEN TIME(created_at) <= '15:00:00' THEN 1 ELSE 0 END) AS llegadas_a_tiempo,
-      SUM(CASE WHEN TIME(created_at) >  '15:00:00' THEN 1 ELSE 0 END) AS llegadas_tarde
+      SUM(CASE WHEN TIME(created_at) <= ? THEN 1 ELSE 0 END) AS llegadas_a_tiempo,
+      SUM(CASE WHEN TIME(created_at) >  ? THEN 1 ELSE 0 END) AS llegadas_tarde
     FROM primera_llegada
     WHERE rn = 1;
   `;
   const totalResults = await queryDb(queryTotalEmpleados);
-  const llegadasResults = await queryDb(queryLlegadas);
+  const llegadasResults = await queryDb(queryLlegadas, [horaEntradaTarde, horaEntradaTarde]);
   return {
     totalEmpleados: totalResults[0]?.total || 0,
     llegadasATiempo: llegadasResults[0]?.llegadas_a_tiempo || 0,
@@ -233,7 +237,9 @@ export async function getLineDataByWorker(workerId, queryParams) {
   });
 
   const semanas = [1,2,3,4,5].map(n => ({ semana: n, temprano: 0, tarde: 0, ausente: 0 }));
-  const limiteTemprano = 9*3600;
+  const horaEntradaTarde = await getHoraEntradaTardeForQueries();
+  const [hora, minuto, segundo] = horaEntradaTarde.split(':').map(Number);
+  const limiteTemprano = hora * 3600 + minuto * 60 + segundo;
   diasHabiles.forEach(fecha => {
     const dia = new Date(fecha).getDate();
     const semana = Math.ceil(dia/7);
@@ -284,11 +290,12 @@ export async function getAttendanceDoughnutByWorker(workerId, queryParams) {
     WHERE rn = 1
   `;
   const results = await queryDb(query, [workerId, year, month]);
+  const horaEntradaTarde = await getHoraEntradaTardeForQueries();
   let aTiempo = 0, tardanza = 0, inasistencia = 0;
   diasHabiles.forEach(dia => {
     const registro = results.find(r => r.fecha_local.toISOString().slice(0, 10) === dia);
     if (!registro) inasistencia++;
-    else if (registro.hora_local < "09:00:00") aTiempo++;
+    else if (registro.hora_local < horaEntradaTarde) aTiempo++;
     else tardanza++;
   });
   return [
@@ -384,13 +391,14 @@ export async function getAttendanceDoughnutAllWorkers(queryParams) {
     WHERE rn = 1
   `;
   const results = await queryDb(query, [year, month]);
+  const horaEntradaTarde = await getHoraEntradaTardeForQueries();
   const workerIds = [...new Set(results.map(r => r.worker_id))];
   let aTiempo = 0, tardanza = 0, inasistencia = 0;
   workerIds.forEach(workerId => {
     diasHabiles.forEach(dia => {
       const registro = results.find(r => r.worker_id === workerId && r.fecha_local.toISOString().slice(0,10) === dia);
       if (!registro) inasistencia++;
-      else if (registro.hora_local < "09:00:00") aTiempo++;
+      else if (registro.hora_local < horaEntradaTarde) aTiempo++;
       else tardanza++;
     });
   });
