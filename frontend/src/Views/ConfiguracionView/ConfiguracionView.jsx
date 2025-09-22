@@ -249,7 +249,7 @@ useEffect(() => {
         </div>
       </ul>
 
-      <h3>Agregar nuevo empleado</h3>
+      <h3 class="textAgregar">Agregar nuevo empleado</h3>
       <input
         className="configuracionInput"
         type="text"
@@ -289,9 +289,10 @@ useEffect(() => {
         ➕ Agregar
       </button>
 
-      <h3>Configurar horarios</h3>
-      <h4>Hora tarde</h4>
+      <h3 class="textConfig">Configurar horarios</h3>
+      <h4 class="textTarde">Hora tarde</h4>
       <input
+      class="confiTiempo"
         type="time"
         value={horarioTarde}
         onChange={(e) => setHorarioTarde(e.target.value)}
