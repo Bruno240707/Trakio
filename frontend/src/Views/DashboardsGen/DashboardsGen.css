@@ -105,3 +105,49 @@
   white-space: normal;
   max-width: 100px;
 }
+.infoMes
+{
+  font-size:large;
+  font-weight: bold;
+}
+.infoSemana
+{
+  font-size: large;
+  font-weight: bold;
+  margin-left: 48%;
+  text-decoration: underline;
+}
+#semana
+{
+  margin-left: 1%;
+  padding: 0.2%;
+  margin-bottom: 1%;
+  border: 0px;
+  border-radius: 5px;
+}
+#anio
+{
+  margin-left: 10%;
+  font-size: large;
+  font-weight: bold;
+  text-decoration: underline;
+}
+#mes
+{
+  margin-left: 3%;
+  text-decoration: underline;
+}
+#mes2
+{
+  padding: 0.2%;
+  margin-left: 0.5%;
+  border: 0px;
+  border-radius: 5px;
+}
+#anio2
+{
+  padding: 0.2%;
+  margin-left: 0.5%;
+  border: 0px;
+  border-radius: 5px;
+}

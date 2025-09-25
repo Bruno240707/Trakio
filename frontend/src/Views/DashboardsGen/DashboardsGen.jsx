@@ -105,21 +105,23 @@ const DashboardsGen = () => {
 
       {/* Filtro de mes, año y semana */}
       <div className="filtro-mes-anio-semana">
-        <label htmlFor="mes2">Mes:</label>
-        <select id="mes2" value={month} onChange={e => setMonth(Number(e.target.value))}>
-          {meses.map(m => (
-            <option key={m.value} value={m.value}>{m.label}</option>
-          ))}
-        </select>
 
-        <label htmlFor="anio2">Año:</label>
+
+        <label id="anio" htmlFor="anio2">Año:</label>
         <select id="anio2" value={year} onChange={e => setYear(Number(e.target.value))}>
           {Array.from({ length: 5 }, (_, i) => hoy.getFullYear() - i).map(y => (
             <option key={y} value={y}>{y}</option>
           ))}
         </select>
 
-        <label htmlFor="semana">Semana:</label>
+        <label id="mes" class="infoMes" htmlFor="mes2">Mes:</label>
+        <select id="mes2" value={month} onChange={e => setMonth(Number(e.target.value))}>
+          {meses.map(m => (
+            <option key={m.value} value={m.value}>{m.label}</option>
+          ))}
+        </select>
+
+        <label class="infoSemana" htmlFor="semana">Semana:</label>
         <select id="semana" value={week} onChange={e => setWeek(Number(e.target.value))}>
           <option value={0}>Todas las semanas</option>
           <option value={1}>Semana 1</option>
