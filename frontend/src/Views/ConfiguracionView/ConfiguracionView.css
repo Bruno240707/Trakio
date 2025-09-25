@@ -310,26 +310,13 @@
 }
 .textAgregar
 {
-  margin-left: 31%;
-  background-color: lightblue;
-  margin-right: 36%;
-  border-radius: 5px;
-  padding:0.5%;
-  text-align: center;
   text-decoration: underline;
-  margin-bottom: 520px;
+  margin-left: 33%;
 }
 .textConfig
 {
-  
-  margin-left: 31%;
-  background-color: lightblue;
-  margin-right: 36%;
-  border-radius: 5px;
-  padding:0.5%;
-  text-align: center;
+  margin-left: 36%;
   text-decoration: underline;
-  margin-bottom: 520px;
 }
 .textTarde
 {
