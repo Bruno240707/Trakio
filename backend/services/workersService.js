@@ -1,7 +1,7 @@
 import { queryWorkers, insertWorker, updateWorkerById, deleteWorkerById } from "../repositories/workerRepository.js";
 
 export async function getWorkers(filtro) {
-  let query = "SELECT id, nombre, apellido, foto_url FROM workers";
+  let query = "SELECT id, nombre, apellido, foto_url, id_sucursal FROM workers";
   let valores = [];
   if (filtro.includes(" ")) {
     const [nombreFiltro, apellidoFiltro] = filtro.split(" ", 2);

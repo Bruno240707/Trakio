@@ -23,6 +23,7 @@ const DashboardsInd = ({ empleados }) => {
 
   const [empleadosFiltrados, setEmpleados] = useState([]);
   const [filtro, setFiltro] = useState("");
+  const [sucursales, setSucursales] = useState("")
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/getWorkers?filtro=${filtro}`)
@@ -31,7 +32,28 @@ const DashboardsInd = ({ empleados }) => {
       .catch((err) => console.error("Error al cargar la API:", err));
   }, [filtro]);
 
+  useEffect(() => {
+    const fetchSucursales = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/getSucursales");
+        if (!res.ok) throw new Error("Error en la respuesta de la API");
+        const data = await res.json();
+        setSucursales(data);
+      } catch (err) {
+        console.error("Error al cargar las sucursales:", err);
+      }
+    };
+  
+    fetchSucursales();
+  }, []);
+
+
   const workerActual = empleados.find((e) => e.id == workerId);
+
+  // Validar que exista antes de acceder a propiedades
+  const sucursalActual = workerActual 
+    ? sucursales.find((s) => s.id == workerActual.id_sucursal)
+    : null;
 
   useEffect(() => {
     if (!workerId) return;
@@ -133,9 +155,15 @@ const DashboardsInd = ({ empleados }) => {
           <div className="employee-card">
             <div className="employee-header">
               {workerActual ? (
-                <p className="employee-name">
-                  {workerActual.nombre} {workerActual.apellido}
-                </p>
+                <>
+                  <p className="employee-name">
+                    {workerActual.nombre} {workerActual.apellido}
+                  </p>
+
+                  <p className="employee-name">
+                    {sucursalActual.nombre}
+                  </p>
+                </>
               ) : (
                 <p>Cargando...</p>
               )}

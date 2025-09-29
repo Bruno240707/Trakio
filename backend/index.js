@@ -15,6 +15,12 @@ import {
   eventsAllWorkersController,
   attendanceDoughnutAllWorkersController,
 } from "./controllers/chartsController.js";
+import {
+  getSucursalesController,
+  addSucursalController,
+  updateSucursalController,
+  deleteSucursalController,
+} from "./controllers/sucursalesController.js";
 
 dotenv.config();
 
@@ -26,6 +32,12 @@ app.use(express.json());
 
 // Auth
 app.post("/api/login", loginController);
+
+//Sucursales
+app.get("/api/getSucursales", getSucursalesController);
+app.post("/api/addSucursal", addSucursalController);
+app.put("/api/updateSucursal/:id", updateSucursalController);
+app.delete("/api/deleteSucursal/:id", deleteSucursalController);
 
 // Workers
 app.get("/api/getWorkers", getWorkersController);
@@ -47,6 +59,7 @@ app.get("/api/attendanceDoughnutAllWorkers", attendanceDoughnutAllWorkersControl
 // Configuration
 app.get("/api/configurar-hora-entrada", getHoraEntradaTardeController);
 app.post("/api/configurar-hora-entrada", updateHoraEntradaTardeController);
+
 
 
 app.listen(port, () => {
