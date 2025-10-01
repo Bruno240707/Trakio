@@ -58,10 +58,20 @@ const TiempoRealGen = ({ empleados }) => {
             </div>
           ))
         ) : (
-          <p>No hay eventos para mostrar.</p>
+          <div className="empty-container">
+          <div className="empty-icon">
+            <img src="https://www.svgrepo.com/show/532097/clock-check.svg" alt="Reloj" width="150" height="200"/>
+          </div>
+          <h2>No hay eventos para mostrar.</h2>
+          <p>Para ver los ingresos/egresos de los empleados espere al inicio de la jornada.</p>
+          {empleados.length === 0 && <p>No hay empleados disponibles.</p>}
+        </div>
         )}
       </div>
+
     </div>
+
+    
   );
 };
 
