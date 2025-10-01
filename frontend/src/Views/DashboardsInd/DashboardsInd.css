@@ -175,7 +175,20 @@ body {
   
 
   .employee-name {
+    margin-top: 8%;
     background-color: #38497E;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;    
+  }
+  .employee-sucursal
+  {
+    margin-left: -35%;
+    padding: 0%;
+    background-color: #4b65b1;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -183,6 +196,7 @@ body {
     font-size: 16px;
     font-weight: 600;
   }
+
   
   .employee-photo {
     width:  150px;

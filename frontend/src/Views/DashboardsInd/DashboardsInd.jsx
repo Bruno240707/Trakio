@@ -160,7 +160,7 @@ const DashboardsInd = ({ empleados }) => {
                     {workerActual.nombre} {workerActual.apellido}
                   </p>
 
-                  <p className="employee-name">
+                  <p className="employee-sucursal">
                     {sucursalActual.nombre}
                   </p>
                 </>
