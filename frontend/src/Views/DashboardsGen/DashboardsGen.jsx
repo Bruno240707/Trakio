@@ -6,6 +6,7 @@ import LineChart from "../../Componentes/LineChart/index";
 import BarChartGeneral from "../../Componentes/BarChartGeneral/BarChartGeneral"
 import './DashboardsGen.css'
 import DescargarExcel from "../../Componentes/CopiarDataButton/CopiarDataButton";
+import CopiarDataGeneralButton from "../../Componentes/CopiarDataButton/CopiarDataGeneralButton";
 
 const meses = [
   { value: 1, label: "Enero" },
@@ -38,6 +39,8 @@ const DashboardsGen = () => {
     llegadasTarde: 0
   });
 
+  const [empleados, setEmpleados] = useState([]);
+
   useEffect(() => {
     fetch(`http://localhost:3001/api/attendanceDoughnutAllWorkers?year=${year}&month=${month}`)
       .then((res) => res.json())
@@ -64,6 +67,11 @@ const DashboardsGen = () => {
         });
       })
       .catch((err) => console.error("Error al cargar dashboardStats:", err));
+
+    fetch("http://localhost:3001/api/getWorkers")
+      .then((res) => res.json())
+      .then((data) => setEmpleados(data))
+      .catch((err) => console.error("Error al cargar empleados:", err));
   }, [year, month, week]);
 
   return (
@@ -133,15 +141,39 @@ const DashboardsGen = () => {
 
       <div className="graficos-flex">
         <div className="grafico-container">
-          <DescargarExcel data={lineData}/>
+          <DescargarExcel
+            data={lineData}
+            employee={null}
+            sucursal={null}
+            dataType="General Line Data"
+            year={year}
+            month={month}
+            week={week}
+          />
           <LineChart lineData={lineData}/>
         </div>
         <div className="grafico-container">
-          <DescargarExcel data={doughnutData}/>
+          <DescargarExcel
+            data={doughnutData}
+            employee={null}
+            sucursal={null}
+            dataType="General Doughnut Data"
+            year={year}
+            month={month}
+            week={week}
+          />
           <DoughnutChartGeneral doughnutData={doughnutData}/>
         </div>
         <div className="grafico-container">
-          <DescargarExcel data={barData}/>
+          <DescargarExcel
+            data={barData}
+            employee={null}
+            sucursal={null}
+            dataType="General Bar Data"
+            year={year}
+            month={month}
+            week={week}
+          />
           <BarChartGeneral barData={barData}/>
         </div>
       </div>

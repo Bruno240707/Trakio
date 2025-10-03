@@ -268,10 +268,43 @@ const DashboardsInd = ({ empleados }) => {
               )}
             </div>
 
-            <div className="grid">
-              <div className="card"><DescargarExcel data={lineData} /><LineChart lineData={lineData} /></div>
-              <div className="card"><DescargarExcel data={doughnutData} /><DoughnutChart doughnutData={doughnutData} /></div>
-              <div className="card"><DescargarExcel data={barData} /><BarChart barData={barData} /></div>
+          <div className="grid">
+              <div className="card">
+                <DescargarExcel 
+                  data={lineData} 
+                  employee={workerActual} 
+                  sucursal={sucursalActual} 
+                  dataType="Line Data" 
+                  year={year} 
+                  month={month} 
+                  day={day} 
+                />
+                <LineChart lineData={lineData} />
+              </div>
+              <div className="card">
+                <DescargarExcel 
+                  data={doughnutData} 
+                  employee={workerActual} 
+                  sucursal={sucursalActual} 
+                  dataType="Doughnut Data" 
+                  year={year} 
+                  month={month} 
+                  day={day} 
+                />
+                <DoughnutChart doughnutData={doughnutData} />
+              </div>
+              <div className="card">
+                <DescargarExcel 
+                  data={barData} 
+                  employee={workerActual} 
+                  sucursal={sucursalActual} 
+                  dataType="Bar Data" 
+                  year={year} 
+                  month={month} 
+                  day={day} 
+                />
+                <BarChart barData={barData} />
+              </div>
               {Array.from({ length: 12 }).map((_, i) => <div key={i} className="card"></div>)}
             </div>
           </div>
