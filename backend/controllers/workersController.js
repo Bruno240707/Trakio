@@ -3,7 +3,8 @@ import { getWorkers, addWorker, updateWorker, deleteWorker } from "../services/w
 export async function getWorkersController(req, res) {
   try {
     const filtro = (req.query.filtro || "").trim();
-    const workers = await getWorkers(filtro);
+    const sucursal = (req.query.sucursal || "").trim();
+    const workers = await getWorkers(filtro, sucursal);
     res.json(workers);
   } catch (error) {
     console.error("Error al obtener los trabajadores:", error);

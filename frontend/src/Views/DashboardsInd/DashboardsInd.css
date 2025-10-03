@@ -25,6 +25,41 @@ body {
   margin-bottom: 1rem;
 }
 
+/* Contenedor combinado de buscador + dropdown */
+.input-search-container {
+  position: relative;
+  width: 100%; /* ajusto para que entren ambos */
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 10px; /* espacio entre input y select */
+  align-items: center;
+}
+
+/* Estilo del select de sucursales */
+.select-sucursal {
+  flex: 1; /* ocupa el espacio sobrante */
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Hover/focus para mejor UX */
+.select-sucursal:hover {
+  border-color: #888;
+}
+
+.select-sucursal:focus {
+  outline: none;
+  border-color: #0D84A2;
+  box-shadow: 0 0 0 3px rgba(13, 132, 162, 0.3);
+}
+
+
 .input-search {
   width: 100%;
   padding: 0.6rem 2.5rem 0.6rem 0.75rem; /* padding derecho para la X */

@@ -24,13 +24,15 @@ const DashboardsInd = ({ empleados }) => {
   const [empleadosFiltrados, setEmpleados] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [sucursales, setSucursales] = useState("")
+  const [sucursalSeleccionada, setSucursalSeleccionada] = useState("")
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtro}`)
+    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtro}&sucursal=${sucursalSeleccionada}`)
       .then((res) => res.json())
       .then((data) => setEmpleados(data))
       .catch((err) => console.error("Error al cargar la API:", err));
-  }, [filtro]);
+  }, [filtro, sucursalSeleccionada]);
+  
 
   useEffect(() => {
     const fetchSucursales = async () => {
@@ -138,6 +140,21 @@ const DashboardsInd = ({ empleados }) => {
               ×
             </button>
           )}
+
+          <select
+              className="select-sucursal"
+              value={sucursalSeleccionada}
+              onChange={(e) => setSucursalSeleccionada(e.target.value)}
+            >
+              <option value="">Todas las sucursales</option>
+              {Array.isArray(sucursales) &&
+                sucursales.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.nombre}
+                  </option>
+                ))}
+            </select>
+
         </div>
 
         <ul className="user-list">
