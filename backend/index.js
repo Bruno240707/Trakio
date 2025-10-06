@@ -14,6 +14,7 @@ import {
   attendanceDoughnutByWorkerController,
   eventsAllWorkersController,
   attendanceDoughnutAllWorkersController,
+  eventsByWorkerAndWeekController,
 } from "./controllers/chartsController.js";
 import {
   getSucursalesController,
@@ -48,6 +49,7 @@ app.delete("/api/deleteWorker/:id", deleteWorkerController);
 // Charts and dashboards
 app.get("/api/lineData", lineDataGeneralController);
 app.get("/api/eventsEntradasSalidasByWorkerAndDate/:workerId", eventsByWorkerAndDateController);
+app.get("/api/eventsByWorkerAndWeek/:workerId/:year/:month/:week", eventsByWorkerAndWeekController);
 app.get("/api/barData", barDataController);
 app.get("/api/dashboardStats", dashboardStatsController);
 app.get("/api/worker-events", workerEventsTodayController);

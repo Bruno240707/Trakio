@@ -5,4 +5,28 @@
     padding: 20px;
     border-radius: 10px;
   }
+
+  
+  .popup-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    min-width: 120px;
+    text-align: center;
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+  
+  .popup-content button {
+    margin-top: 5px;
+    padding: 3px 8px;
+    background: #18b2e7;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
   

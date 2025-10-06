@@ -279,7 +279,7 @@ const DashboardsInd = ({ empleados }) => {
                   month={month} 
                   day={day} 
                 />
-                <LineChart lineData={lineData} />
+                <LineChart lineData={lineData} workerId={workerId} year={year} month={month} />
               </div>
               <div className="card">
                 <DescargarExcel 

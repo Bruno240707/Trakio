@@ -293,7 +293,7 @@ export async function getAttendanceDoughnutByWorker(workerId, queryParams) {
   const horaEntradaTarde = await getHoraEntradaTardeForQueries();
   let aTiempo = 0, tardanza = 0, inasistencia = 0;
   diasHabiles.forEach(dia => {
-    const registro = results.find(r => r.fecha_local.toISOString().slice(0, 10) === dia);
+    const registro = results.find(r => r.fecha_local === dia);
     if (!registro) inasistencia++;
     else if (registro.hora_local < horaEntradaTarde) aTiempo++;
     else tardanza++;
@@ -396,7 +396,7 @@ export async function getAttendanceDoughnutAllWorkers(queryParams) {
   let aTiempo = 0, tardanza = 0, inasistencia = 0;
   workerIds.forEach(workerId => {
     diasHabiles.forEach(dia => {
-      const registro = results.find(r => r.worker_id === workerId && r.fecha_local.toISOString().slice(0,10) === dia);
+      const registro = results.find(r => r.worker_id === workerId && r.fecha_local === dia);
       if (!registro) inasistencia++;
       else if (registro.hora_local < horaEntradaTarde) aTiempo++;
       else tardanza++;
@@ -409,6 +409,66 @@ export async function getAttendanceDoughnutAllWorkers(queryParams) {
   ];
 }
 
+export async function getEventsByWorkerAndWeek(workerId, year, month, week) {
+  year = parseInt(year);
+  month = parseInt(month);
+  week = parseInt(week);
+
+  // Calculate dates for the week
+  const firstDayOfMonth = new Date(year, month - 1, 1);
+  const startOfWeek = new Date(firstDayOfMonth);
+  startOfWeek.setDate(firstDayOfMonth.getDate() + (week - 1) * 7);
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+  // Filter to weekdays
+  const dates = [];
+  for (let d = new Date(startOfWeek); d <= endOfWeek; d.setDate(d.getDate() + 1)) {
+    if (d.getDay() !== 0 && d.getDay() !== 6) {
+      dates.push(d.toISOString().slice(0, 10));
+    }
+  }
+
+  if (dates.length === 0) return { entries: [], exits: [] };
+
+  const placeholders = dates.map(() => '?').join(',');
+  const query = `
+    SELECT created_at, event_type
+    FROM eventos
+    WHERE worker_id = ?
+      AND DATE(created_at) IN (${placeholders})
+      AND event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+    ORDER BY created_at ASC
+  `;
+  const params = [workerId, ...dates];
+  const results = await queryDb(query, params);
+
+  // Group by date
+  const eventsByDate = {};
+  results.forEach(row => {
+    const date = row.created_at.toISOString().slice(0, 10);
+    if (!eventsByDate[date]) eventsByDate[date] = [];
+    eventsByDate[date].push({
+      time: row.created_at.toTimeString().slice(0, 8),
+      type: row.event_type
+    });
+  });
+
+  const entries = [];
+  const exits = [];
+  Object.keys(eventsByDate).forEach(date => {
+    const events = eventsByDate[date];
+    if (events.length > 0) {
+      entries.push(events[0].time); // first entry
+      if (events.length > 1) {
+        exits.push(events[events.length - 1].time); // last event as exit
+      }
+    }
+  });
+
+  return { entries, exits };
+}
+
 function queryDb(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.query(sql, params, (err, results) => {
@@ -417,4 +477,3 @@ function queryDb(sql, params = []) {
     });
   });
 }
-

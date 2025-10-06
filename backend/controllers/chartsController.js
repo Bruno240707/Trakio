@@ -8,6 +8,7 @@ import {
   getAttendanceDoughnutByWorker,
   getEventsAllWorkers,
   getAttendanceDoughnutAllWorkers,
+  getEventsByWorkerAndWeek,
 } from "../services/chartsService.js";
 
 export async function lineDataGeneralController(req, res) {
@@ -85,6 +86,16 @@ export async function eventsAllWorkersController(req, res) {
 export async function attendanceDoughnutAllWorkersController(req, res) {
   try {
     const data = await getAttendanceDoughnutAllWorkers(req.query);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Error en la consulta" });
+  }
+}
+
+export async function eventsByWorkerAndWeekController(req, res) {
+  try {
+    const { workerId, year, month, week } = req.params;
+    const data = await getEventsByWorkerAndWeek(workerId, year, month, week);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Error en la consulta" });
