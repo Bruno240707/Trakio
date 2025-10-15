@@ -256,9 +256,6 @@ const DashboardsInd = ({ empleados }) => {
                   />
                 }
               />
-                <button className="enviarInd" onClick={enviarFecha}>
-                  Enviar
-                </button>
               </div>
 
               {workerActual ? (

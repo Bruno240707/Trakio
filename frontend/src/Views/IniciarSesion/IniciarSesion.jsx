@@ -26,7 +26,7 @@ const IniciarSesion = ({setCuentaActiva}) => {
 
       sessionStorage.setItem("token", data.token);
 
-      navigate("/dashboardsInd");
+      navigate("/dashboardsGen");
     } else {
       const errorData = await response.json();
       setMensajeErrorInicio(errorData.message || "Error en inicio de sesión");
