@@ -32,10 +32,15 @@ const App = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setCuentaActiva({
-          id: decoded.id,
-          username: decoded.username
-        });
+        const now = Date.now() / 1000;
+        if (decoded.exp > now) {
+          setCuentaActiva({
+            id: decoded.id,
+            username: decoded.username
+          });
+        } else {
+          sessionStorage.removeItem("token");
+        }
       } catch (err) {
         console.error("Token inválido o expirado", err);
         sessionStorage.removeItem("token");
@@ -45,6 +50,31 @@ const App = () => {
     setLoading(false);
 
   }, []);
+
+  useEffect(() => {
+    if (cuentaActiva) {
+      const token = sessionStorage.getItem("token");
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          const remaining = (decoded.exp * 1000) - Date.now();
+          if (remaining > 0) {
+            const timeoutId = setTimeout(() => {
+              setCuentaActiva(null);
+              sessionStorage.removeItem("token");
+            }, remaining);
+            return () => clearTimeout(timeoutId);
+          } else {
+            setCuentaActiva(null);
+            sessionStorage.removeItem("token");
+          }
+        } catch {
+          setCuentaActiva(null);
+          sessionStorage.removeItem("token");
+        }
+      }
+    }
+  }, [cuentaActiva]);
 
   useEffect(() => {
     const fetchEmpleados = async () => {

@@ -171,7 +171,7 @@ const DashboardsInd = ({ empleados }) => {
           <h1>Informacion de Empleado</h1>
           <div className="employee-card">
             <div className="employee-header">
-              {workerActual ? (
+              {(workerActual && sucursalActual) ? (
                 <>
                   <p className="employee-name">
                     {workerActual.nombre} {workerActual.apellido}

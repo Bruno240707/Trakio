@@ -159,7 +159,7 @@ useEffect(() => {
     setEditValues({
       nombre: emp.nombre,
       apellido: emp.apellido,
-      sucursal: emp.sucursal,
+      id_sucursal: emp.id_sucursal || "",
       email: emp.email,
       telefono: emp.telefono,
       foto_url: emp.foto_url || ""
@@ -196,19 +196,6 @@ useEffect(() => {
     setEditingId(null);
     setEditValues({});
   };
-
-  const handleDeleteConfirmado = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3001/api/deleteWorker/${id}`);
-      fetchEmpleados();
-    } catch (err) {
-      console.error("Error eliminando empleado:", err);
-    }
-  }
-
-  const handleCancelDelete = () => {
-    setDeleteId(null)
-  }
 
   return (
     <div className="configuracionContainer">
@@ -266,7 +253,18 @@ useEffect(() => {
                 {/* Select de sucursales en edición */}
                 <select
                   value={editValues.id_sucursal || ""}
-                  onChange={(e) => setEditValues({ ...editValues, id_sucursal: e.target.value || null, sucursal: (sucursales.find(s => String(s.id) === e.target.value) || {}).nombre || editValues.sucursal })}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val !== "") {
+                      const sucursalSeleccionada = sucursales.find(s => String(s.id) === val);
+                      setEditValues({
+                        ...editValues,
+                        id_sucursal: val,
+                        sucursal: sucursalSeleccionada ? sucursalSeleccionada.nombre : editValues.sucursal,
+                      });
+                    }
+                    // Si es "", no cambia nada para mantener la sucursal actual
+                  }}
                 >
                   <option value="">-- Mantener sucursal --</option>
                   {sucursales.map((s) => (
