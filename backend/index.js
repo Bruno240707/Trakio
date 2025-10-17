@@ -31,6 +31,49 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
+// Servir archivos estáticos subidos
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+import { dirname } from 'path';
+const __dirname = dirname(__filename);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// multer for file uploads
+import multer from 'multer';
+import path from 'path';
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(process.cwd(), 'uploads', 'workers'));
+  },
+  filename: function (req, file, cb) {
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    // Map common mimetypes to preferred extensions to avoid .jfif
+    const mimeExtMap = {
+      'image/jpeg': '.jpg',
+      'image/pjpeg': '.jpg',
+      'image/png': '.png',
+      'image/gif': '.gif',
+      'image/webp': '.webp',
+      'image/svg+xml': '.svg'
+    };
+    const extFromMime = mimeExtMap[file.mimetype] || path.extname(file.originalname) || '';
+    cb(null, `${unique}${extFromMime}`);
+  }
+});
+
+// Accept only images
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    if (file.mimetype && file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Solo se permiten imágenes.'), false);
+    }
+  }
+});
+
 // Auth
 app.post("/api/login", loginController);
 
@@ -42,8 +85,9 @@ app.delete("/api/deleteSucursal/:id", deleteSucursalController);
 
 // Workers
 app.get("/api/getWorkers", getWorkersController);
-app.post("/api/addWorker", addWorkerController);
-app.put("/api/updateWorker/:id", updateWorkerController);
+// Use upload.single('foto') for endpoints that accept a photo file field named 'foto'
+app.post("/api/addWorker", upload.single('foto'), addWorkerController);
+app.put("/api/updateWorker/:id", upload.single('foto'), updateWorkerController);
 app.delete("/api/deleteWorker/:id", deleteWorkerController);
 app.put("/api/setWorkerActivo/:id", setWorkerActivoController);
 

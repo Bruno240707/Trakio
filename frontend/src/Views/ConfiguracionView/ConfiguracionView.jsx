@@ -13,11 +13,13 @@ export default function Configuracion({ empleados, setEmpleados }) {
     id_sucursal: null,
 
   });
+  const [nuevoFotoFile, setNuevoFotoFile] = useState(null);
   const [sucursales, setSucursales] = useState([]);
   const [filtroConf, setFiltroConf] = useState("")
   const [mostrarInactivos, setMostrarInactivos] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({});
+  const [editFotoFile, setEditFotoFile] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [horarioTarde, setHorarioTarde] = useState("");
 
@@ -118,11 +120,24 @@ useEffect(() => {
         alert("Faltan datos obligatorios");
         return;
       }
-      // Envia id_sucursal como id_sucursal (o null)
-      const payload = { ...nuevoEmpleado };
-      if (!payload.id_sucursal) payload.id_sucursal = null;
-      await axios.post("http://localhost:3001/api/addWorker", payload);
+      // Si hay un archivo, usar FormData
+      if (nuevoFotoFile) {
+        const form = new FormData();
+        form.append('nombre', nuevoEmpleado.nombre);
+        form.append('apellido', nuevoEmpleado.apellido);
+        form.append('email', nuevoEmpleado.email);
+        form.append('telefono', nuevoEmpleado.telefono);
+        form.append('id_sucursal', nuevoEmpleado.id_sucursal || '');
+        form.append('foto', nuevoFotoFile);
+        await axios.post("http://localhost:3001/api/addWorker", form);
+      } else {
+        // Envia id_sucursal como id_sucursal (o null)
+        const payload = { ...nuevoEmpleado };
+        if (!payload.id_sucursal) payload.id_sucursal = null;
+        await axios.post("http://localhost:3001/api/addWorker", payload);
+      }
       setNuevoEmpleado({ nombre: "", apellido: "", email: "", telefono: "", foto_url: "" });
+      setNuevoFotoFile(null);
       fetchEmpleados();
     } catch (err) {
       console.error("Error agregando empleado:", err);
@@ -160,10 +175,21 @@ useEffect(() => {
   // Guardar cambios
   const handleSave = async (id) => {
     try {
-      const payload = { ...editValues };
-      if (!payload.id_sucursal) payload.id_sucursal = null;
-      console.log("Updating worker payload:", payload);
-      await axios.put(`http://localhost:3001/api/updateWorker/${id}`, payload);
+      if (editFotoFile) {
+        const form = new FormData();
+        form.append('nombre', editValues.nombre || '');
+        form.append('apellido', editValues.apellido || '');
+        form.append('email', editValues.email || '');
+        form.append('telefono', editValues.telefono || '');
+        form.append('id_sucursal', editValues.id_sucursal || '');
+        form.append('foto', editFotoFile);
+        await axios.put(`http://localhost:3001/api/updateWorker/${id}`, form);
+      } else {
+        const payload = { ...editValues };
+        if (!payload.id_sucursal) payload.id_sucursal = null;
+        console.log("Updating worker payload:", payload);
+        await axios.put(`http://localhost:3001/api/updateWorker/${id}`, payload);
+      }
       setEditingId(null);
       fetchEmpleados();
     } catch (err) {
@@ -259,6 +285,11 @@ useEffect(() => {
                   onChange={(e) => setEditValues({ ...editValues, foto_url: e.target.value })}
                   placeholder="Foto URL"
                 />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setEditFotoFile(e.target.files && e.target.files[0])}
+                  />
                 <div className="editButtons">
                   <button className="configuracionBoton configuracionBotonGuardar" onClick={() => handleSave(emp.id)}>
                     💾 Guardar
@@ -371,6 +402,12 @@ useEffect(() => {
         placeholder="Foto URL"
         value={nuevoEmpleado.foto_url}
         onChange={(e) => setNuevoEmpleado({ ...nuevoEmpleado, foto_url: e.target.value })}
+      />
+      <input
+        className="configuracionInput"
+        type="file"
+        accept="image/*"
+        onChange={(e) => setNuevoFotoFile(e.target.files && e.target.files[0])}
       />
       
       <button className="configuracionBotonAgregar" onClick={handleAdd}>

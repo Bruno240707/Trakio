@@ -31,3 +31,15 @@ Cómo aplicar localmente (MySQL):
 4. Reiniciá el backend si es necesario. Nodemon debería detectar el cambio automáticamente.
 
 Si preferís, puedo crear un script npm para ejecutar la migración con `mysql` desde la línea de comandos, pero necesitarás las credenciales de la base de datos en tu entorno.
+
+Uploads
+-------
+Este proyecto ahora soporta subir fotos de empleados. Las imágenes se guardan en:
+
+   backend/uploads/workers/
+
+Dependencias: el backend usa `multer` para manejar uploads. Instalalo con:
+
+   npm install multer
+
+El servidor expone la ruta de archivos estáticos mediante las rutas relativas usadas en `foto_url` (por ejemplo `/uploads/workers/<filename>`). Asegurate que la carpeta `backend/uploads/workers` exista (ya se creó en el repo).

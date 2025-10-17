@@ -16,7 +16,14 @@ export async function getWorkersController(req, res) {
 
 export async function addWorkerController(req, res) {
   try {
-    const { nombre, apellido, email, telefono, foto_url, id_sucursal } = req.body;
+    const { nombre, apellido, email, telefono, id_sucursal } = req.body;
+    // si hay un archivo subido por multer, construir la ruta relativa
+    let foto_url = null;
+    if (req.file) {
+      foto_url = `/uploads/workers/${req.file.filename}`;
+    } else if (req.body.foto_url) {
+      foto_url = req.body.foto_url;
+    }
     if (!nombre || !apellido || !email || !telefono) {
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
@@ -31,7 +38,13 @@ export async function addWorkerController(req, res) {
 export async function updateWorkerController(req, res) {
   try {
     const { id } = req.params;
-    const { nombre, apellido, email, telefono, foto_url, id_sucursal } = req.body;
+    const { nombre, apellido, email, telefono, id_sucursal } = req.body;
+    let foto_url = undefined;
+    if (req.file) {
+      foto_url = `/uploads/workers/${req.file.filename}`;
+    } else if (req.body.foto_url) {
+      foto_url = req.body.foto_url;
+    }
     await updateWorker({ id, nombre, apellido, email, telefono, foto_url, id_sucursal });
     res.json({ success: true });
   } catch (error) {
