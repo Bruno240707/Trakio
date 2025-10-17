@@ -1,0 +1,6 @@
+
+
+/* asegúrate que el footer no use position: absolute ni fixed aquí */
+footer {
+margin-top: 80%;
+}

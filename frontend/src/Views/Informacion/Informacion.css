@@ -11,6 +11,9 @@
 .contenidoInfo
 {
     height: 200vh;
+    min-height: calc(100vh - 140px);
+    padding-bottom: 140px; /* ajusta según la altura de tu footer */
+    box-sizing: border-box;
 }
 .tituloInfo
 {
@@ -128,4 +131,51 @@
     border: 0.5px solid black;
     border-radius: 15px;
     margin-top: 5%;
+}
+
+/* Centered transparent "Ver más" button with bolder text and arrows */
+.btnWrapper {
+    display: flex;
+    justify-content: center; /* centra el botón horizontalmente */
+    margin: 20px 0;
+}
+
+.btnVerMas {
+    background: transparent; /* caja transparente */
+    border: none; /* sin borde visible */
+    padding: 10px 20px;
+    font-weight: 700; /* letras más gruesas */
+    font-size: 1rem;
+    color: #fff; /* ajustar según tu fondo (puede ser #000 o variable) */
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.12s ease, opacity 0.12s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4); /* mejora la legibilidad sobre imágenes */
+    letter-spacing: 0.2px;
+}
+
+/* pequeño efecto al pasar el mouse */
+.btnVerMas:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+/* si quieres que la flecha tenga algo de separación */
+.btnVerMas::after {
+    margin-left: 8px;
+}
+
+/* asegúrate de que el footer no esté posicionado absolute/fixed */
+/* si tu footer tiene otra clase/carpeta, reemplaza "footer" por la clase real */
+footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* pequeño ajuste para pantallas muy pequeñas */
+@media (max-height: 600px) {
+    .contenidoInfo {
+        padding-bottom: 80px;
+        min-height: calc(100vh - 80px);
+    }
 }
