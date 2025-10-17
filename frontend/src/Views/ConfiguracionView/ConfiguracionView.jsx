@@ -144,12 +144,6 @@ useEffect(() => {
     }
   };
 
-  // Eliminar empleado
-  const handleDelete = async (emp) => {
-    // ahora mostramos confirmación para inactivar
-    setDeleteId(emp.id)
-  };
-
   const toggleActivo = async (empId, nuevoEstado) => {
     try {
       await axios.put(`http://localhost:3001/api/setWorkerActivo/${empId}`, { activo: nuevoEstado });
@@ -299,20 +293,11 @@ useEffect(() => {
                   </button>
                 </div>
               </div>
-            ) : deleteId == emp.id ? (
-              <div className="editContainer">
-                  <button className="configuracionBoton configuracionBotonGuardar" onClick={() => handleDeleteConfirmado(emp.id)}>
-                   🗑️ Borrar
-                  </button>
-                  <button className="configuracionBoton configuracionBotonCancelar" onClick={handleCancelDelete}>
-                    ❌ Cancelar
-                  </button>
-              </div>
             ) : (
               <>
                 <img src={emp.foto_url || "https://via.placeholder.com/50"} alt="foto" className="configuracionFoto" />
                 <span>{emp.nombre} {emp.apellido}</span>
-                {/* Mostrar botón para inactivar/reactivar */}
+
                 {emp.activo === 1 || emp.activo === undefined ? (
                   <button className="configuracionBoton configuracionBotonEliminar" onClick={() => toggleActivo(emp.id, 0)}>
                     🚫 Inactivar
@@ -327,12 +312,6 @@ useEffect(() => {
                   onClick={() => handleEdit(emp)}
                 >
                   ✏ Editar
-                </button>
-                <button
-                  className="configuracionBoton configuracionBotonEliminar"
-                  onClick={() => handleDelete(emp)}
-                >
-                  🗑 Eliminar
                 </button>
               </>
             )}
