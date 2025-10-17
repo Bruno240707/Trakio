@@ -310,13 +310,21 @@ useEffect(() => {
         </div>
       </ul>
 
-      <div style={{ marginTop: 12 }}>
-        <label style={{ color: '#fff' }}>
-          <input type="checkbox" checked={mostrarInactivos} onChange={(e) => setMostrarInactivos(e.target.checked)} /> Mostrar inactivos
+      <div className="mostrarInactivosWrapper">
+        <label className="switch">
+          <input
+            type="checkbox"
+            checked={mostrarInactivos}
+            onChange={(e) => setMostrarInactivos(e.target.checked)}
+            aria-label="Mostrar inactivos"
+          />
+          <span className="slider" />
         </label>
+        <span className="switchLabel">Mostrar Inactivos</span>
       </div>
 
-  <h3 className="textAgregar">Agregar nuevo empleado</h3>
+  <div className="addSection">
+    <h3 className="textAgregar">Agregar nuevo empleado</h3>
       <input
         className="configuracionInput"
         type="text"
@@ -368,9 +376,11 @@ useEffect(() => {
       <button className="configuracionBotonAgregar" onClick={handleAdd}>
         ➕ Agregar
       </button>
+  </div>
 
-  <h3 className="textConfig">Configurar horarios</h3>
-  <h4 className="textTarde">Hora tarde</h4>
+  <div className="scheduleSection">
+    <h3 className="textConfig">Configurar horarios</h3>
+    <h4 className="textTarde">Hora tarde</h4>
       <input
         className="confiTiempo"
         type="time"
@@ -380,6 +390,7 @@ useEffect(() => {
       <button className="configuracionBotonAgregar" onClick={handleHorario}>
         ➕ Actualizar horario
       </button>
+  </div>
     </div>
   );
 }
