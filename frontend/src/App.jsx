@@ -62,19 +62,22 @@ const App = () => {
             const timeoutId = setTimeout(() => {
               setCuentaActiva(null);
               sessionStorage.removeItem("token");
+              navigate("/IniciarSesion");
             }, remaining);
             return () => clearTimeout(timeoutId);
           } else {
             setCuentaActiva(null);
             sessionStorage.removeItem("token");
+            navigate("/IniciarSesion");
           }
         } catch {
           setCuentaActiva(null);
           sessionStorage.removeItem("token");
+          navigate("/IniciarSesion");
         }
       }
     }
-  }, [cuentaActiva]);
+  }, [cuentaActiva, navigate]);
 
   useEffect(() => {
     const fetchEmpleados = async () => {
