@@ -15,6 +15,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
   });
   const [sucursales, setSucursales] = useState([]);
   const [filtroConf, setFiltroConf] = useState("")
+  const [mostrarInactivos, setMostrarInactivos] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({});
   const [deleteId, setDeleteId] = useState(null);
@@ -22,7 +23,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
 
   const fetchEmpleados = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/api/getWorkers");
+      const res = await axios.get(`http://localhost:3001/api/getWorkers?includeInactive=${mostrarInactivos}`);
       setEmpleados(res.data);
     } catch (err) {
       console.error("Error al cargar los empleados:", err);
@@ -30,7 +31,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtroConf}`)
+    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtroConf}&includeInactive=${mostrarInactivos}`)
       .then((res) => res.json())
       .then((data) => setEmpleados(data))
       .catch((err) => console.error("Error al cargar la API:", err));
@@ -58,6 +59,11 @@ useEffect(() => {
   useEffect(() => {
     fetchEmpleados();
   }, []);
+
+  useEffect(() => {
+    // cuando cambie mostrarInactivos, recargar empleados
+    fetchEmpleados();
+  }, [mostrarInactivos]);
 
   // Fetch sucursales para el select
   useEffect(() => {
@@ -125,8 +131,18 @@ useEffect(() => {
 
   // Eliminar empleado
   const handleDelete = async (emp) => {
+    // ahora mostramos confirmación para inactivar
     setDeleteId(emp.id)
   };
+
+  const toggleActivo = async (empId, nuevoEstado) => {
+    try {
+      await axios.put(`http://localhost:3001/api/setWorkerActivo/${empId}`, { activo: nuevoEstado });
+      fetchEmpleados();
+    } catch (err) {
+      console.error('Error cambiando estado:', err);
+    }
+  }
 
   // Iniciar edición
   const handleEdit = (emp) => {
@@ -265,6 +281,16 @@ useEffect(() => {
               <>
                 <img src={emp.foto_url || "https://via.placeholder.com/50"} alt="foto" className="configuracionFoto" />
                 <span>{emp.nombre} {emp.apellido}</span>
+                {/* Mostrar botón para inactivar/reactivar */}
+                {emp.activo === 1 || emp.activo === undefined ? (
+                  <button className="configuracionBoton configuracionBotonEliminar" onClick={() => toggleActivo(emp.id, 0)}>
+                    🚫 Inactivar
+                  </button>
+                ) : (
+                  <button className="configuracionBoton configuracionBotonAgregar" onClick={() => toggleActivo(emp.id, 1)}>
+                    ✅ Reactivar
+                  </button>
+                )}
                 <button
                   className="configuracionBoton configuracionBotonEditar"
                   onClick={() => handleEdit(emp)}
@@ -284,7 +310,13 @@ useEffect(() => {
         </div>
       </ul>
 
-      <h3 class="textAgregar">Agregar nuevo empleado</h3>
+      <div style={{ marginTop: 12 }}>
+        <label style={{ color: '#fff' }}>
+          <input type="checkbox" checked={mostrarInactivos} onChange={(e) => setMostrarInactivos(e.target.checked)} /> Mostrar inactivos
+        </label>
+      </div>
+
+  <h3 className="textAgregar">Agregar nuevo empleado</h3>
       <input
         className="configuracionInput"
         type="text"
@@ -337,10 +369,10 @@ useEffect(() => {
         ➕ Agregar
       </button>
 
-      <h3 class="textConfig">Configurar horarios</h3>
-      <h4 class="textTarde">Hora tarde</h4>
+  <h3 className="textConfig">Configurar horarios</h3>
+  <h4 className="textTarde">Hora tarde</h4>
       <input
-      class="confiTiempo"
+        className="confiTiempo"
         type="time"
         value={horarioTarde}
         onChange={(e) => setHorarioTarde(e.target.value)}

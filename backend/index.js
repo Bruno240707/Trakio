@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { loginController } from "./controllers/authController.js";
 import { getWorkersController, addWorkerController, updateWorkerController, deleteWorkerController } from "./controllers/workersController.js";
+import { setWorkerActivoController } from "./controllers/workersController.js";
 import { getHoraEntradaTardeController, updateHoraEntradaTardeController } from "./controllers/configController.js";
 import {
   lineDataGeneralController,
@@ -44,6 +45,7 @@ app.get("/api/getWorkers", getWorkersController);
 app.post("/api/addWorker", addWorkerController);
 app.put("/api/updateWorker/:id", updateWorkerController);
 app.delete("/api/deleteWorker/:id", deleteWorkerController);
+app.put("/api/setWorkerActivo/:id", setWorkerActivoController);
 
 // Charts and dashboards
 app.get("/api/lineData", lineDataGeneralController);

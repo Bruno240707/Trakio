@@ -1,6 +1,18 @@
 import db from "../repositories/db.js";
 import { getHoraEntradaTardeForQueries } from "./configService.js";
 
+async function tryQueryDbPreferActivo(sqlWithActivo, paramsWithActivo = [], sqlFallback, paramsFallback = []) {
+  try {
+    return await queryDb(sqlWithActivo, paramsWithActivo);
+  } catch (err) {
+    // Si la columna activo no existe en la base de datos, hacer fallback
+    if (err && err.code === 'ER_BAD_FIELD_ERROR') {
+      return await queryDb(sqlFallback, paramsFallback);
+    }
+    throw err;
+  }
+}
+
 export async function getLineDataGeneral(queryParams) {
   let { year, month } = queryParams;
   if (!year || !month) {
@@ -26,7 +38,12 @@ export async function getLineDataGeneral(queryParams) {
     }
   }
 
-  const workers = await queryDb("SELECT id FROM workers");
+  const workers = await tryQueryDbPreferActivo(
+    "SELECT id FROM workers WHERE activo = 1",
+    [],
+    "SELECT id FROM workers",
+    []
+  );
   const empleados = workers.map(w => w.id);
 
   const query = `
@@ -134,8 +151,13 @@ export async function getBarData() {
 }
 
 export async function getDashboardStats() {
-  const queryTotalEmpleados = "SELECT COUNT(*) AS total FROM workers";
   const horaEntradaTarde = await getHoraEntradaTardeForQueries();
+  const totalResults = await tryQueryDbPreferActivo(
+    "SELECT COUNT(*) AS total FROM workers WHERE activo = 1",
+    [],
+    "SELECT COUNT(*) AS total FROM workers",
+    []
+  );
   const queryLlegadas = `
     WITH primera_llegada AS (
       SELECT *,
@@ -152,7 +174,6 @@ export async function getDashboardStats() {
     FROM primera_llegada
     WHERE rn = 1;
   `;
-  const totalResults = await queryDb(queryTotalEmpleados);
   const llegadasResults = await queryDb(queryLlegadas, [horaEntradaTarde, horaEntradaTarde]);
   return {
     totalEmpleados: totalResults[0]?.total || 0,
