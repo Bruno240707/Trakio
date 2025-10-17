@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { loginController } from "./controllers/authController.js";
-import { getWorkersController, addWorkerController, updateWorkerController, deleteWorkerController } from "./controllers/workersController.js";
+import { getWorkersController, addWorkerController, updateWorkerController } from "./controllers/workersController.js";
 import { setWorkerActivoController } from "./controllers/workersController.js";
 import { getHoraEntradaTardeController, updateHoraEntradaTardeController } from "./controllers/configController.js";
 import {
@@ -88,7 +88,6 @@ app.get("/api/getWorkers", getWorkersController);
 // Use upload.single('foto') for endpoints that accept a photo file field named 'foto'
 app.post("/api/addWorker", upload.single('foto'), addWorkerController);
 app.put("/api/updateWorker/:id", upload.single('foto'), updateWorkerController);
-app.delete("/api/deleteWorker/:id", deleteWorkerController);
 app.put("/api/setWorkerActivo/:id", setWorkerActivoController);
 
 // Charts and dashboards

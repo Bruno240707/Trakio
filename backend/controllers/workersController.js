@@ -1,4 +1,4 @@
-import { getWorkers, addWorker, updateWorker, deleteWorker, setWorkerActivo } from "../services/workersService.js";
+import { getWorkers, addWorker, updateWorker, setWorkerActivo } from "../services/workersService.js";
 
 export async function getWorkersController(req, res) {
   try {
@@ -49,18 +49,6 @@ export async function updateWorkerController(req, res) {
     res.json({ success: true });
   } catch (error) {
     console.error("Error al modificar trabajador:", error);
-    res.status(500).json({ error: "Error en la consulta" });
-  }
-}
-
-export async function deleteWorkerController(req, res) {
-  try {
-    const { id } = req.params;
-    // Mantener por compatibilidad: seguir borrando físicamente si hace falta
-    await deleteWorker(id);
-    res.json({ success: true });
-  } catch (error) {
-    console.error("Error al eliminar trabajador:", error);
     res.status(500).json({ error: "Error en la consulta" });
   }
 }

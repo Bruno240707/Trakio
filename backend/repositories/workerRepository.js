@@ -69,14 +69,3 @@ export function setWorkerActivoById(id, activo) {
     });
   });
 }
-
-export function deleteWorkerById(id) {
-  const query = "DELETE FROM workers WHERE id = ?";
-  return new Promise((resolve, reject) => {
-    db.query(query, [id], (err) => {
-      if (err) return reject(err);
-      resolve(true);
-    });
-  });
-}
-

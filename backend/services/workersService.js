@@ -1,4 +1,4 @@
-import { queryWorkers, insertWorker, updateWorkerById, deleteWorkerById, setWorkerActivoById } from "../repositories/workerRepository.js";
+import { queryWorkers, insertWorker, updateWorkerById, setWorkerActivoById } from "../repositories/workerRepository.js";
 
 export async function getWorkers(filtro, sucursal, includeInactive = false) {
   // Intentamos incluir la columna activo si existe; si no, hacemos fallback
@@ -63,8 +63,4 @@ export async function setWorkerActivo(id, activo) {
     throw err;
   }
   return res;
-}
-
-export async function deleteWorker(id) {
-  return deleteWorkerById(id);
 }
