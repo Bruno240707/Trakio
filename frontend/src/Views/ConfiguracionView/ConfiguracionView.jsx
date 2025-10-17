@@ -8,8 +8,12 @@ export default function Configuracion({ empleados, setEmpleados }) {
     apellido: "",
     email: "",
     telefono: "",
-    foto_url: ""
+    foto_url: "",
+    sucursal: "",
+    id_sucursal: null,
+
   });
+  const [sucursales, setSucursales] = useState([]);
   const [filtroConf, setFiltroConf] = useState("")
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({});
@@ -55,6 +59,20 @@ useEffect(() => {
     fetchEmpleados();
   }, []);
 
+  // Fetch sucursales para el select
+  useEffect(() => {
+    const fetchSucursales = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/getSucursales");
+        const data = await res.json();
+        setSucursales(data || []);
+      } catch (err) {
+        console.error("Error cargando sucursales:", err);
+      }
+    };
+    fetchSucursales();
+  }, []);
+
   const handleHorario = async () => {
     if (!horarioTarde) {
       alert("Seleccioná una hora primero.");
@@ -94,7 +112,10 @@ useEffect(() => {
         alert("Faltan datos obligatorios");
         return;
       }
-      await axios.post("http://localhost:3001/api/addWorker", nuevoEmpleado);
+      // Envia id_sucursal como id_sucursal (o null)
+      const payload = { ...nuevoEmpleado };
+      if (!payload.id_sucursal) payload.id_sucursal = null;
+      await axios.post("http://localhost:3001/api/addWorker", payload);
       setNuevoEmpleado({ nombre: "", apellido: "", email: "", telefono: "", foto_url: "" });
       fetchEmpleados();
     } catch (err) {
@@ -113,6 +134,7 @@ useEffect(() => {
     setEditValues({
       nombre: emp.nombre,
       apellido: emp.apellido,
+      sucursal: emp.sucursal,
       email: emp.email,
       telefono: emp.telefono,
       foto_url: emp.foto_url || ""
@@ -122,7 +144,10 @@ useEffect(() => {
   // Guardar cambios
   const handleSave = async (id) => {
     try {
-      await axios.put(`http://localhost:3001/api/updateWorker/${id}`, editValues);
+      const payload = { ...editValues };
+      if (!payload.id_sucursal) payload.id_sucursal = null;
+      console.log("Updating worker payload:", payload);
+      await axios.put(`http://localhost:3001/api/updateWorker/${id}`, payload);
       setEditingId(null);
       fetchEmpleados();
     } catch (err) {
@@ -202,6 +227,16 @@ useEffect(() => {
                   onChange={(e) => setEditValues({ ...editValues, telefono: e.target.value })}
                   placeholder="Teléfono"
                 />
+                {/* Select de sucursales en edición */}
+                <select
+                  value={editValues.id_sucursal || ""}
+                  onChange={(e) => setEditValues({ ...editValues, id_sucursal: e.target.value || null, sucursal: (sucursales.find(s => String(s.id) === e.target.value) || {}).nombre || editValues.sucursal })}
+                >
+                  <option value="">-- Mantener sucursal --</option>
+                  {sucursales.map((s) => (
+                    <option key={s.id} value={s.id}>{s.nombre}</option>
+                  ))}
+                </select>
                 <input
                   type="text"
                   value={editValues.foto_url}
@@ -278,6 +313,18 @@ useEffect(() => {
         value={nuevoEmpleado.telefono}
         onChange={(e) => setNuevoEmpleado({ ...nuevoEmpleado, telefono: e.target.value })}
       />
+      {/* Reemplazar input de sucursal por select con sucursales disponibles */}
+      <label style={{ display: 'block', marginTop: '8px', color: '#fff' }}>Sucursal</label>
+      <select
+        className="configuracionInput"
+        value={nuevoEmpleado.id_sucursal || ""}
+        onChange={(e) => setNuevoEmpleado({ ...nuevoEmpleado, id_sucursal: e.target.value || null, sucursal: (sucursales.find(s => String(s.id) === e.target.value) || {}).nombre || "" })}
+      >
+        <option value="">-- Seleccionar sucursal --</option>
+        {sucursales.map((s) => (
+          <option key={s.id} value={s.id}>{s.nombre}</option>
+        ))}
+      </select>
       <input
         className="configuracionInput"
         type="text"
@@ -285,6 +332,7 @@ useEffect(() => {
         value={nuevoEmpleado.foto_url}
         onChange={(e) => setNuevoEmpleado({ ...nuevoEmpleado, foto_url: e.target.value })}
       />
+      
       <button className="configuracionBotonAgregar" onClick={handleAdd}>
         ➕ Agregar
       </button>

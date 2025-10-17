@@ -14,11 +14,11 @@ export async function getWorkersController(req, res) {
 
 export async function addWorkerController(req, res) {
   try {
-    const { nombre, apellido, email, telefono, foto_url } = req.body;
+    const { nombre, apellido, email, telefono, foto_url, id_sucursal } = req.body;
     if (!nombre || !apellido || !email || !telefono) {
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
-    const id = await addWorker({ nombre, apellido, email, telefono, foto_url });
+    const id = await addWorker({ nombre, apellido, email, telefono, foto_url, id_sucursal });
     res.json({ success: true, id });
   } catch (error) {
     console.error("Error al agregar trabajador:", error);
@@ -29,8 +29,8 @@ export async function addWorkerController(req, res) {
 export async function updateWorkerController(req, res) {
   try {
     const { id } = req.params;
-    const { nombre, apellido, email, telefono, foto_url } = req.body;
-    await updateWorker({ id, nombre, apellido, email, telefono, foto_url });
+    const { nombre, apellido, email, telefono, foto_url, id_sucursal } = req.body;
+    await updateWorker({ id, nombre, apellido, email, telefono, foto_url, id_sucursal });
     res.json({ success: true });
   } catch (error) {
     console.error("Error al modificar trabajador:", error);

@@ -9,27 +9,27 @@ export function queryWorkers(query, values) {
   });
 }
 
-export function insertWorker(nombre, apellido, email, telefono, foto_url) {
+export function insertWorker(nombre, apellido, email, telefono, foto_url, id_sucursal) {
   const query = `
-    INSERT INTO workers (nombre, apellido, email, telefono, foto_url)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO workers (nombre, apellido, email, telefono, foto_url, id_sucursal)
+    VALUES (?, ?, ?, ?, ?, ?)
   `;
   return new Promise((resolve, reject) => {
-    db.query(query, [nombre, apellido, email, telefono, foto_url], (err, result) => {
+    db.query(query, [nombre, apellido, email, telefono, foto_url, id_sucursal || null], (err, result) => {
       if (err) return reject(err);
       resolve(result.insertId);
     });
   });
 }
 
-export function updateWorkerById(id, nombre, apellido, email, telefono, foto_url) {
+export function updateWorkerById(id, nombre, apellido, email, telefono, foto_url, id_sucursal) {
   const query = `
     UPDATE workers 
-    SET nombre = ?, apellido = ?, email = ?, telefono = ?, foto_url = ?
+    SET nombre = ?, apellido = ?, email = ?, telefono = ?, foto_url = ?, id_sucursal = ?
     WHERE id = ?
   `;
   return new Promise((resolve, reject) => {
-    db.query(query, [nombre, apellido, email, telefono, foto_url, id], (err) => {
+    db.query(query, [nombre, apellido, email, telefono, foto_url, id_sucursal || null, id], (err) => {
       if (err) return reject(err);
       resolve(true);
     });

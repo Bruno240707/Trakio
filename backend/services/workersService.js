@@ -32,13 +32,13 @@ export async function getWorkers(filtro, sucursal) {
 }
 
 export async function addWorker(worker) {
-  const { nombre, apellido, email, telefono, foto_url } = worker;
-  return insertWorker(nombre, apellido, email, telefono, foto_url);
+  const { nombre, apellido, email, telefono, foto_url, id_sucursal } = worker;
+  return insertWorker(nombre, apellido, email, telefono, foto_url, id_sucursal);
 }
 
 export async function updateWorker(worker) {
-  const { id, nombre, apellido, email, telefono, foto_url } = worker;
-  return updateWorkerById(id, nombre, apellido, email, telefono, foto_url);
+  const { id, nombre, apellido, email, telefono, foto_url, id_sucursal } = worker;
+  return updateWorkerById(id, nombre, apellido, email, telefono, foto_url, id_sucursal);
 }
 
 export async function deleteWorker(id) {
