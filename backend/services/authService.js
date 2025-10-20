@@ -36,7 +36,7 @@ export async function loginUser(username, password) {
     throw err;
   }
 
-  const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: "5s" });
+  const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: "1h" });
   return { success: true, user: { id: user.id, username: user.username }, token };
 }
 

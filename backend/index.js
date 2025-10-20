@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { loginController } from "./controllers/authController.js";
+import authRoutes from "./routes/authRoutes.js";
 import { getWorkersController, addWorkerController, updateWorkerController } from "./controllers/workersController.js";
 import { setWorkerActivoController } from "./controllers/workersController.js";
 import { getHoraEntradaTardeController, updateHoraEntradaTardeController } from "./controllers/configController.js";
@@ -28,8 +29,12 @@ dotenv.config();
 const app = express();
 const port = 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5174", // Cambiar a 5174 para que coincida con el frontend
+  credentials: true,               // importante para cookies
+}));
 app.use(express.json());
+app.use(cookieParser());
 
 // Servir archivos estáticos subidos
 import { fileURLToPath } from 'url';
@@ -75,7 +80,7 @@ const upload = multer({
 });
 
 // Auth
-app.post("/api/login", loginController);
+app.use("/api", authRoutes);
 
 //Sucursales
 app.get("/api/getSucursales", getSucursalesController);
@@ -110,4 +115,3 @@ app.post("/api/configurar-hora-entrada", updateHoraEntradaTardeController);
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
-
