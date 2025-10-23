@@ -30,9 +30,10 @@ const app = express();
 const port = 3001;
 
 app.use(cors({
-  origin: "http://localhost:5174", // Cambiar a 5174 para que coincida con el frontend
-  credentials: true,               // importante para cookies
+  origin: "http://localhost:5173",
+  credentials: true,
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 

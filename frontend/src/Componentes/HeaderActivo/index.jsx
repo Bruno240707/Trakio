@@ -4,11 +4,26 @@
   const Header = ({ setCuentaActiva, cuentaActiva }) => {
     const navigate = useNavigate();
 
-    const cerrarSesion = () => {
-      setCuentaActiva(false);
-      sessionStorage.removeItem("token");
-      navigate("/");
-    };
+  const cerrarSesion = async () => {
+    try {
+      // Llamada al backend para eliminar cookie httpOnly
+      const res = await fetch("http://localhost:3001/api/logout", {
+        method: "POST",
+        credentials: "include", // 👈 muy importante para httpOnly cookies
+      });
+
+      if (res.ok) {
+        // Limpiar estado del frontend
+        setCuentaActiva(null);
+        sessionStorage.removeItem("token");
+        navigate("/IniciarSesion");
+      } else {
+        console.error("Error cerrando sesión en backend");
+      }
+    } catch (err) {
+      console.error("Error en logout:", err);
+    }
+  };
 
 
     return (

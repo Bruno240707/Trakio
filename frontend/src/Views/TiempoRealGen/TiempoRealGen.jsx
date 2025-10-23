@@ -9,7 +9,7 @@ const TiempoRealGen = ({ empleados }) => {
 
   useEffect(() => {
     const fetchEvents = () => {
-      axios.get('http://localhost:3001/api/worker-events')
+      axios.get('/api/worker-events')
         .then(response => {
           setEvents(response.data);
           console.log(events)

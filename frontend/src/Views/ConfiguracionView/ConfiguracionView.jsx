@@ -25,7 +25,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
 
   const fetchEmpleados = async () => {
     try {
-      const res = await axios.get(`http://localhost:3001/api/getWorkers?includeInactive=${mostrarInactivos}`);
+      const res = await axios.get(`/api/getWorkers?includeInactive=${mostrarInactivos}`);
       setEmpleados(res.data);
     } catch (err) {
       console.error("Error al cargar los empleados:", err);
@@ -33,17 +33,17 @@ export default function Configuracion({ empleados, setEmpleados }) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtroConf}&includeInactive=${mostrarInactivos}`)
+    fetch(`/api/getWorkers?filtro=${filtroConf}&includeInactive=${mostrarInactivos}`)
       .then((res) => res.json())
       .then((data) => setEmpleados(data))
       .catch((err) => console.error("Error al cargar la API:", err));
   }, [filtroConf]);
-  
+
 
 useEffect(() => {
   const fetchHorario = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/configurar-hora-entrada");
+      const res = await fetch("/api/configurar-hora-entrada");
       const data = await res.json();
       if (data.horaEntradaTarde) {
         setHorarioTarde(data.horaEntradaTarde.slice(0, 5));
@@ -71,7 +71,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchSucursales = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/getSucursales");
+        const res = await fetch("/api/getSucursales");
         const data = await res.json();
         setSucursales(data || []);
       } catch (err) {
@@ -86,11 +86,11 @@ useEffect(() => {
       alert("Seleccioná una hora primero.");
       return;
     }
-  
+
     const horaConSegundos = `${horarioTarde}:00`;
-  
+
     try {
-      const response = await fetch('http://localhost:3001/api/configurar-hora-entrada', {
+      const response = await fetch('/api/configurar-hora-entrada', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -99,19 +99,19 @@ useEffect(() => {
           horaEntradaTarde: horaConSegundos
         })
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
       }
-  
+
       alert("Horario actualizado a " + horaConSegundos);
     } catch (error) {
       console.error("Error actualizando horario:", error);
       alert("Error actualizando el horario.");
     }
   };
-  
+
 
   // Agregar nuevo empleado
   const handleAdd = async () => {
@@ -129,12 +129,12 @@ useEffect(() => {
         form.append('telefono', nuevoEmpleado.telefono);
         form.append('id_sucursal', nuevoEmpleado.id_sucursal || '');
         form.append('foto', nuevoFotoFile);
-        await axios.post("http://localhost:3001/api/addWorker", form);
+        await axios.post("/api/addWorker", form);
       } else {
         // Envia id_sucursal como id_sucursal (o null)
         const payload = { ...nuevoEmpleado };
         if (!payload.id_sucursal) payload.id_sucursal = null;
-        await axios.post("http://localhost:3001/api/addWorker", payload);
+        await axios.post("/api/addWorker", payload);
       }
       setNuevoEmpleado({ nombre: "", apellido: "", email: "", telefono: "", foto_url: "" });
       setNuevoFotoFile(null);
@@ -146,7 +146,7 @@ useEffect(() => {
 
   const toggleActivo = async (empId, nuevoEstado) => {
     try {
-      await axios.put(`http://localhost:3001/api/setWorkerActivo/${empId}`, { activo: nuevoEstado });
+      await axios.put(`/api/setWorkerActivo/${empId}`, { activo: nuevoEstado });
       fetchEmpleados();
     } catch (err) {
       console.error('Error cambiando estado:', err);
@@ -177,12 +177,12 @@ useEffect(() => {
         form.append('telefono', editValues.telefono || '');
         form.append('id_sucursal', editValues.id_sucursal || '');
         form.append('foto', editFotoFile);
-        await axios.put(`http://localhost:3001/api/updateWorker/${id}`, form);
+        await axios.put(`/api/updateWorker/${id}`, form);
       } else {
         const payload = { ...editValues };
         if (!payload.id_sucursal) payload.id_sucursal = null;
         console.log("Updating worker payload:", payload);
-        await axios.put(`http://localhost:3001/api/updateWorker/${id}`, payload);
+        await axios.put(`/api/updateWorker/${id}`, payload);
       }
       setEditingId(null);
       fetchEmpleados();

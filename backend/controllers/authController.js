@@ -4,17 +4,17 @@ export async function loginController(req, res) {
   try {
     const { username, password } = req.body;
     const result = await loginUser(username, password);
-
+  
     const { user, token } = result;
 
     // Guardar token en cookie HTTP segura (compatible con desarrollo)
-    res.cookie("auth_token", token, {
-      httpOnly: true,
-      secure: false, // Cambiar a false para desarrollo local
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 60 * 1000,
-    });
+res.cookie("auth_token", token, {
+  httpOnly: true,
+  secure: false,      // true solo en producción HTTPS
+  sameSite: "lax",    // permite navegación interna sin borrarla
+  path: "/",
+  maxAge: 60 * 60 * 1000,
+});
 
     res.json({
       success: true,
@@ -37,12 +37,12 @@ export function perfilController(req, res) {
 }
 
 export function logoutController(req, res) {
-  // Limpiar cookie del token con las mismas opciones
   res.clearCookie("auth_token", {
     httpOnly: true,
-    secure: false, // Cambiar a false para desarrollo local
+    secure: false,       // false para desarrollo local
     sameSite: "strict",
-    path: "/",
+    path: "/",           // debe ser igual al path de login
+    domain: "localhost", // si pusiste domain en login
   });
 
   res.json({ message: "Sesión cerrada exitosamente" });

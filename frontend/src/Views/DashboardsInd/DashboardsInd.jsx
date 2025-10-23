@@ -27,17 +27,17 @@ const DashboardsInd = ({ empleados }) => {
   const [sucursalSeleccionada, setSucursalSeleccionada] = useState("")
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/getWorkers?filtro=${filtro}&sucursal=${sucursalSeleccionada}`)
+    fetch(`/api/getWorkers?filtro=${filtro}&sucursal=${sucursalSeleccionada}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setEmpleados(data))
       .catch((err) => console.error("Error al cargar la API:", err));
   }, [filtro, sucursalSeleccionada]);
-  
+
 
   useEffect(() => {
     const fetchSucursales = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/getSucursales");
+        const res = await fetch("/api/getSucursales", { credentials: "include" });
         if (!res.ok) throw new Error("Error en la respuesta de la API");
         const data = await res.json();
         setSucursales(data);
@@ -45,7 +45,7 @@ const DashboardsInd = ({ empleados }) => {
         console.error("Error al cargar las sucursales:", err);
       }
     };
-  
+
     fetchSucursales();
   }, []);
 
@@ -60,7 +60,7 @@ const DashboardsInd = ({ empleados }) => {
   useEffect(() => {
     if (!workerId) return;
 
-    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${year}&month=${month}&day=${day}`)
+    fetch(`/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${year}&month=${month}&day=${day}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
@@ -69,7 +69,7 @@ const DashboardsInd = ({ empleados }) => {
   useEffect(() => {
     if (!workerId) return;
 
-    fetch(`http://localhost:3001/api/lineData/${workerId}?year=${year}&month=${month}`)
+    fetch(`/api/lineData/${workerId}?year=${year}&month=${month}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar lineData:", err));
@@ -78,7 +78,7 @@ const DashboardsInd = ({ empleados }) => {
   useEffect(() => {
     if (!workerId) return;
 
-    fetch(`http://localhost:3001/api/attendanceDoughnut/${workerId}?year=${year}&month=${month}`)
+    fetch(`/api/attendanceDoughnut/${workerId}?year=${year}&month=${month}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setDoughnutData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
@@ -94,17 +94,17 @@ const DashboardsInd = ({ empleados }) => {
     if (y && !m && d) d = "";
     if (!y) m = ""; d = "";
 
-    fetch(`http://localhost:3001/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${y}&month=${m}&day=${d}`)
+    fetch(`/api/eventsEntradasSalidasByWorkerAndDate/${workerId}?year=${y}&month=${m}&day=${d}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setBarData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
 
-    fetch(`http://localhost:3001/api/lineData/${workerId}?year=${y}&month=${m}`)
+    fetch(`/api/lineData/${workerId}?year=${y}&month=${m}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar lineData:", err));
 
-    fetch(`http://localhost:3001/api/attendanceDoughnut/${workerId}?year=${y}&month=${m}`)
+    fetch(`/api/attendanceDoughnut/${workerId}?year=${y}&month=${m}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setDoughnutData(data))
       .catch((err) => console.error("Error al cargar la API:", err));

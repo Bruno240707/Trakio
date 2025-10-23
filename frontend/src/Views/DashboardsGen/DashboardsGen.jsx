@@ -42,22 +42,22 @@ const DashboardsGen = () => {
   const [empleados, setEmpleados] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/attendanceDoughnutAllWorkers?year=${year}&month=${month}`)
+    fetch(`/api/attendanceDoughnutAllWorkers?year=${year}&month=${month}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setDoughnutData(data))
       .catch((err) => console.error("Error al cargar la API de Doughnut:", err));
 
-    fetch(`http://localhost:3001/api/lineData?year=${year}&month=${month}`)
+    fetch(`/api/lineData?year=${year}&month=${month}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
 
-    fetch(`http://localhost:3001/api/eventsEntradasSalidasAllWorkers?year=${year}&month=${month}&week=${week}`)
+    fetch(`/api/eventsEntradasSalidasAllWorkers?year=${year}&month=${month}&week=${week}`, { credentials: "include" })
       .then(res => res.json())
       .then(data => setBarData(data))
       .catch(err => console.error("Error al cargar la API:", err));
 
-    fetch("http://localhost:3001/api/dashboardStats")
+    fetch("/api/dashboardStats", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         setDashboardStats({
@@ -68,7 +68,7 @@ const DashboardsGen = () => {
       })
       .catch((err) => console.error("Error al cargar dashboardStats:", err));
 
-    fetch("http://localhost:3001/api/getWorkers")
+    fetch("/api/getWorkers", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setEmpleados(data))
       .catch((err) => console.error("Error al cargar empleados:", err));
