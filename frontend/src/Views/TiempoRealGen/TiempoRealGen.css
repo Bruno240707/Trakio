@@ -50,5 +50,28 @@ body {
 padding: 1000%;
 }
 
+  /* Filtro sucursal estilo profesional */
+  .filtro-sucursal {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    padding: 0.6rem 0.9rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border-radius: 12px;
+    border: 1px solid rgba(10,20,40,0.06);
+    box-shadow: 0 10px 26px rgba(8,18,40,0.12);
+  }
+
+  .filtro-sucursal label { font-weight:700; color:#0f2340; }
+  .filtro-sucursal select { min-width:220px; padding:0.45rem 0.6rem; border-radius:8px; border:1px solid rgba(15,35,64,0.08); background: linear-gradient(#fff,#f6f9fd); box-shadow:0 6px 14px rgba(12,30,60,0.06); }
+
+  @media (max-width:640px) {
+    .filtro-sucursal { padding:0.5rem; }
+    .filtro-sucursal select { min-width:140px; }
+    .registro-completo { width: 80%; }
+  }
+
 
   
