@@ -6,13 +6,17 @@ import CardTiempoReal from "../../Componentes/CardTiempoReal/index";
 const TiempoRealGen = ({ empleados }) => {
 
   const [events, setEvents] = useState([]);
+  const [sucursales, setSucursales] = useState([]);
+  const [selectedSucursal, setSelectedSucursal] = useState("");
 
   useEffect(() => {
     const fetchEvents = () => {
-      axios.get('/api/worker-events')
+      const params = selectedSucursal ? { id_sucursal: selectedSucursal } : {};
+      axios.get('/api/worker-events', { params })
         .then(response => {
           setEvents(response.data);
-          console.log(events)
+          // console.log la respuesta para debugging
+          console.log('fetched events', response.data);
         })
         .catch(error => {
           console.error('Error fetching events:', error);
@@ -24,6 +28,33 @@ const TiempoRealGen = ({ empleados }) => {
     const intervalId = setInterval(fetchEvents, 5000);
 
     return () => clearInterval(intervalId);
+  }, [selectedSucursal]);
+
+  // Traer sucursales para el dropdown de filtro
+  useEffect(() => {
+    axios.get('/api/getSucursales')
+      .then(res => {
+        setSucursales(res.data || []);
+        // Si hay una sucursal guardada previamente en localStorage, úsala como selección inicial
+        try {
+          const saved = localStorage.getItem('selectedSucursal');
+          if (saved) setSelectedSucursal(saved);
+        } catch (err) {
+          console.error('Error reading selectedSucursal from localStorage', err);
+        }
+      })
+      .catch(err => console.error('Error fetching sucursales', err));
+  }, []);
+
+  // Escuchar cambios en localStorage (p.ej. si se selecciona otra sucursal en DashboardsInd)
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'selectedSucursal') {
+        setSelectedSucursal(e.newValue || "");
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
   }, []);
 
     const workerActual = (id) =>{
@@ -34,6 +65,16 @@ const TiempoRealGen = ({ empleados }) => {
   return (
     <div className="tiempo-real-container">
       <h1>Entradas y Salidas en Tiempo Real</h1>
+
+      <div className="filtro-sucursal">
+        <label htmlFor="sucursalSelect">Filtrar por sucursal: </label>
+        <select id="sucursalSelect" value={selectedSucursal} onChange={e => setSelectedSucursal(e.target.value)}>
+          <option value="">Todas las sucursales</option>
+          {sucursales.map(s => (
+            <option key={s.id} value={s.id}>{s.nombre}</option>
+          ))}
+        </select>
+      </div>
 
       <div className="lista-registros">
         {Array.isArray(events) && events.length > 0 ? (

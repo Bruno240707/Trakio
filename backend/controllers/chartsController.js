@@ -39,7 +39,7 @@ export async function barDataController(req, res) {
 
 export async function dashboardStatsController(req, res) {
   try {
-    const data = await getDashboardStats();
+    const data = await getDashboardStats(req.query);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Error en la consulta" });
@@ -48,7 +48,8 @@ export async function dashboardStatsController(req, res) {
 
 export async function workerEventsTodayController(req, res) {
   try {
-    const data = await getWorkerEventsToday();
+    // Pasamos los query params (p.ej. id_sucursal) al servicio para permitir filtrado
+    const data = await getWorkerEventsToday(req.query);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Error en la consulta" });

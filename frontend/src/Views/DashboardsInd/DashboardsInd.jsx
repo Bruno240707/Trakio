@@ -52,6 +52,38 @@ const DashboardsInd = ({ empleados }) => {
     fetchSucursales();
   }, []);
 
+  // Inicializar selección desde localStorage (persistencia entre vistas / recargas)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('selectedSucursal');
+      if (saved) setSucursalSeleccionada(saved);
+    } catch (err) {
+      console.error('Error reading selectedSucursal from localStorage', err);
+    }
+  }, []);
+
+  // Escuchar cambios en localStorage en caso de que se modifique desde otra pestaña/vista
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'selectedSucursal') {
+        setSucursalSeleccionada(e.newValue || "");
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  // Guardar selección de sucursal en localStorage para que otras vistas (p.ej. DashboardsGen)
+  // puedan leer la última sucursal seleccionada y prefiltrarse.
+  useEffect(() => {
+    try {
+      if (sucursalSeleccionada) localStorage.setItem('selectedSucursal', sucursalSeleccionada);
+      else localStorage.removeItem('selectedSucursal');
+    } catch (err) {
+      console.error('Error saving selectedSucursal to localStorage', err);
+    }
+  }, [sucursalSeleccionada]);
+
   // Buscar empleado actual
   const workerActual = empleadosFiltrados.find((e) => e.id == workerId);
 

@@ -14,7 +14,7 @@ async function tryQueryDbPreferActivo(sqlWithActivo, paramsWithActivo = [], sqlF
 }
 
 export async function getLineDataGeneral(queryParams) {
-  let { year, month } = queryParams;
+  let { year, month, id_sucursal } = queryParams || {};
   if (!year || !month) {
     const today = new Date();
     year = today.getFullYear();
@@ -38,12 +38,17 @@ export async function getLineDataGeneral(queryParams) {
     }
   }
 
-  const workers = await tryQueryDbPreferActivo(
-    "SELECT id FROM workers WHERE activo = 1",
-    [],
-    "SELECT id FROM workers",
-    []
-  );
+  // Obtener lista de workers, filtrando por sucursal si viene en queryParams
+  const queryWithActivo = id_sucursal
+    ? "SELECT id FROM workers WHERE activo = 1 AND id_sucursal = ?"
+    : "SELECT id FROM workers WHERE activo = 1";
+  const paramsWithActivo = id_sucursal ? [id_sucursal] : [];
+  const queryFallback = id_sucursal
+    ? "SELECT id FROM workers WHERE id_sucursal = ?"
+    : "SELECT id FROM workers";
+  const paramsFallback = id_sucursal ? [id_sucursal] : [];
+
+  const workers = await tryQueryDbPreferActivo(queryWithActivo, paramsWithActivo, queryFallback, paramsFallback);
   const empleados = workers.map(w => w.id);
 
   const query = `
@@ -150,31 +155,66 @@ export async function getBarData() {
   ];
 }
 
-export async function getDashboardStats() {
+export async function getDashboardStats(queryParams = {}) {
+  const { id_sucursal } = queryParams;
   const horaEntradaTarde = await getHoraEntradaTardeForQueries();
-  const totalResults = await tryQueryDbPreferActivo(
-    "SELECT COUNT(*) AS total FROM workers WHERE activo = 1",
-    [],
-    "SELECT COUNT(*) AS total FROM workers",
-    []
-  );
-  const queryLlegadas = `
-    WITH primera_llegada AS (
-      SELECT *,
-             ROW_NUMBER() OVER (
-               PARTITION BY worker_id, DATE(created_at)
-               ORDER BY created_at
-             ) AS rn
-      FROM eventos
-      WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
-    )
-    SELECT 
-      SUM(CASE WHEN TIME(created_at) <= ? THEN 1 ELSE 0 END) AS llegadas_a_tiempo,
-      SUM(CASE WHEN TIME(created_at) >  ? THEN 1 ELSE 0 END) AS llegadas_tarde
-    FROM primera_llegada
-    WHERE rn = 1;
-  `;
-  const llegadasResults = await queryDb(queryLlegadas, [horaEntradaTarde, horaEntradaTarde]);
+
+  // Contar empleados (filtrar por sucursal si aplica)
+  const queryWithActivo = id_sucursal
+    ? "SELECT COUNT(*) AS total FROM workers WHERE activo = 1 AND id_sucursal = ?"
+    : "SELECT COUNT(*) AS total FROM workers WHERE activo = 1";
+  const paramsWithActivo = id_sucursal ? [id_sucursal] : [];
+  const queryFallback = id_sucursal
+    ? "SELECT COUNT(*) AS total FROM workers WHERE id_sucursal = ?"
+    : "SELECT COUNT(*) AS total FROM workers";
+  const paramsFallback = id_sucursal ? [id_sucursal] : [];
+
+  const totalResults = await tryQueryDbPreferActivo(queryWithActivo, paramsWithActivo, queryFallback, paramsFallback);
+
+  // Llegadas: si se filtra por sucursal, unimos con workers
+  let queryLlegadas;
+  let paramsLlegadas = [horaEntradaTarde, horaEntradaTarde];
+  if (id_sucursal) {
+    queryLlegadas = `
+      WITH primera_llegada AS (
+        SELECT e.*,
+               ROW_NUMBER() OVER (
+                 PARTITION BY worker_id, DATE(e.created_at)
+                 ORDER BY e.created_at
+               ) AS rn
+        FROM eventos e
+        JOIN workers w ON e.worker_id = w.id
+        WHERE e.event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+          AND w.id_sucursal = ?
+      )
+      SELECT 
+        SUM(CASE WHEN TIME(created_at) <= ? THEN 1 ELSE 0 END) AS llegadas_a_tiempo,
+        SUM(CASE WHEN TIME(created_at) >  ? THEN 1 ELSE 0 END) AS llegadas_tarde
+      FROM primera_llegada
+      WHERE rn = 1;
+    `;
+    // params: id_sucursal, horaEntradaTarde, horaEntradaTarde
+    paramsLlegadas = [id_sucursal, horaEntradaTarde, horaEntradaTarde];
+  } else {
+    queryLlegadas = `
+      WITH primera_llegada AS (
+        SELECT *,
+               ROW_NUMBER() OVER (
+                 PARTITION BY worker_id, DATE(created_at)
+                 ORDER BY created_at
+               ) AS rn
+        FROM eventos
+        WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+      )
+      SELECT 
+        SUM(CASE WHEN TIME(created_at) <= ? THEN 1 ELSE 0 END) AS llegadas_a_tiempo,
+        SUM(CASE WHEN TIME(created_at) >  ? THEN 1 ELSE 0 END) AS llegadas_tarde
+      FROM primera_llegada
+      WHERE rn = 1;
+    `;
+  }
+
+  const llegadasResults = await queryDb(queryLlegadas, paramsLlegadas);
   return {
     totalEmpleados: totalResults[0]?.total || 0,
     llegadasATiempo: llegadasResults[0]?.llegadas_a_tiempo || 0,
@@ -182,33 +222,73 @@ export async function getDashboardStats() {
   };
 }
 
-export async function getWorkerEventsToday() {
-  const query = `
-    WITH eventos_filtrados AS (
-      SELECT *
-      FROM eventos
-      WHERE 
-        event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
-        AND DATE(created_at) = CURDATE()
-    ),
-    numerados AS (
+export async function getWorkerEventsToday(queryParams = {}) {
+  // Permitir filtrado opcional por id_sucursal (viene en queryParams.id_sucursal)
+  const { id_sucursal } = queryParams;
+
+  // Si se pasa id_sucursal, unimos con tabla workers y filtramos por esa sucursal.
+  // Construimos la consulta condicionalmente para no romper compatibilidad si no se pasa el parámetro.
+  let query;
+  let params = [];
+
+  if (id_sucursal) {
+    query = `
+      WITH eventos_filtrados AS (
+        SELECT e.*
+        FROM eventos e
+        JOIN workers w ON e.worker_id = w.id
+        WHERE 
+          e.event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+          AND DATE(e.created_at) = CURDATE()
+          AND w.id_sucursal = ?
+      ),
+      numerados AS (
+        SELECT *,
+               ROW_NUMBER() OVER (
+                 PARTITION BY worker_id, DATE(created_at)
+                 ORDER BY created_at
+               ) - 1 AS evento_previo_count
+        FROM eventos_filtrados
+      )
       SELECT *,
-             ROW_NUMBER() OVER (
-               PARTITION BY worker_id, DATE(created_at)
-               ORDER BY created_at
-             ) - 1 AS evento_previo_count
-      FROM eventos_filtrados
-    )
-    SELECT *,
-           CASE 
-             WHEN MOD(evento_previo_count, 2) = 0 THEN 'Entrance'
-             ELSE 'Exit'
-           END AS event_direction
-    FROM numerados
-    WHERE created_at >= CURDATE()
-    ORDER BY created_at DESC;
-  `;
-  return queryDb(query);
+             CASE 
+               WHEN MOD(evento_previo_count, 2) = 0 THEN 'Entrance'
+               ELSE 'Exit'
+             END AS event_direction
+      FROM numerados
+      WHERE created_at >= CURDATE()
+      ORDER BY created_at DESC;
+    `;
+    params.push(id_sucursal);
+  } else {
+    query = `
+      WITH eventos_filtrados AS (
+        SELECT *
+        FROM eventos
+        WHERE 
+          event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+          AND DATE(created_at) = CURDATE()
+      ),
+      numerados AS (
+        SELECT *,
+               ROW_NUMBER() OVER (
+                 PARTITION BY worker_id, DATE(created_at)
+                 ORDER BY created_at
+               ) - 1 AS evento_previo_count
+        FROM eventos_filtrados
+      )
+      SELECT *,
+             CASE 
+               WHEN MOD(evento_previo_count, 2) = 0 THEN 'Entrance'
+               ELSE 'Exit'
+             END AS event_direction
+      FROM numerados
+      WHERE created_at >= CURDATE()
+      ORDER BY created_at DESC;
+    `;
+  }
+
+  return queryDb(query, params);
 }
 
 export async function getLineDataByWorker(workerId, queryParams) {
@@ -327,7 +407,7 @@ export async function getAttendanceDoughnutByWorker(workerId, queryParams) {
 }
 
 export async function getEventsAllWorkers(queryParams) {
-  let { year, month, week } = queryParams;
+  let { year, month, week, id_sucursal } = queryParams || {};
   const today = new Date();
   if (!year || !month) {
     year = today.getFullYear();
@@ -353,14 +433,32 @@ export async function getEventsAllWorkers(queryParams) {
   const fechasStr = diasFiltrados.map(d => d.toISOString().slice(0,10));
   if (fechasStr.length === 0) return [];
   const placeholders = fechasStr.map(() => '?').join(',');
-  const query = `
-    SELECT created_at
-    FROM eventos
-    WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
-      AND DATE(created_at) IN (${placeholders})
-    ORDER BY created_at ASC
-  `;
-  const results = await queryDb(query, fechasStr);
+  // Si hay id_sucursal, unimos con workers para filtrar por sucursal
+  let query;
+  let params = [];
+  if (id_sucursal) {
+    query = `
+      SELECT e.created_at
+      FROM eventos e
+      JOIN workers w ON e.worker_id = w.id
+      WHERE e.event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+        AND w.id_sucursal = ?
+        AND DATE(e.created_at) IN (${placeholders})
+      ORDER BY e.created_at ASC
+    `;
+    params.push(id_sucursal);
+    params = params.concat(fechasStr);
+  } else {
+    query = `
+      SELECT created_at
+      FROM eventos
+      WHERE event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+        AND DATE(created_at) IN (${placeholders})
+      ORDER BY created_at ASC
+    `;
+    params = fechasStr;
+  }
+  const results = await queryDb(query, params);
   const dataMap = {};
   results.forEach(row => {
     const dateObj = new Date(row.created_at);
@@ -375,7 +473,7 @@ export async function getEventsAllWorkers(queryParams) {
 }
 
 export async function getAttendanceDoughnutAllWorkers(queryParams) {
-  let { year, month } = queryParams;
+  let { year, month, id_sucursal } = queryParams || {};
   const today = new Date();
   if (!year || !month) {
     year = today.getFullYear();
@@ -391,27 +489,57 @@ export async function getAttendanceDoughnutAllWorkers(queryParams) {
     const dayOfWeek = date.getDay();
     if (dayOfWeek !== 0 && dayOfWeek !== 6) diasHabiles.push(date.toISOString().slice(0, 10));
   }
-  const query = `
-    WITH primeras_entradas AS (
-      SELECT 
-        worker_id,
-        DATE(created_at) AS fecha_local,
-        TIME(created_at) AS hora_local,
-        ROW_NUMBER() OVER (
-          PARTITION BY worker_id, DATE(created_at)
-          ORDER BY created_at ASC
-        ) AS rn
-      FROM eventos
-      WHERE 
-        event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
-        AND YEAR(created_at) = ?
-        AND MONTH(created_at) = ?
-    )
-    SELECT worker_id, fecha_local, hora_local
-    FROM primeras_entradas
-    WHERE rn = 1
-  `;
-  const results = await queryDb(query, [year, month]);
+  // Si se filtra por sucursal, unimos con workers para limitar
+  let query;
+  let params = [year, month];
+  if (id_sucursal) {
+    query = `
+      WITH primeras_entradas AS (
+        SELECT 
+          e.worker_id,
+          DATE(e.created_at) AS fecha_local,
+          TIME(e.created_at) AS hora_local,
+          ROW_NUMBER() OVER (
+            PARTITION BY e.worker_id, DATE(e.created_at)
+            ORDER BY e.created_at ASC
+          ) AS rn
+        FROM eventos e
+        JOIN workers w ON e.worker_id = w.id
+        WHERE 
+          e.event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+          AND YEAR(e.created_at) = ?
+          AND MONTH(e.created_at) = ?
+          AND w.id_sucursal = ?
+      )
+      SELECT worker_id, fecha_local, hora_local
+      FROM primeras_entradas
+      WHERE rn = 1
+    `;
+    params = [year, month, id_sucursal];
+  } else {
+    query = `
+      WITH primeras_entradas AS (
+        SELECT 
+          worker_id,
+          DATE(created_at) AS fecha_local,
+          TIME(created_at) AS hora_local,
+          ROW_NUMBER() OVER (
+            PARTITION BY worker_id, DATE(created_at)
+            ORDER BY created_at ASC
+          ) AS rn
+        FROM eventos
+        WHERE 
+          event_type IN ('door-unlocked-from-app', 'hiplock-door-lock-open-log-event')
+          AND YEAR(created_at) = ?
+          AND MONTH(created_at) = ?
+      )
+      SELECT worker_id, fecha_local, hora_local
+      FROM primeras_entradas
+      WHERE rn = 1
+    `;
+    params = [year, month];
+  }
+  const results = await queryDb(query, params);
   const horaEntradaTarde = await getHoraEntradaTardeForQueries();
   const workerIds = [...new Set(results.map(r => r.worker_id))];
   let aTiempo = 0, tardanza = 0, inasistencia = 0;

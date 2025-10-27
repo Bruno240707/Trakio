@@ -33,6 +33,9 @@ const DashboardsGen = () => {
   const [doughnutData, setDoughnutData] = useState([])
   const [barData, setBarData] = useState([])
 
+  const [sucursales, setSucursales] = useState([]);
+  const [selectedSucursal, setSelectedSucursal] = useState("");
+
   const [dashboardStats, setDashboardStats] = useState({
     totalEmpleados: 0,
     llegadasATiempo: 0,
@@ -42,22 +45,34 @@ const DashboardsGen = () => {
   const [empleados, setEmpleados] = useState([]);
 
   useEffect(() => {
-    fetch(`/api/attendanceDoughnutAllWorkers?year=${year}&month=${month}`, { credentials: "include" })
+    const params = new URLSearchParams();
+    params.append('year', year);
+    params.append('month', month);
+    if (week) params.append('week', week);
+    if (selectedSucursal) params.append('id_sucursal', selectedSucursal);
+
+    fetch(`/api/attendanceDoughnutAllWorkers?${params.toString()}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setDoughnutData(data))
       .catch((err) => console.error("Error al cargar la API de Doughnut:", err));
 
-    fetch(`/api/lineData?year=${year}&month=${month}`, { credentials: "include" })
+    fetch(`/api/lineData?${new URLSearchParams({ year, month, ...(selectedSucursal ? { id_sucursal: selectedSucursal } : {}) }).toString()}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setLineData(data))
       .catch((err) => console.error("Error al cargar la API:", err));
+    const paramsBar = new URLSearchParams();
+    paramsBar.append('year', year);
+    paramsBar.append('month', month);
+    paramsBar.append('week', week);
+    if (selectedSucursal) paramsBar.append('id_sucursal', selectedSucursal);
 
-    fetch(`/api/eventsEntradasSalidasAllWorkers?year=${year}&month=${month}&week=${week}`, { credentials: "include" })
+    fetch(`/api/eventsEntradasSalidasAllWorkers?${paramsBar.toString()}`, { credentials: "include" })
       .then(res => res.json())
       .then(data => setBarData(data))
       .catch(err => console.error("Error al cargar la API:", err));
 
-    fetch("/api/dashboardStats", { credentials: "include" })
+    const statsParams = selectedSucursal ? `?id_sucursal=${selectedSucursal}` : '';
+    fetch(`/api/dashboardStats${statsParams}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         setDashboardStats({
@@ -68,11 +83,39 @@ const DashboardsGen = () => {
       })
       .catch((err) => console.error("Error al cargar dashboardStats:", err));
 
-    fetch("/api/getWorkers", { credentials: "include" })
+    // Obtener empleados (filtrados por sucursal si aplica)
+    const workersParams = selectedSucursal ? `?sucursal=${selectedSucursal}` : '';
+    fetch(`/api/getWorkers${workersParams}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setEmpleados(data))
       .catch((err) => console.error("Error al cargar empleados:", err));
-  }, [year, month, week]);
+  }, [year, month, week, selectedSucursal]);
+
+  // Cargar sucursales y leer selección previa desde localStorage
+  useEffect(() => {
+    fetch('/api/getSucursales', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => setSucursales(data || []))
+      .catch(err => console.error('Error al cargar sucursales', err));
+
+    try {
+      const saved = localStorage.getItem('selectedSucursal');
+      if (saved) setSelectedSucursal(saved);
+    } catch (err) {
+      console.error('Error reading selectedSucursal from localStorage', err);
+    }
+  }, []);
+
+  // Escuchar cambios en localStorage y actualizar filtro en tiempo real
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'selectedSucursal') {
+        setSelectedSucursal(e.newValue || "");
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   return (
     <>
@@ -109,6 +152,16 @@ const DashboardsGen = () => {
           <div className="number">{dashboardStats.llegadasTarde}</div>
           <div className="label">Llegadas tarde</div>
         </div>
+      </div>
+
+      <div className="filtro-sucursal-gen">
+        <label htmlFor="sucursalGenSelect">Filtrar por sucursal: </label>
+        <select id="sucursalGenSelect" value={selectedSucursal} onChange={e => setSelectedSucursal(e.target.value)}>
+          <option value="">Todas las sucursales</option>
+          {sucursales.map(s => (
+            <option key={s.id} value={s.id}>{s.nombre}</option>
+          ))}
+        </select>
       </div>
 
       {/* Filtro de mes, año y semana */}
