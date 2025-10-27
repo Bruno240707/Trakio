@@ -29,9 +29,29 @@ const App = () => {
   // 🔁 Función para verificar sesión con backend
   const checkSession = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/perfil", {
-        credentials: "include", // 👈 envía cookies
+      let res = await fetch("http://localhost:3001/api/perfil", {
+        credentials: "include",
       });
+  
+      // Si el access token expiró, intentamos refresh automáticamente
+      if (res.status === 401) {
+        const refreshRes = await fetch("http://localhost:3001/api/refresh", {
+          method: "POST",
+          credentials: "include",
+        });
+  
+        if (refreshRes.ok) {
+          // refresh exitoso, volvemos a pedir perfil
+          res = await fetch("http://localhost:3001/api/perfil", {
+            credentials: "include",
+          });
+        } else {
+          // refresh expiró => cerramos sesión automáticamente
+          setCuentaActiva(null);
+          return;
+        }
+      }
+  
       if (res.ok) {
         const data = await res.json();
         setCuentaActiva(data.user);
@@ -44,7 +64,7 @@ const App = () => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   // ⚡ Al montar: si ya aceptó cookies, verificar sesión
   useEffect(() => {

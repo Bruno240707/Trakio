@@ -1,5 +1,5 @@
 import express from "express";
-import { loginController, perfilController, logoutController } from "../controllers/authController.js";
+import { loginController, perfilController, logoutController, refreshTokenController } from "../controllers/authController.js";
 import { requireAuth } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -7,10 +7,13 @@ const router = express.Router();
 // LOGIN
 router.post("/login", loginController);
 
-// LOGOUT (borra la cookie)
-router.post("/logout", logoutController);
-
-// PERFIL (verifica sesión desde cookie)
+// PERFIL
 router.get("/perfil", requireAuth, perfilController);
+
+// REFRESH TOKEN (nuevo endpoint)
+router.post("/refresh", refreshTokenController);
+
+// LOGOUT
+router.post("/logout", logoutController);
 
 export default router;
