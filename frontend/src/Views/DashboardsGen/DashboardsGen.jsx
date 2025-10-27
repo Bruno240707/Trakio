@@ -175,14 +175,14 @@ const DashboardsGen = () => {
           ))}
         </select>
 
-        <label id="mes" class="infoMes" htmlFor="mes2">Mes:</label>
+  <label id="mes" className="infoMes" htmlFor="mes2">Mes:</label>
         <select id="mes2" value={month} onChange={e => setMonth(Number(e.target.value))}>
           {meses.map(m => (
             <option key={m.value} value={m.value}>{m.label}</option>
           ))}
         </select>
 
-        <label class="infoSemana" htmlFor="semana">Semana:</label>
+  <label className="infoSemana" htmlFor="semana">Semana:</label>
         <select id="semana" value={week} onChange={e => setWeek(Number(e.target.value))}>
           <option value={0}>Todas las semanas</option>
           <option value={1}>Semana 1</option>
