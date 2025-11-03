@@ -15,6 +15,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
   });
   const [nuevoFotoFile, setNuevoFotoFile] = useState(null);
   const [sucursales, setSucursales] = useState([]);
+  const [sucursalSeleccionada, setSucursalSeleccionada] = useState("");
   const [filtroConf, setFiltroConf] = useState("")
   const [mostrarInactivos, setMostrarInactivos] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -25,20 +26,21 @@ export default function Configuracion({ empleados, setEmpleados }) {
 
   const fetchEmpleados = async () => {
     try {
-      const res = await axios.get(`/api/getWorkers?includeInactive=${mostrarInactivos}`);
+      const res = await axios.get(
+        `/api/getWorkers?filtro=${filtroConf}&sucursal=${sucursalSeleccionada}&includeInactive=${mostrarInactivos}`,
+        { withCredentials: true } // importante para cookies/sesión
+      );
       setEmpleados(res.data);
     } catch (err) {
       console.error("Error al cargar los empleados:", err);
     }
   };
-
+  
+  // 🔹 Recarga empleados cuando cambia filtro, sucursal o mostrarInactivos
   useEffect(() => {
-    fetch(`/api/getWorkers?filtro=${filtroConf}&includeInactive=${mostrarInactivos}`)
-      .then((res) => res.json())
-      .then((data) => setEmpleados(data))
-      .catch((err) => console.error("Error al cargar la API:", err));
-  }, [filtroConf]);
-
+    fetchEmpleados();
+  }, [filtroConf, sucursalSeleccionada, mostrarInactivos]);  
+  
 
 useEffect(() => {
   const fetchHorario = async () => {
@@ -218,6 +220,20 @@ useEffect(() => {
               ×
             </button>
           )}
+
+          <select
+            className="select-sucursal"
+            value={sucursalSeleccionada}
+            onChange={(e) => setSucursalSeleccionada(e.target.value)}
+          >
+            <option value="">Todas las sucursales</option>
+            {Array.isArray(sucursales) &&
+              sucursales.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.nombre}
+                </option>
+              ))}
+          </select>
       </div>
 
       <ul className="configuracionLista">
