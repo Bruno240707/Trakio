@@ -334,10 +334,7 @@ const DashboardsInd = ({ empleados }) => {
                 <BarChart barData={barData} />
               </div>
 
-              {/* Espacios para futuras tarjetas */}
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="card"></div>
-              ))}
+
             </div>
           </div>
         </main>
