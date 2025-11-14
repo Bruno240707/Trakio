@@ -23,6 +23,7 @@ export default function Configuracion({ empleados, setEmpleados }) {
   const [editFotoFile, setEditFotoFile] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [horarioTarde, setHorarioTarde] = useState("");
+  const [horaDesde, setHoraDesde] = useState("");
 
   const fetchEmpleados = async () => {
     try {
@@ -58,7 +59,23 @@ useEffect(() => {
   fetchHorario();
 }, []);
 
-  
+useEffect(() => {
+  const fetchHoraDesde = async () => {
+    try {
+      const res = await fetch("/api/configurar-hora-desde");
+      const data = await res.json();
+
+      if (data.horaDesde) {
+        setHoraDesde(data.horaDesde.slice(0, 5)); // HH:MM
+      }
+    } catch (error) {
+      console.error("Error obteniendo hora_desde:", error);
+    }
+  };
+
+  fetchHoraDesde();
+}, []);
+
 
   useEffect(() => {
     fetchEmpleados();
@@ -86,7 +103,7 @@ useEffect(() => {
   const handleHorario = async () => {
     if (!horarioTarde) {
       alert("Seleccioná una hora primero.");
-      return;
+      return; 
     }
 
     const horaConSegundos = `${horarioTarde}:00`;
@@ -113,6 +130,39 @@ useEffect(() => {
       alert("Error actualizando el horario.");
     }
   };
+
+  const handleHorarioDesde = async () => {
+    if (!horaDesde) {
+      alert("Seleccioná una hora primero.");
+      return;
+    }
+  
+    const horaConSegundos = `${horaDesde}:00`;
+  
+    try {
+      const response = await fetch('/api/configurar-hora-desde', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          horaDesde: horaConSegundos
+        })
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+  
+      alert("Horario actualizado a " + horaConSegundos);
+    } catch (error) {
+      console.error("Error actualizando horario:", error);
+      alert("Error actualizando el horario.");
+    }
+    handleHorario()
+  };
+  
 
 
   // Agregar nuevo empleado
@@ -410,14 +460,22 @@ useEffect(() => {
 
   <div className="scheduleSection">
     <h3 className="textConfig">Configurar horarios</h3>
-    <h4 className="textTarde">Hora tarde</h4>
+    <h4 className="textTarde">Hora Desde</h4>
+      <input
+        className="confiTiempo"
+        type="time"
+        value={horaDesde}
+        onChange={(e) => setHoraDesde(e.target.value)}
+      />
+
+    <h4 className="textTarde">Hora Hasta</h4>
       <input
         className="confiTiempo"
         type="time"
         value={horarioTarde}
         onChange={(e) => setHorarioTarde(e.target.value)}
       />
-      <button className="configuracionBotonAgregar" onClick={handleHorario}>
+      <button className="configuracionBotonAgregar" onClick={handleHorarioDesde}>
         ➕ Actualizar horario
       </button>
   </div>

@@ -5,7 +5,12 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import { getWorkersController, addWorkerController, updateWorkerController } from "./controllers/workersController.js";
 import { setWorkerActivoController } from "./controllers/workersController.js";
-import { getHoraEntradaTardeController, updateHoraEntradaTardeController } from "./controllers/configController.js";
+import { 
+  getHoraEntradaTardeController, 
+  updateHoraEntradaTardeController,
+  getHoraDesdeController,
+  updateHoraDesdeController
+} from "./controllers/configController.js";
 import {
   lineDataGeneralController,
   eventsByWorkerAndDateController,
@@ -110,6 +115,8 @@ app.get("/api/attendanceDoughnutAllWorkers", attendanceDoughnutAllWorkersControl
 // Configuration
 app.get("/api/configurar-hora-entrada", getHoraEntradaTardeController);
 app.post("/api/configurar-hora-entrada", updateHoraEntradaTardeController);
+app.get("/api/configurar-hora-desde", getHoraDesdeController);
+app.post("/api/configurar-hora-desde", updateHoraDesdeController);
 
 
 

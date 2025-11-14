@@ -101,17 +101,6 @@ const Home = () => {
             </div>
           </div>
         </section>
-
-        <section className="dashboards-showcase-section">
-          <h2>Explora nuestros dashboards</h2>
-          <div className="dashboards-grid">
-            <img src="../src/Imagenes/dashboard1.png" className="dashboard-img" />
-            <img src="../src/Imagenes/dashboard2.png" className="dashboard-img" />
-            <img src="../src/Imagenes/dashboard3.png" className="dashboard-img" />
-            <img src="../src/Imagenes/dashboard4.png" className="dashboard-img" />
-          </div>
-        </section>
-
       </div>
     </>
   );
