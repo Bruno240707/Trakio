@@ -460,6 +460,21 @@ useEffect(() => {
 
   <div className="scheduleSection">
     <h3 className="textConfig">Configurar horarios</h3>
+
+          <select
+            className="select-sucursal"
+            value={sucursalSeleccionada}
+            onChange={(e) => setSucursalSeleccionada(e.target.value)}
+          >
+            <option value="">Todas las sucursales</option>
+            {Array.isArray(sucursales) &&
+              sucursales.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.nombre}
+                </option>
+              ))}
+          </select>
+
     <h4 className="textTarde">Hora Desde</h4>
       <input
         className="confiTiempo"
